@@ -1,0 +1,599 @@
+export default function Blog_single(){
+    return(
+        <>
+        <>
+  <div id="overlayer" />
+  <div className="loader">
+    <div className="spinner-border text-primary" role="status">
+      <span className="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div className="site-wrap">
+    <div className="site-mobile-menu site-navbar-target">
+      <div className="site-mobile-menu-header">
+        <div className="site-mobile-menu-close mt-3">
+          <span className="icon-close2 js-menu-toggle" />
+        </div>
+      </div>
+      <div className="site-mobile-menu-body" />
+    </div>{" "}
+    {/* .site-mobile-menu */}
+    {/* NAVBAR */}
+    <header className="site-navbar mt-3">
+      <div className="container-fluid">
+        <div className="row align-items-center">
+          <div className="site-logo col-6">
+            <a href="index.html">JobBoard</a>
+          </div>
+          <nav className="mx-auto site-navigation">
+            <ul className="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
+              <li>
+                <a href="index.html" className="nav-link">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="about.html">About</a>
+              </li>
+              <li className="has-children">
+                <a href="job-listings.html">Job Listings</a>
+                <ul className="dropdown">
+                  <li>
+                    <a href="job-single.html">Job Single</a>
+                  </li>
+                  <li>
+                    <a href="post-job.html">Post a Job</a>
+                  </li>
+                </ul>
+              </li>
+              <li className="has-children">
+                <a href="services.html" className="active">
+                  Pages
+                </a>
+                <ul className="dropdown">
+                  <li>
+                    <a href="services.html">Services</a>
+                  </li>
+                  <li>
+                    <a href="service-single.html">Service Single</a>
+                  </li>
+                  <li>
+                    <a href="blog-single.html" className="active">
+                      Blog Single
+                    </a>
+                  </li>
+                  <li>
+                    <a href="portfolio.html">Portfolio</a>
+                  </li>
+                  <li>
+                    <a href="portfolio-single.html">Portfolio Single</a>
+                  </li>
+                  <li>
+                    <a href="testimonials.html">Testimonials</a>
+                  </li>
+                  <li>
+                    <a href="faq.html">Frequently Ask Questions</a>
+                  </li>
+                  <li>
+                    <a href="gallery.html">Gallery</a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="blog.html">Blog</a>
+              </li>
+              <li>
+                <a href="contact.html">Contact</a>
+              </li>
+              <li className="d-lg-none">
+                <a href="post-job.html">
+                  <span className="mr-2">+</span> Post a Job
+                </a>
+              </li>
+              <li className="d-lg-none">
+                <a href="login.html">Log In</a>
+              </li>
+            </ul>
+          </nav>
+          <div className="right-cta-menu text-right d-flex aligin-items-center col-6">
+            <div className="ml-auto">
+              <a
+                href="post-job.html"
+                className="btn btn-outline-white border-width-2 d-none d-lg-inline-block"
+              >
+                <span className="mr-2 icon-add" />
+                Post a Job
+              </a>
+              <a
+                href="login.html"
+                className="btn btn-primary border-width-2 d-none d-lg-inline-block"
+              >
+                <span className="mr-2 icon-lock_outline" />
+                Log In
+              </a>
+            </div>
+            <a
+              href="#"
+              className="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"
+            >
+              <span className="icon-menu h3 m-0 p-0 mt-2" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+    {/* HOME */}
+    <section
+      className="section-hero overlay inner-page bg-image"
+      style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
+      id="home-section"
+    >
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <div className="custom-breadcrumbs mb-0">
+              <span className="slash">Posted by</span> Admin
+              <span className="mx-2 slash">•</span>
+              <span className="text-white">
+                <strong>April 15, 2019</strong>
+              </span>
+            </div>
+            <h1 className="text-white">
+              Where Do You Learn HTML &amp; CSS in 2020?
+            </h1>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section className="site-section" id="next-section">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-8 blog-content">
+            <h3 className="mb-4">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit
+            </h3>
+            <p className="lead">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Assumenda nihil aspernatur nemo sunt, qui, harum repudiandae
+              quisquam eaque dolore itaque quod tenetur quo quos labore?
+            </p>
+            <p>
+              <img
+                src="/assets/images/job_single_img_1.jpg"
+                alt="Image"
+                className="img-fluid rounded"
+              />
+            </p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae
+              expedita cumque necessitatibus ducimus debitis totam, quasi
+              praesentium eveniet tempore possimus illo esse, facilis? Corrupti
+              possimus quae ipsa pariatur cumque, accusantium tenetur
+              voluptatibus incidunt reprehenderit, quidem repellat sapiente, id,
+              earum obcaecati.
+            </p>
+            <blockquote>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Provident vero tempora aliquam excepturi labore, ad soluta
+                voluptate necessitatibus. Nulla error beatae, quam, facilis
+                suscipit quaerat aperiam minima eveniet quis placeat.
+              </p>
+            </blockquote>
+            <p>
+              Eveniet deleniti accusantium nulla natus nobis nam asperiores ipsa
+              minima laudantium vero cumque cupiditate ipsum ratione dicta,
+              expedita quae, officiis provident harum nisi! Esse eligendi ab
+              molestias, quod nostrum hic saepe repudiandae non. Suscipit
+              reiciendis tempora ut, saepe temporibus nemo.
+            </p>
+            <h4 className="mt-5 mb-4">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit
+            </h4>
+            <p>
+              Accusamus, temporibus, ullam. Voluptate consectetur laborum totam
+              sunt culpa repellat, dolore voluptas. Quaerat cum ducimus aut
+              distinctio sit, facilis corporis ab vel alias, voluptas aliquam,
+              expedita molestias quisquam sequi eligendi nobis ea error omnis
+              consequatur iste deleniti illum, dolorum odit.
+            </p>
+            <p>
+              In adipisci corporis at delectus! Cupiditate, voluptas, in
+              architecto odit id error reprehenderit quam quibusdam excepturi
+              distinctio dicta laborum deserunt qui labore dignissimos
+              necessitatibus reiciendis tenetur corporis quas explicabo
+              exercitationem suscipit. Nisi quo nulla, nihil harum obcaecati vel
+              atque quos.
+            </p>
+            <p>
+              Amet sint explicabo maxime accusantium qui dicta enim quia,
+              nostrum id libero voluptates quae suscipit dolor quam tenetur
+              dolores inventore illo laborum, corporis non ex, debitis quidem
+              obcaecati! Praesentium maiores illo atque error! Earum, et, fugit.
+              Sint, delectus molestiae. Totam.
+            </p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa
+              iste, repudiandae facere aperiam sapiente, officia delectus soluta
+              molestiae nihil corporis animi quos ratione qui labore? Sint eaque
+              perspiciatis minus illum.
+            </p>
+            <p>
+              Consectetur porro odio quod iure quaerat cupiditate similique,
+              dolor reprehenderit molestias provident, esse dolorum omnis
+              architecto magni amet corrupti neque ratione sunt beatae
+              perspiciatis? Iste pariatur omnis sed ut itaque.
+            </p>
+            <p>
+              Id similique, rem ipsam accusantium iusto dolores sit velit ex
+              quas ea atque, molestiae. Sint, sed. Quisquam, suscipit! Quisquam
+              quibusdam maiores fugiat eligendi eius consequuntur, molestiae
+              saepe commodi expedita nemo!
+            </p>
+            <div className="pt-5">
+              <p>
+                Categories: <a href="#">Design</a>, <a href="#">Events</a> Tags:{" "}
+                <a href="#">#html</a>, <a href="#">#trends</a>
+              </p>
+            </div>
+            <div className="pt-5">
+              <h3 className="mb-5">6 Comments</h3>
+              <ul className="comment-list">
+                <li className="comment">
+                  <div className="vcard bio">
+                    <img src="/assets/images/person_2.jpg" alt="Image placeholder" />
+                  </div>
+                  <div className="comment-body">
+                    <h3>Jacob Smith</h3>
+                    <div className="meta">January 9, 2018 at 2:21pm</div>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Pariatur quidem laborum necessitatibus, ipsam impedit
+                      vitae autem, eum officia, fugiat saepe enim sapiente iste
+                      iure! Quam voluptas earum impedit necessitatibus, nihil?
+                    </p>
+                    <p>
+                      <a href="#" className="reply">
+                        Reply
+                      </a>
+                    </p>
+                  </div>
+                </li>
+                <li className="comment">
+                  <div className="vcard bio">
+                    <img src="/assets/images/person_3.jpg" alt="Image placeholder" />
+                  </div>
+                  <div className="comment-body">
+                    <h3>Chris Meyer</h3>
+                    <div className="meta">January 9, 2018 at 2:21pm</div>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Pariatur quidem laborum necessitatibus, ipsam impedit
+                      vitae autem, eum officia, fugiat saepe enim sapiente iste
+                      iure! Quam voluptas earum impedit necessitatibus, nihil?
+                    </p>
+                    <p>
+                      <a href="#" className="reply">
+                        Reply
+                      </a>
+                    </p>
+                  </div>
+                  <ul className="children">
+                    <li className="comment">
+                      <div className="vcard bio">
+                        <img
+                          src="/assets/images/person_5.jpg"
+                          alt="Image placeholder"
+                        />
+                      </div>
+                      <div className="comment-body">
+                        <h3>Chintan Patel</h3>
+                        <div className="meta">January 9, 2018 at 2:21pm</div>
+                        <p>
+                          Lorem ipsum dolor sit amet, consectetur adipisicing
+                          elit. Pariatur quidem laborum necessitatibus, ipsam
+                          impedit vitae autem, eum officia, fugiat saepe enim
+                          sapiente iste iure! Quam voluptas earum impedit
+                          necessitatibus, nihil?
+                        </p>
+                        <p>
+                          <a href="#" className="reply">
+                            Reply
+                          </a>
+                        </p>
+                      </div>
+                      <ul className="children">
+                        <li className="comment">
+                          <div className="vcard bio">
+                            <img
+                              src="/assets/images/person_1.jpg"
+                              alt="Image placeholder"
+                            />
+                          </div>
+                          <div className="comment-body">
+                            <h3>Jean Doe</h3>
+                            <div className="meta">
+                              January 9, 2018 at 2:21pm
+                            </div>
+                            <p>
+                              Lorem ipsum dolor sit amet, consectetur
+                              adipisicing elit. Pariatur quidem laborum
+                              necessitatibus, ipsam impedit vitae autem, eum
+                              officia, fugiat saepe enim sapiente iste iure!
+                              Quam voluptas earum impedit necessitatibus, nihil?
+                            </p>
+                            <p>
+                              <a href="#" className="reply">
+                                Reply
+                              </a>
+                            </p>
+                          </div>
+                          <ul className="children">
+                            <li className="comment">
+                              <div className="vcard bio">
+                                <img
+                                  src="/assets/images/person_4.jpg"
+                                  alt="Image placeholder"
+                                />
+                              </div>
+                              <div className="comment-body">
+                                <h3>Ben Afflick</h3>
+                                <div className="meta">
+                                  January 9, 2018 at 2:21pm
+                                </div>
+                                <p>
+                                  Lorem ipsum dolor sit amet, consectetur
+                                  adipisicing elit. Pariatur quidem laborum
+                                  necessitatibus, ipsam impedit vitae autem, eum
+                                  officia, fugiat saepe enim sapiente iste iure!
+                                  Quam voluptas earum impedit necessitatibus,
+                                  nihil?
+                                </p>
+                                <p>
+                                  <a href="#" className="reply">
+                                    Reply
+                                  </a>
+                                </p>
+                              </div>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li className="comment">
+                  <div className="vcard bio">
+                    <img src="/assets/images/person_1.jpg" alt="Image placeholder" />
+                  </div>
+                  <div className="comment-body">
+                    <h3>Jean Doe</h3>
+                    <div className="meta">January 9, 2018 at 2:21pm</div>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Pariatur quidem laborum necessitatibus, ipsam impedit
+                      vitae autem, eum officia, fugiat saepe enim sapiente iste
+                      iure! Quam voluptas earum impedit necessitatibus, nihil?
+                    </p>
+                    <p>
+                      <a href="#" className="reply">
+                        Reply
+                      </a>
+                    </p>
+                  </div>
+                </li>
+              </ul>
+              {/* END comment-list */}
+              <div className="comment-form-wrap pt-5">
+                <h3 className="mb-5">Leave a comment</h3>
+                <form action="#" className="">
+                  <div className="form-group">
+                    <label htmlFor="name">Name *</label>
+                    <input type="text" className="form-control" id="name" />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="email">Email *</label>
+                    <input type="email" className="form-control" id="email" />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="website">Website</label>
+                    <input type="url" className="form-control" id="website" />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="message">Message</label>
+                    <textarea
+                      name=""
+                      id="message"
+                      cols={30}
+                      rows={10}
+                      className="form-control"
+                      defaultValue={""}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="submit"
+                      defaultValue="Post Comment"
+                      className="btn btn-primary btn-md"
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-4 sidebar pl-lg-5">
+            <div className="sidebar-box">
+              <form action="#" className="search-form">
+                <div className="form-group">
+                  <span className="icon fa fa-search" />
+                  <input
+                    type="text"
+                    className="form-control form-control-lg"
+                    placeholder="Type a keyword and hit enter"
+                  />
+                </div>
+              </form>
+            </div>
+            <div className="sidebar-box">
+              <img
+                src="/assets/images/person_1.jpg"
+                alt="Image placeholder"
+                className="img-fluid mb-4 w-50 rounded-circle"
+              />
+              <h3>About The Author</h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Ducimus itaque, autem necessitatibus voluptate quod mollitia
+                delectus aut, sunt placeat nam vero culpa sapiente consectetur
+                similique, inventore eos fugit cupiditate numquam!
+              </p>
+              <p>
+                <a href="#" className="btn btn-primary btn-sm">
+                  Read More
+                </a>
+              </p>
+            </div>
+            <div className="sidebar-box">
+              <div className="categories">
+                <h3>Categories</h3>
+                <li>
+                  <a href="#">
+                    Creatives <span>(12)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    News <span>(22)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Design <span>(37)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    HTML <span>(42)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    Web Development <span>(14)</span>
+                  </a>
+                </li>
+              </div>
+            </div>
+            <div className="sidebar-box">
+              <h3>Paragraph</h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Ducimus itaque, autem necessitatibus voluptate quod mollitia
+                delectus aut, sunt placeat nam vero culpa sapiente consectetur
+                similique, inventore eos fugit cupiditate numquam!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer className="site-footer">
+      <a href="#top" className="smoothscroll scroll-top">
+        <span className="icon-keyboard_arrow_up" />
+      </a>
+      <div className="container">
+        <div className="row mb-5">
+          <div className="col-6 col-md-3 mb-4 mb-md-0">
+            <h3>Search Trending</h3>
+            <ul className="list-unstyled">
+              <li>
+                <a href="#">Web Design</a>
+              </li>
+              <li>
+                <a href="#">Graphic Design</a>
+              </li>
+              <li>
+                <a href="#">Web Developers</a>
+              </li>
+              <li>
+                <a href="#">Python</a>
+              </li>
+              <li>
+                <a href="#">HTML5</a>
+              </li>
+              <li>
+                <a href="#">CSS3</a>
+              </li>
+            </ul>
+          </div>
+          <div className="col-6 col-md-3 mb-4 mb-md-0">
+            <h3>Company</h3>
+            <ul className="list-unstyled">
+              <li>
+                <a href="#">About Us</a>
+              </li>
+              <li>
+                <a href="#">Career</a>
+              </li>
+              <li>
+                <a href="#">Blog</a>
+              </li>
+              <li>
+                <a href="#">Resources</a>
+              </li>
+            </ul>
+          </div>
+          <div className="col-6 col-md-3 mb-4 mb-md-0">
+            <h3>Support</h3>
+            <ul className="list-unstyled">
+              <li>
+                <a href="#">Support</a>
+              </li>
+              <li>
+                <a href="#">Privacy</a>
+              </li>
+              <li>
+                <a href="#">Terms of Service</a>
+              </li>
+            </ul>
+          </div>
+          <div className="col-6 col-md-3 mb-4 mb-md-0">
+            <h3>Contact Us</h3>
+            <div className="footer-social">
+              <a href="#">
+                <span className="icon-facebook" />
+              </a>
+              <a href="#">
+                <span className="icon-twitter" />
+              </a>
+              <a href="#">
+                <span className="icon-instagram" />
+              </a>
+              <a href="#">
+                <span className="icon-linkedin" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="row text-center">
+          <div className="col-12">
+            <p className="copyright">
+              <small>
+                {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
+                Copyright © All rights reserved | This template is made with{" "}
+                <i className="icon-heart text-danger" aria-hidden="true" /> by{" "}
+                <a href="https://colorlib.com" target="_blank">
+                  Colorlib
+                </a>
+                {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</>
+
+        </>
+    )
+}
