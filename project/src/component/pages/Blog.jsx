@@ -2,8 +2,7 @@ import Navbar from "../layout/Navbar";
 
 export default function Blog(){
     return(
-        <>
-        <>
+        <>   
         <Navbar/>
   <div id="overlayer" />
   
@@ -271,7 +270,5 @@ export default function Blog(){
     </footer>
   </div>
 </>
-
-        </>
     )
 }

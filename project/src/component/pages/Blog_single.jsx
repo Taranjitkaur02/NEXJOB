@@ -3,7 +3,7 @@ import Navbar from "../layout/Navbar";
 export default function Blog_single(){
     return(
         <>
-        <>
+        
         <Navbar/>
   <div id="overlayer" />
   
@@ -491,6 +491,6 @@ export default function Blog_single(){
   </div>
 </>
 
-        </>
+        
     )
 }

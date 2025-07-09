@@ -3,7 +3,7 @@ import Navbar from "../layout/Navbar";
 export default function Job_single(){
     return(
         <>
-        <>
+        
         <Navbar/>
   <div id="overlayer" />
   
@@ -652,6 +652,6 @@ export default function Job_single(){
   </div>
 </>
 
-        </>
+        
     )
 }

@@ -23,11 +23,8 @@ import Testimonials from "./component/pages/Testimonials";
 import Error from "./component/pages/Error";
 
 function App() {
- 
-
   return (
     <>
-    
     <BrowserRouter>
     <Routes>
       <Route path="/about" element={<About/>}/>

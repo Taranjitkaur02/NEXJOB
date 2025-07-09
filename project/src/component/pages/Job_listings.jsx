@@ -3,7 +3,7 @@ import Navbar from "../layout/Navbar";
 export default function Job_listings(){
     return(
         <>
-        <>
+        
         <Navbar/>
   <div id="overlayer" />
 
@@ -424,6 +424,6 @@ export default function Job_listings(){
   </div>
 </>
 
-        </>
+        
     )
 }
