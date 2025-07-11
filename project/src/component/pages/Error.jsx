@@ -1,8 +1,9 @@
 
+
 export default function Error() {
   return (
     <>
-    <Navbar/>
+  
       <div className="error-bg d-flex align-items-center justify-content-center text-center">
         <div className="container">
           <div className="row justify-content-center">

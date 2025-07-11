@@ -3,11 +3,19 @@ import { Link } from "react-router-dom"
 export default function Navbar(){
     return(
         <>
+        <div className="site-mobile-menu site-navbar-target">
+      <div className="site-mobile-menu-header">
+        <div className="site-mobile-menu-close mt-3">
+          <span className="icon-close2 js-menu-toggle" />
+        </div>
+      </div>
+      <div className="site-mobile-menu-body" />
+    </div>{" "}
         <header className="site-navbar mt-3">
       <div className="container-fluid">
         <div className="row align-items-center">
           <div className="site-logo col-6">
-            <Link to="/">JobBoard</Link>
+            <Link to="/">NEXJOB</Link>
           </div>
           <nav className="mx-auto site-navigation">
             <ul className="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">

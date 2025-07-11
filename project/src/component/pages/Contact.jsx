@@ -1,10 +1,12 @@
+import { Link } from "react-router-dom";
+import Footer from "../layout/Footer";
 import Navbar from "../layout/Navbar";
 
 export default function Contact(){
     return(
         <>
         <Navbar/>
-  <div id="overlayer" />
+  {/* <div id="overlayer" /> */}
  
   <div className="site-wrap">
     <div className="site-mobile-menu site-navbar-target">
@@ -29,7 +31,7 @@ export default function Contact(){
           <div className="col-md-7">
             <h1 className="text-white font-weight-bold">Contact Us</h1>
             <div className="custom-breadcrumbs">
-              <a href="#">Home</a> <span className="mx-2 slash">/</span>
+              <Link to="/">Home</Link> <span className="mx-2 slash">/</span>
               <span className="text-white">
                 <strong>Contact Us</strong>
               </span>
@@ -104,15 +106,16 @@ export default function Contact(){
             <div className="p-4 mb-3 bg-white">
               <p className="mb-0 font-weight-bold">Address</p>
               <p className="mb-4">
-                203 Fake St. Mountain View, San Francisco, California, USA
+                DAV University, Jalandhar, Punjab, India
               </p>
               <p className="mb-0 font-weight-bold">Phone</p>
               <p className="mb-4">
-                <a href="#">+1 232 3235 324</a>
+                <Link to="#">+91 9872977156</Link>
+
               </p>
               <p className="mb-0 font-weight-bold">Email Address</p>
               <p className="mb-0">
-                <a href="#">youremail@domain.com</a>
+                <Link to="https://mail.google.com/mail/u/0/#inbox?compose=new">metaran@gmail.com</Link>
               </p>
             </div>
           </div>
@@ -180,101 +183,7 @@ export default function Contact(){
         </div>
       </div>
     </section>
-    <footer className="site-footer">
-      <a href="#top" className="smoothscroll scroll-top">
-        <span className="icon-keyboard_arrow_up" />
-      </a>
-      <div className="container">
-        <div className="row mb-5">
-          <div className="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Search Trending</h3>
-            <ul className="list-unstyled">
-              <li>
-                <a href="#">Web Design</a>
-              </li>
-              <li>
-                <a href="#">Graphic Design</a>
-              </li>
-              <li>
-                <a href="#">Web Developers</a>
-              </li>
-              <li>
-                <a href="#">Python</a>
-              </li>
-              <li>
-                <a href="#">HTML5</a>
-              </li>
-              <li>
-                <a href="#">CSS3</a>
-              </li>
-            </ul>
-          </div>
-          <div className="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Company</h3>
-            <ul className="list-unstyled">
-              <li>
-                <a href="#">About Us</a>
-              </li>
-              <li>
-                <a href="#">Career</a>
-              </li>
-              <li>
-                <a href="#">Blog</a>
-              </li>
-              <li>
-                <a href="#">Resources</a>
-              </li>
-            </ul>
-          </div>
-          <div className="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Support</h3>
-            <ul className="list-unstyled">
-              <li>
-                <a href="#">Support</a>
-              </li>
-              <li>
-                <a href="#">Privacy</a>
-              </li>
-              <li>
-                <a href="#">Terms of Service</a>
-              </li>
-            </ul>
-          </div>
-          <div className="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Contact Us</h3>
-            <div className="footer-social">
-              <a href="#">
-                <span className="icon-facebook" />
-              </a>
-              <a href="#">
-                <span className="icon-twitter" />
-              </a>
-              <a href="#">
-                <span className="icon-instagram" />
-              </a>
-              <a href="#">
-                <span className="icon-linkedin" />
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="row text-center">
-          <div className="col-12">
-            <p className="copyright">
-              <small>
-                {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
-                Copyright © All rights reserved | This template is made with{" "}
-                <i className="icon-heart text-danger" aria-hidden="true" /> by{" "}
-                <a href="https://colorlib.com" target="_blank">
-                  Colorlib
-                </a>
-                {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
-              </small>
-            </p>
-          </div>
-        </div>
-      </div>
-    </footer>
+    {/* <Footer/> */}
   </div>
 </>
 
