@@ -23,10 +23,13 @@ import Testimonials from "./component/pages/Testimonials";
 import Error from "./component/pages/Error";
 import Layout from "./component/layout/Layout";
 import Register from "./component/auth/Register";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <>
+    <ToastContainer/>
     <BrowserRouter>
     <Routes>
      <Route path="/" element={<Layout/>}>
