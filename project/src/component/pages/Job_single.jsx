@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Footer from "../layout/Footer";
 import Navbar from "../layout/Navbar";
 
@@ -31,8 +32,8 @@ export default function Job_single(){
           <div className="col-md-7">
             <h1 className="text-white font-weight-bold">Product Designer</h1>
             <div className="custom-breadcrumbs">
-              <a href="#">Home</a> <span className="mx-2 slash">/</span>
-              <a href="#">Job</a> <span className="mx-2 slash">/</span>
+              <Link to={"/"}>Home</Link> <span className="mx-2 slash">/</span>
+              <Link to={"/job-listings"}>Job</Link> <span className="mx-2 slash">/</span>
               <span className="text-white">
                 <strong>Product Designer</strong>
               </span>
@@ -58,7 +59,7 @@ export default function Job_single(){
                   </span>
                   <span className="m-2">
                     <span className="icon-room mr-2" />
-                    New York City
+                    Mumbai
                   </span>
                   <span className="m-2">
                     <span className="icon-clock-o mr-2" />
@@ -71,15 +72,15 @@ export default function Job_single(){
           <div className="col-lg-4">
             <div className="row">
               <div className="col-6">
-                <a href="#" className="btn btn-block btn-light btn-md">
+                <Link href="#" className="btn btn-block btn-light btn-md">
                   <span className="icon-heart-o mr-2 text-danger" />
                   Save Job
-                </a>
+                </Link>
               </div>
               <div className="col-6">
-                <a href="#" className="btn btn-block btn-primary btn-md">
+                <Link to={"/"} className="btn btn-block btn-primary btn-md">
                   Apply Now
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -95,20 +96,14 @@ export default function Job_single(){
                 />
               </figure>
               <h3 className="h5 d-flex align-items-center mb-4 text-primary">
-                <span className="icon-align-left mr-3" />
+                <span className="icon-align-left mr-3 " />
                 Job Description
               </h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Debitis illum fuga eveniet. Deleniti asperiores, commodi quae
-                ipsum quas est itaque, ipsa, dolore beatae voluptates nemo
-                blanditiis iste eius officia minus.
+              <p className="text-justify">
+                We are looking for a highly motivated and customer-focused individual to join our team at PUMA in Mumbai. The ideal candidate will be responsible for delivering an exceptional in-store experience and representing the PUMA brand with enthusiasm and professionalism. Key duties include assisting customers with product selection, achieving sales targets, and ensuring high levels of customer satisfaction through excellent service.
               </p>
-              <p>
-                Velit unde aliquam et voluptas reiciendis non sapiente labore,
-                deleniti asperiores blanditiis nihil quia officiis dolor vero
-                iste dolore vel molestiae saepe. Id nisi, consequuntur sunt
-                impedit quidem, vitae mollitia!
+              <p className="text-justify">
+                In addition, the candidate will be expected to maintain visual merchandising standards, support inventory management, and contribute to the overall efficiency of daily store operations. Strong communication skills, a proactive attitude, and a genuine interest in sports and fashion are essential. Flexibility to work on weekends and public holidays is required.
               </p>
             </div>
             <div className="mb-5">
@@ -119,29 +114,28 @@ export default function Job_single(){
               <ul className="list-unstyled m-0 p-0">
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
-                  <span>Necessitatibus quibusdam facilis</span>
+                  <span>Assist customers in finding products and provide knowledgeable recommendations.</span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
                   <span>
-                    Velit unde aliquam et voluptas reiciendis n Velit unde
-                    aliquam et voluptas reiciendis non sapiente labore
+                    Achieve individual and store sales targets through effective selling techniques.
                   </span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
-                  <span>Commodi quae ipsum quas est itaque</span>
+                  <span>Maintain store cleanliness and ensure visual merchandising standards are met.</span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
                   <span>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit
+                    Handle billing and operate the POS system accurately.
                   </span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
                   <span>
-                    Deleniti asperiores blanditiis nihil quia officiis dolor
+                    Support stock management, including receiving, organizing, and replenishing inventory.
                   </span>
                 </li>
               </ul>
@@ -154,29 +148,28 @@ export default function Job_single(){
               <ul className="list-unstyled m-0 p-0">
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
-                  <span>Necessitatibus quibusdam facilis</span>
+                  <span>Minimum qualification: HSC (12th pass); Graduation preferred.</span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
                   <span>
-                    Velit unde aliquam et voluptas reiciendis non sapiente
-                    labore
+                    0–2 years of experience in retail, sales, or customer service.
                   </span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
-                  <span>Commodi quae ipsum quas est itaque</span>
+                  <span>Freshers with good communication skills are welcome to apply.</span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
                   <span>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit
+                    Prior experience in fashion, footwear, or sports retail is an advantage.
                   </span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
                   <span>
-                    Deleniti asperiores blanditiis nihil quia officiis dolor
+                    Basic knowledge of billing systems or POS operations is preferred.
                   </span>
                 </li>
               </ul>
@@ -189,39 +182,39 @@ export default function Job_single(){
               <ul className="list-unstyled m-0 p-0">
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
-                  <span>Necessitatibus quibusdam facilis</span>
+                  <span>
+                  Competitive salary with performance-based incentives.</span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
                   <span>
-                    Velit unde aliquam et voluptas reiciendis non sapiente
-                    labore
+                    Employee discounts on PUMA products.
                   </span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
-                  <span>Commodi quae ipsum quas est itaque</span>
+                  <span>Opportunities for career growth and internal promotions.</span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
                   <span>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit
+                    On-the-job training and skill development programs.
                   </span>
                 </li>
                 <li className="d-flex align-items-start mb-2">
                   <span className="icon-check_circle mr-2 text-muted" />
                   <span>
-                    Deleniti asperiores blanditiis nihil quia officiis dolor
+                    Dynamic and inclusive work environment within a global sports brand.
                   </span>
                 </li>
               </ul>
             </div>
             <div className="row mb-5">
               <div className="col-6">
-                <a href="#" className="btn btn-block btn-light btn-md">
+                <Link to={"/"} className="btn btn-block btn-light btn-md">
                   <span className="icon-heart-o mr-2 text-danger" />
                   Save Job
-                </a>
+                </Link>
               </div>
               <div className="col-6">
                 <a href="#" className="btn btn-block btn-primary btn-md">
@@ -250,8 +243,7 @@ export default function Job_single(){
                   year(s)
                 </li>
                 <li className="mb-2">
-                  <strong className="text-black">Job Location:</strong> New ork
-                  City
+                  <strong className="text-black">Job Location:</strong> Mumbai City
                 </li>
                 <li className="mb-2">
                   <strong className="text-black">Salary:</strong> $60k - $100k
@@ -261,25 +253,25 @@ export default function Job_single(){
                 </li>
                 <li className="mb-2">
                   <strong className="text-black">Application Deadline:</strong>{" "}
-                  April 28, 2019
+                  December 28, 2025
                 </li>
               </ul>
             </div>
             <div className="bg-light p-3 border rounded">
               <h3 className="text-primary  mt-3 h5 pl-3 mb-3 ">Share</h3>
               <div className="px-3">
-                <a href="#" className="pt-3 pb-3 pr-3 pl-0">
+                <Link to={"https://www.facebook.com/PUMAIndia/"} className="pt-3 pb-3 pr-3 pl-0">
                   <span className="icon-facebook" />
-                </a>
-                <a href="#" className="pt-3 pb-3 pr-3 pl-0">
+                </Link>
+                <Link to={"https://twitter.com/PUMAIndia "} className="pt-3 pb-3 pr-3 pl-0">
                   <span className="icon-twitter" />
-                </a>
-                <a href="#" className="pt-3 pb-3 pr-3 pl-0">
+                </Link>
+                <Link to={"https://www.linkedin.com/company/puma?originalSubdomain=in"} className="pt-3 pb-3 pr-3 pl-0">
                   <span className="icon-linkedin" />
-                </a>
-                <a href="#" className="pt-3 pb-3 pr-3 pl-0">
+                </Link>
+                <Link to={"https://in.pinterest.com/puma_india_official/ "} className="pt-3 pb-3 pr-3 pl-0">
                   <span className="icon-pinterest" />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -295,7 +287,7 @@ export default function Job_single(){
         </div>
         <ul className="job-listings mb-5">
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_1.jpg"
@@ -309,7 +301,7 @@ export default function Job_single(){
                 <strong>Adidas</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> New York, New York
+                <span className="icon-room" /> Bangalore,Karnataka
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-danger">Part Time</span>
@@ -317,7 +309,7 @@ export default function Job_single(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_2.jpg"
@@ -331,7 +323,7 @@ export default function Job_single(){
                 <strong>Sprint</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> Overland Park, Kansas
+                <span className="icon-room" /> Delhi
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -339,7 +331,7 @@ export default function Job_single(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_3.jpg"
@@ -353,7 +345,7 @@ export default function Job_single(){
                 <strong>Amazon</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> Overland Park, Kansas
+                <span className="icon-room" /> Mumbai,Maharashtra
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -361,7 +353,7 @@ export default function Job_single(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_4.jpg"
@@ -383,7 +375,7 @@ export default function Job_single(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_5.jpg"
@@ -397,7 +389,7 @@ export default function Job_single(){
                 <strong>Puma</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> San Mateo, CA
+                <span className="icon-room" /> Mumbai, Maharashtra
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -405,7 +397,7 @@ export default function Job_single(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_1.jpg"
@@ -419,7 +411,7 @@ export default function Job_single(){
                 <strong>Adidas</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> New York, New York
+                <span className="icon-room" /> Mohali,Punjab
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-danger">Part Time</span>
@@ -427,7 +419,7 @@ export default function Job_single(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_2.jpg"
@@ -441,7 +433,7 @@ export default function Job_single(){
                 <strong>Sprint</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> Overland Park, Kansas
+                <span className="icon-room" /> Lucknow,Uttar Pradesh
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -481,13 +473,10 @@ export default function Job_single(){
             <div className="col-lg-6 align-self-center text-center text-lg-left">
               <blockquote>
                 <p>
-                  “Soluta quasi cum delectus eum facilis recusandae nesciunt
-                  molestias accusantium libero dolores repellat id in dolorem
-                  laborum ad modi qui at quas dolorum voluptatem voluptatum
-                  repudiandae.”
+                  “We help leading brands hire smarter and faster — and help candidates land roles they’re passionate about. Whether you’re recruiting or applying, we make the hiring journey simple and impactful.”
                 </p>
                 <p>
-                  <cite> — Corey Woods, @Dribbble</cite>
+                  <cite> — Built for Brands. Designed for Talent.</cite>
                 </p>
               </blockquote>
             </div>
@@ -505,13 +494,10 @@ export default function Job_single(){
             <div className="col-lg-6 align-self-center text-center text-lg-left">
               <blockquote>
                 <p>
-                  “Soluta quasi cum delectus eum facilis recusandae nesciunt
-                  molestias accusantium libero dolores repellat id in dolorem
-                  laborum ad modi qui at quas dolorum voluptatem voluptatum
-                  repudiandae.”
+                  “From retail to tech, startups to global enterprises — we connect talent with opportunity across every industry. Explore thousands of jobs, build your career, and work where you truly belong.”
                 </p>
                 <p>
-                  <cite> — Chris Peters, @Google</cite>
+                  <cite> — Your journey starts here.</cite>
                 </p>
               </blockquote>
             </div>
@@ -530,30 +516,14 @@ export default function Job_single(){
       className="pt-5 bg-image overlay-primary fixed overlay"
       style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
     >
-      <div className="container">
+      {/* <div className="container">
         <div className="row">
-          <div className="col-md-6 align-self-center text-center text-md-left mb-5 mb-md-0">
-            <h2 className="text-white">Get The Mobile Apps</h2>
-            <p className="mb-5 lead text-white">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit tempora
-              adipisci impedit.
-            </p>
-            <p className="mb-0">
-              <a href="#" className="btn btn-dark btn-md px-4 border-width-2">
-                <span className="icon-apple mr-3" />
-                App Store
-              </a>
-              <a href="#" className="btn btn-dark btn-md px-4 border-width-2">
-                <span className="icon-android mr-3" />
-                Play Store
-              </a>
-            </p>
-          </div>
+         
           <div className="col-md-6 ml-auto align-self-end">
             <img src="/assets/images/apps.png" alt="Image" className="img-fluid" />
           </div>
         </div>
-      </div>
+      </div> */}
     </section>
     {/* <Footer/> */}
   </div>

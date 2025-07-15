@@ -1,6 +1,6 @@
 import Footer from "../layout/Footer";
 import Navbar from "../layout/Navbar";
-
+import { Link } from "react-router-dom";
 export default function Job_listings(){
     return(
         <>
@@ -56,14 +56,14 @@ export default function Job_listings(){
                     title="Select Region"
                   >
                     <option>Anywhere</option>
-                    <option>San Francisco</option>
-                    <option>Palo Alto</option>
-                    <option>New York</option>
-                    <option>Manhattan</option>
-                    <option>Ontario</option>
-                    <option>Toronto</option>
-                    <option>Kansas</option>
-                    <option>Mountain View</option>
+                  <option>Maharashtra</option>
+                  <option>Punjab</option>
+                  <option>Karnatka</option>
+                  <option>Uttar Pradesh</option>
+                  <option>Delhi</option>
+                  <option>West Bengal </option>
+                  <option>Gujarat</option>
+                  <option>Uttrakhand</option>
                   </select>
                 </div>
                 <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
@@ -127,7 +127,7 @@ export default function Job_listings(){
         </div>
         <ul className="job-listings mb-5">
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_1.jpg"
@@ -141,7 +141,7 @@ export default function Job_listings(){
                 <strong>Adidas</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> New York, New York
+                <span className="icon-room" /> Bangalore,Karnataka
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-danger">Part Time</span>
@@ -149,7 +149,7 @@ export default function Job_listings(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_2.jpg"
@@ -163,7 +163,7 @@ export default function Job_listings(){
                 <strong>Sprint</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> Overland Park, Kansas
+                <span className="icon-room" /> Delhi
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -171,7 +171,7 @@ export default function Job_listings(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_3.jpg"
@@ -185,7 +185,7 @@ export default function Job_listings(){
                 <strong>Amazon</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> Overland Park, Kansas
+                <span className="icon-room" /> Mumbai,Maharashtra
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -193,7 +193,7 @@ export default function Job_listings(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_4.jpg"
@@ -215,7 +215,7 @@ export default function Job_listings(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_5.jpg"
@@ -229,7 +229,7 @@ export default function Job_listings(){
                 <strong>Puma</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> San Mateo, CA
+                <span className="icon-room" /> Mumbai, Maharashtra
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -237,7 +237,7 @@ export default function Job_listings(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_1.jpg"
@@ -251,7 +251,7 @@ export default function Job_listings(){
                 <strong>Adidas</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> New York, New York
+                <span className="icon-room" /> Mohali,Punjab
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-danger">Part Time</span>
@@ -259,7 +259,7 @@ export default function Job_listings(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_2.jpg"
@@ -273,7 +273,7 @@ export default function Job_listings(){
                 <strong>Sprint</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> Overland Park, Kansas
+                <span className="icon-room" /> Lucknow,Uttar Pradesh
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -315,14 +315,13 @@ export default function Job_listings(){
           <div className="col-md-8">
             <h2 className="text-white">Looking For A Job?</h2>
             <p className="mb-0 text-white lead">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit tempora
-              adipisci impedit.
+              “Your next opportunity is just one click away.”
             </p>
           </div>
           <div className="col-md-3 ml-auto">
-            <a href="#" className="btn btn-warning btn-block btn-lg">
+            <Link to={"/register"} className="btn btn-warning btn-block btn-lg">
               Sign Up
-            </a>
+            </Link>
           </div>
         </div>
       </div>

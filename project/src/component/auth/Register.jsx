@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 export default function Register() {
 
-  const [email,setEmail] = useState("admin@gmail.com")
+  const [email,setEmail] = useState(" ")
       const[password,setPassword]=useState("")
       const changeEmail=(e)=>{
         console.log(e)

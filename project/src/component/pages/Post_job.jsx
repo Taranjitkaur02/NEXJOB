@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Footer from "../layout/Footer";
 import Navbar from "../layout/Navbar";
 
@@ -30,8 +31,8 @@ export default function Post_job(){
           <div className="col-md-7">
             <h1 className="text-white font-weight-bold">Post A Job</h1>
             <div className="custom-breadcrumbs">
-              <a href="#">Home</a> <span className="mx-2 slash">/</span>
-              <a href="#">Job</a> <span className="mx-2 slash">/</span>
+              <Link to={"/"}>Home</Link> <span className="mx-2 slash">/</span>
+              <Link to={"/post-job"}>Job</Link> <span className="mx-2 slash">/</span>
               <span className="text-white">
                 <strong>Post a Job</strong>
               </span>
@@ -106,7 +107,7 @@ export default function Post_job(){
                   type="text"
                   className="form-control"
                   id="job-location"
-                  placeholder="e.g. New York"
+                  placeholder="e.g. Mumbai"
                 />
               </div>
               <div className="form-group">
@@ -120,14 +121,14 @@ export default function Post_job(){
                   title="Select Region"
                 >
                   <option>Anywhere</option>
-                  <option>San Francisco</option>
-                  <option>Palo Alto</option>
-                  <option>New York</option>
-                  <option>Manhattan</option>
-                  <option>Ontario</option>
-                  <option>Toronto</option>
-                  <option>Kansas</option>
-                  <option>Mountain View</option>
+                  <option>Maharashtra</option>
+                  <option>Punjab</option>
+                  <option>Karnatka</option>
+                  <option>Uttar Pradesh</option>
+                  <option>Delhi</option>
+                  <option>West Bengal </option>
+                  <option>Gujarat</option>
+                  <option>Uttrakhand</option>
                 </select>
               </div>
               <div className="form-group">

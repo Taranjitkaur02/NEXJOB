@@ -89,7 +89,7 @@ export default function Footer(){
                 Copyright © All rights reserved {" "}
                
                 <Link to="https://o7services.com/" target="_blank">
-                  o7services
+                  O7Services
                 </Link>
                
               </small>

@@ -133,11 +133,8 @@ export default function Contact(){
           <div className="col-lg-6">
             <div className="block__87154 bg-white rounded">
               <blockquote>
-                <p>
-                  “Ipsum harum assumenda in eum vel eveniet numquam cumque vero
-                  vitae enim cupiditate deserunt eligendi officia modi
-                  consectetur. Expedita tempora quos nobis earum hic ex
-                  asperiores quisquam optio nostrum sit”
+                <p className="text-justify">
+                  “This platform made my job search so easy. I applied to a few roles and got shortlisted within days. The process was smooth and fast. Highly recommend it to anyone looking for serious opportunities.”
                 </p>
               </blockquote>
               <div className="block__91147 d-flex align-items-center">
@@ -149,7 +146,7 @@ export default function Contact(){
                   />
                 </figure>
                 <div>
-                  <h3>Elisabeth Smith</h3>
+                  <h3>Priya Desai</h3>
                   <span className="position">Creative Director</span>
                 </div>
               </div>
@@ -159,10 +156,7 @@ export default function Contact(){
             <div className="block__87154 bg-white rounded">
               <blockquote>
                 <p>
-                  “Ipsum harum assumenda in eum vel eveniet numquam, cumque vero
-                  vitae enim cupiditate deserunt eligendi officia modi
-                  consectetur. Expedita tempora quos nobis earum hic ex
-                  asperiores quisquam optio nostrum sit”
+                  “Posting jobs here has been very effective. We received quality applications quickly and filled key roles faster than expected. A great platform for hiring across India.”
                 </p>
               </blockquote>
               <div className="block__91147 d-flex align-items-center">
@@ -174,7 +168,7 @@ export default function Contact(){
                   />
                 </figure>
                 <div>
-                  <h3>Chris Peter</h3>
+                  <h3>Rahul Verma</h3>
                   <span className="position">Web Designer</span>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import Footer from "../layout/Footer";
 import Navbar from "../layout/Navbar";
-
+import { Link } from "react-router-dom";
 export default  function Home(){
     return(
         <>
@@ -33,8 +33,7 @@ export default  function Home(){
                 The Easiest Way To Get Your Dream Job
               </h1>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Cupiditate est, consequuntur perferendis.
+                Jobs that match your skills. Careers that match your dreams.
               </p>
             </div>
             <form method="post" className="search-jobs-form">
@@ -55,15 +54,15 @@ export default  function Home(){
                     // data-live-search="true"
                     // title="Select Region"
                   >
-                    <option>Anywhere</option>
-                    <option>San Francisco</option>
-                    <option>Palo Alto</option>
-                    <option>New York</option>
-                    <option>Manhattan</option>
-                    <option>Ontario</option>
-                    <option>Toronto</option>
-                    <option>Kansas</option>
-                    <option>Mountain View</option>
+                  <option>Anywhere</option>
+                  <option>Maharashtra</option>
+                  <option>Punjab</option>
+                  <option>Karnatka</option>
+                  <option>Uttar Pradesh</option>
+                  <option>Delhi</option>
+                  <option>West Bengal </option>
+                  <option>Gujarat</option>
+                  <option>Uttrakhand</option>
                   </select>
                 </div>
                 <div className="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
@@ -131,8 +130,7 @@ export default  function Home(){
               JobBoard Site Stats
             </h2>
             <p className="lead text-white">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita
-              unde officiis recusandae sequi excepturi corrupti.
+              We’re growing every day and helping more people find the right job. Here’s a quick look at what we’ve achieved so far:
             </p>
           </div>
         </div>
@@ -179,13 +177,13 @@ export default  function Home(){
             <h2 className="section-title mb-2">43,167 Job Listed</h2>
           </div>
         </div>
-        <ul className="job-listings mb-5">
+         <ul className="job-listings mb-5">
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_1.jpg"
-                alt="Free Website Template by Free-Template.co"
+                alt="Image"
                 className="img-fluid"
               />
             </div>
@@ -195,7 +193,7 @@ export default  function Home(){
                 <strong>Adidas</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> New York, New York
+                <span className="icon-room" /> Bangalore,Karnataka
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-danger">Part Time</span>
@@ -203,11 +201,11 @@ export default  function Home(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_2.jpg"
-                alt="Free Website Template by Free-Template.co"
+                alt="Image"
                 className="img-fluid"
               />
             </div>
@@ -217,7 +215,7 @@ export default  function Home(){
                 <strong>Sprint</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> Overland Park, Kansas
+                <span className="icon-room" /> Delhi
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -225,11 +223,11 @@ export default  function Home(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_3.jpg"
-                alt="Free Website Template by Free-Template.co"
+                alt="Image"
                 className="img-fluid"
               />
             </div>
@@ -239,7 +237,7 @@ export default  function Home(){
                 <strong>Amazon</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> Overland Park, Kansas
+                <span className="icon-room" /> Mumbai,Maharashtra
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -247,11 +245,11 @@ export default  function Home(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_4.jpg"
-                alt="Free Website Template by Free-Template.co"
+                alt="Image"
                 className="img-fluid"
               />
             </div>
@@ -269,11 +267,11 @@ export default  function Home(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_5.jpg"
-                alt="Free Website Template by Free-Template.co"
+                alt="Image"
                 className="img-fluid"
               />
             </div>
@@ -283,7 +281,7 @@ export default  function Home(){
                 <strong>Puma</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> San Mateo, CA
+                <span className="icon-room" /> Mumbai, Maharashtra
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -291,11 +289,11 @@ export default  function Home(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_1.jpg"
-                alt="Free Website Template by Free-Template.co"
+                alt="Image"
                 className="img-fluid"
               />
             </div>
@@ -305,7 +303,7 @@ export default  function Home(){
                 <strong>Adidas</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> New York, New York
+                <span className="icon-room" /> Mohali,Punjab
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-danger">Part Time</span>
@@ -313,11 +311,11 @@ export default  function Home(){
             </div>
           </li>
           <li className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.html" />
+            <Link to={"/job-single"} />
             <div className="job-listing-logo">
               <img
                 src="/assets/images/job_logo_2.jpg"
-                alt="Free Website Template by Free-Template.co"
+                alt="Image"
                 className="img-fluid"
               />
             </div>
@@ -327,7 +325,7 @@ export default  function Home(){
                 <strong>Sprint</strong>
               </div>
               <div className="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span className="icon-room" /> Overland Park, Kansas
+                <span className="icon-room" /> Lucknow,Uttar Pradesh
               </div>
               <div className="job-listing-meta">
                 <span className="badge badge-success">Full Time</span>
@@ -369,14 +367,13 @@ export default  function Home(){
           <div className="col-md-8">
             <h2 className="text-white">Looking For A Job?</h2>
             <p className="mb-0 text-white lead">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit tempora
-              adipisci impedit.
+              “Your next opportunity is just one click away.”
             </p>
           </div>
           <div className="col-md-3 ml-auto">
-            <a href="#" className="btn btn-warning btn-block btn-lg">
+            <Link to={"/register"} className="btn btn-warning btn-block btn-lg">
               Sign Up
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -388,10 +385,8 @@ export default  function Home(){
             <div className="row justify-content-center">
               <div className="col-md-7">
                 <h2 className="section-title mb-2">Company We've Helped</h2>
-                <p className="lead">
-                  Porro error reiciendis commodi beatae omnis similique
-                  voluptate rerum ipsam fugit mollitia ipsum facilis expedita
-                  tempora suscipit iste
+                <p className="lead text-justify">
+                  We’ve proudly partnered with companies across industries — from startups to global brands — to help them find the right talent quickly and efficiently. Here are just a few of the many companies that trust our platform:
                 </p>
               </div>
             </div>
@@ -512,32 +507,7 @@ export default  function Home(){
       style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
     >
       <div className="container">
-        <div className="row">
-          <div className="col-md-6 align-self-center text-center text-md-left mb-5 mb-md-0">
-            <h2 className="text-white">Get The Mobile Apps</h2>
-            <p className="mb-5 lead text-white">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit tempora
-              adipisci impedit.
-            </p>
-            <p className="mb-0">
-              <a href="#" className="btn btn-dark btn-md px-4 border-width-2">
-                <span className="icon-apple mr-3" />
-                App Store
-              </a>
-              <a href="#" className="btn btn-dark btn-md px-4 border-width-2">
-                <span className="icon-android mr-3" />
-                Play Store
-              </a>
-            </p>
-          </div>
-          <div className="col-md-6 ml-auto align-self-end">
-            <img
-              src="/assets/images/apps.png"
-              alt="Free Website Template by Free-Template.co"
-              className="img-fluid"
-            />
-          </div>
-        </div>
+        
       </div>
     </section>
     {/* <Footer/> */}
