@@ -4,42 +4,51 @@ import Navbar from "../layout/Navbar";
 // import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { Auth } from "../../Firebase";
 export default function Login() {
-    const [email,setEmail] = useState("")
-    const[password,setPassword]=useState("")
-    const changeEmail=(e)=>{
-      console.log(e)
-      setEmail(e.target.value)
-    }
-    let nav= useNavigate()
-    const handleForm=(e)=>{
-      e.preventDefault()  //stop form reload
-      // console.log("Hello user!!", e);
-      if(email=="admin@gmail.com" && password=="2025"){
-        toast.success("Login successfully!!")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  let nav = useNavigate();
+
+  const changeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleForm = (e) => {
+    e.preventDefault();
+   const auth = getAuth();
+// createUserWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(Auth,email,password)
+  .then((userCredential) => {
+    // Signed up 
+    const user = userCredential.user;
+    toast.success("Login Sucessfully")
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    toast.error("Login Failed")
+  });
+  };
+  const signInGoogle=()=>{
+    let provider=new GoogleAuthProvider()
+    signInWithPopup(Auth, provider)
+    .then((userCred)=>{
+        console.log(userCred.user.uid);
+        toast.success("Login successfully")
         nav("/")
-      }else{
-        toast.error("Invalid credentials");
-        
-      }
-    }
-
-
+    })
+    .catch((err)=>{
+      toast.error(err.message)
+    })
+  }
   return (
     <>
       {/* <Navbar /> */}
 
       <div className="site-wrap">
-        <div className="site-mobile-menu site-navbar-target">
-          <div className="site-mobile-menu-header">
-            <div className="site-mobile-menu-close mt-3">
-              <span className="icon-close2 js-menu-toggle" />
-            </div>
-          </div>
-          <div className="site-mobile-menu-body" />
-        </div>
-
+        {/* Hero Section */}
         <section
           className="section-hero overlay inner-page bg-image"
           style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
@@ -61,58 +70,100 @@ export default function Login() {
           </div>
         </section>
 
+        {/* Login Section */}
         <section className="site-section">
           <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-lg-6">
+            <div className="row align-items-center">
+              {/* Left Column: Form */}
+              <div className="col-lg-6 mb-5 mb-lg-0">
                 <h2 className="mb-4">Log In To NEXJOB</h2>
-                <form onSubmit={handleForm} className="p-4 border rounded">
-                  <div className="row form-group">
-                    <div className="col-md-12 mb-3 mb-md-0">
-                      <label className="text-black">Email</label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        placeholder="Email address"
-                        required
-                        value={email}
-                        onChange={changeEmail}
-                      />
-                    </div>
+                <form onSubmit={handleForm} className="p-4 border rounded"
+                  style={{
+                    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.12)",
+                    borderRadius: "12px",
+                    backgroundColor: "#ffffff",
+                    transition: "transform 0.3s ease"
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}>
+                  <div className="form-group mb-3">
+                    <label className="text-black">Email</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      placeholder="Email address"
+                      required
+                      value={email}
+                      onChange={changeEmail}
+                    />
                   </div>
-                  <div className="row form-group mb-4">
-                    <div className="col-md-12 mb-3 mb-md-0">
-                      <label className="text-black">Password</label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Password"
-                        required
-                         value={password}
-                            onChange={(e)=>{
-                              setPassword(e.target.value)
-                            }}
-                      />
-                    </div>
+                  <div className="form-group mb-4">
+                    <label className="text-black">Password</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
                   </div>
-                  <div className="row form-group">
-                    <div className="col-md-12">
-                      <input
-                        type="submit"
-                        defaultValue="Log In"
-                        className="btn px-4 btn-primary text-white"
-                        // onSubmit={handleForm}
-                      />
-                    </div>
-                     </div>
-                    </form>
-                    <div className="text-center mt-3">
-                    <p>
-                          Don't have an account?{" "}
-                    <Link to="/register" className="text-primary">Register here</Link>
-                    </p>
-                 </div>
+                  <div className="form-group">
+                    <input
+                      type="submit"
+                      value="Log In"
+                      className="btn px-4 btn-primary text-white"
+                    />
+                  </div>
+                </form>
+                <button
+                   onClick={signInGoogle}
+                   style={{
+                     border: "none",
+                     background: "none",
+                     padding: 0,
+                     display: "inline-block",
+                     borderRadius: "8px",
+                     boxShadow: "0 8px 20px rgba(0, 0, 0, 0.12)",
+                     transition: "transform 0.3s ease",
+                   }}
+                    onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+                    onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                >
+                <img
+                   src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png"
+                   alt="Sign in with Google"
+                   style={{
+                   height: "40px",
+                   display: "block",
+                   borderRadius: "8px",
+                   }}
+                />
+               </button>
 
+
+
+                <div className="text-center mt-3">
+                  <p>
+                    Don't have an account?{" "}
+                    <Link to="/register" className="text-primary">
+                      Register here
+                    </Link>
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column: Illustration */}
+              <div className="col-lg-6 text-center">
+                <img
+                 src="/assets/images/log.png"
+                  alt="Job Search Illustration"
+                  style={{ maxWidth: "90%", height: "auto" }}
+                />
+                <p className="mt-4" style={{ fontSize: "1.1rem", color: "#555" }}>
+                  <strong>Your dream job is just a few clicks away.</strong><br />
+                  Join thousands of professionals using NEXJOB today.
+                </p>
               </div>
             </div>
           </div>

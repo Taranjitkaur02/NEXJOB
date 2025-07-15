@@ -1,42 +1,36 @@
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
-// import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-export default function Register() {
+export default function CompanyRegister() {
+  const [companyName, setCompanyName] = useState("");
   const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState("");
+  const [contact, setContact] = useState("");
+  const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
-  const changeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-  let nav = useNavigate();
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const nav = useNavigate();
 
   const handleForm = (e) => {
     e.preventDefault();
-    if (email === "admin@gmail.com" && password === "2025") {
-      toast.success("Register successfully!!");
-      nav("/");
-    } else {
-      toast.error("Invalid credentials");
+
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
     }
+
+    toast.success("Company Registered Successfully!");
+    nav("/");
   };
 
   return (
     <>
       <Navbar />
-
       <div className="site-wrap">
-        <div className="site-mobile-menu site-navbar-target">
-          <div className="site-mobile-menu-header">
-            <div className="site-mobile-menu-close mt-3">
-              <span className="icon-close2 js-menu-toggle" />
-            </div>
-          </div>
-          <div className="site-mobile-menu-body" />
-        </div>
-
         <section
           className="section-hero overlay inner-page bg-image"
           style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
@@ -45,13 +39,11 @@ export default function Register() {
           <div className="container">
             <div className="row">
               <div className="col-md-7">
-                <h1 className="text-white font-weight-bold">Sign Up</h1>
+                <h1 className="text-white font-weight-bold">Company Sign Up</h1>
                 <div className="custom-breadcrumbs">
                   <Link to="/">Home</Link>
                   <span className="mx-2 slash">/</span>
-                  <span className="text-white">
-                    <strong>Register</strong>
-                  </span>
+                  <span className="text-white"><strong>Register</strong></span>
                 </div>
               </div>
             </div>
@@ -61,9 +53,9 @@ export default function Register() {
         <section className="site-section">
           <div className="container">
             <div className="row align-items-center">
-              {/* Left Side: Form */}
+              {/* Left: Form */}
               <div className="col-lg-6 mb-5">
-                <h2 className="mb-4">Sign Up To NEXJOB</h2>
+                <h2 className="mb-4">Register Your Company on NEXJOB</h2>
                 <form
                   onSubmit={handleForm}
                   className="p-4"
@@ -76,18 +68,66 @@ export default function Register() {
                   onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
                   onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 >
-                  <div className="form-group mb-3">
-                    <label className="text-black">Email</label>
+                  <div className="form-group">
+                    <label className="text-black">Company Name</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Email address"
+                      placeholder="Company Name"
                       required
-                      value={email}
-                      onChange={changeEmail}
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
                     />
                   </div>
-                  <div className="form-group mb-3">
+
+                  <div className="form-group">
+                    <label className="text-black">Company Email</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      placeholder="Company Email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="text-black">Website (optional)</label>
+                    <input
+                      type="url"
+                      className="form-control"
+                      placeholder="https://example.com"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="text-black">Contact Number</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      placeholder="Contact Number"
+                      required
+                      value={contact}
+                      onChange={(e) => setContact(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="text-black">Company Location</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Location or Address"
+                      required
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-group">
                     <label className="text-black">Password</label>
                     <input
                       type="password"
@@ -98,6 +138,7 @@ export default function Register() {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
+
                   <div className="form-group mb-4">
                     <label className="text-black">Re-Type Password</label>
                     <input
@@ -105,14 +146,15 @@ export default function Register() {
                       className="form-control"
                       placeholder="Re-type Password"
                       required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </div>
+
                   <div className="form-group">
                     <input
                       type="submit"
-                      value="Sign Up"
+                      value="Register Company"
                       className="btn px-4 btn-primary text-white"
                     />
                   </div>
@@ -120,7 +162,7 @@ export default function Register() {
 
                 <div className="text-center mt-3">
                   <p>
-                    Already have an account?{" "}
+                    Already registered?{" "}
                     <Link to="/login" className="text-primary">
                       Log In
                     </Link>
@@ -128,29 +170,27 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Right Side: Image + Text */}
+              {/* Right: Illustration */}
               <div className="col-lg-6 text-center">
                 <img
                   src="/assets/images/register.png"
-                  alt="Register Illustration"
+                  alt="Company Register"
                   style={{
-                    maxWidth: "400px",
-                    width: "100%",
+                    maxWidth: "100%",
                     height: "auto",
                     borderRadius: "12px",
-                    margin: "0 auto",
+                   
                   }}
+             
                 />
                 <p className="mt-0" style={{ fontSize: "1.1rem", color: "#555" }}>
-                  <strong>Join thousands of job seekers.</strong><br />
-                  Start your journey with NEXJOB today!
+                  <strong>Start hiring smarter.</strong><br />
+                  Manage your listings with NEXJOB.
                 </p>
               </div>
             </div>
           </div>
         </section>
-
-        {/* <Footer /> */}
       </div>
     </>
   );

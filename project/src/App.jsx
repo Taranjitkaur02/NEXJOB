@@ -25,6 +25,7 @@ import Layout from "./component/layout/Layout";
 import Register from "./component/auth/Register";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CompanyRegister from "./component/auth/Company-register";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
       <Route path="service-single" element={<Services_single/>}/>
       <Route path="testimonials" element={<Testimonials/>}/>
       <Route path="register" element={<Register/>}/>
+      <Route path="company-register" element={<CompanyRegister/>}/>
      </Route>
       <Route path="/*" element={<Error/>}/>
     </Routes>
