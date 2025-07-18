@@ -1,11 +1,14 @@
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
-// import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { Auth,db } from "../../Firebase";
+import { doc,getDoc, setDoc,Timestamp } from "firebase/firestore";
 export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const changeEmail = (e) => {
@@ -15,14 +18,61 @@ export default function Register() {
 
   const handleForm = (e) => {
     e.preventDefault();
-    if (email === "admin@gmail.com" && password === "2025") {
-      toast.success("Register successfully!!");
-      nav("/");
-    } else {
-      toast.error("Invalid credentials");
-    }
+createUserWithEmailAndPassword(Auth, email, password)
+  .then((userCredential) => {
+    let userId= userCredential.user.uid
+    saveData(userId)
+  })
+  .catch((error) => {
+     toast.error(error.message)
+  });
   };
-
+   const saveData=async (userId)=>{
+    try{
+    let data={
+      name:name, 
+      email:email,
+      userType:3, 
+      userId:userId, 
+      status:true, 
+      createdAt:Timestamp.now()
+    }
+     await setDoc(doc(db, "users", userId), data)
+    toast.success("Registered successfully")
+    getUserData(userId)
+  }
+  catch(error){
+    toast.error(error.message)
+  }
+  }
+  const getUserData=async (userId)=>{
+        let userDoc=await getDoc(doc(db, "users", userId))
+        // console.log(userDoc.data())
+        let userData=userDoc.data()
+        sessionStorage.setItem("name", userData.name)
+        sessionStorage.setItem("email", userData.email)
+        sessionStorage.setItem("userType", userData.userType)
+         sessionStorage.setItem("userId", userId)
+          sessionStorage.setItem("isLogin", true)
+          // toast.success("Login successfully")
+          if(userData.userType==2){
+            nav("/company")
+          }else{
+            nav("/")
+          }
+      }
+   const signInGoogle=()=>{
+      let provider=new GoogleAuthProvider()
+      signInWithPopup(Auth, provider)
+      .then((userCred)=>{
+         let userId = userCred.user.uid;
+        saveData(userId)
+      })
+      .catch((err)=>{
+        toast.error(err.message)
+      })
+    }
+    
   return (
     <>
       <Navbar />
@@ -77,6 +127,17 @@ export default function Register() {
                   onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 >
                   <div className="form-group mb-3">
+                    <label className="text-black">Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Name"
+                      required
+                     value={name}
+                     onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group mb-3">
                     <label className="text-black">Email</label>
                     <input
                       type="text"
@@ -116,6 +177,31 @@ export default function Register() {
                       className="btn px-4 btn-primary text-white"
                     />
                   </div>
+                  <p>OR</p>
+                   <button
+                   onClick={signInGoogle}
+                   style={{
+                     border: "none",
+                     background: "none",
+                     padding: 0,
+                     display: "inline-block",
+                     borderRadius: "8px",
+                     boxShadow: "0 8px 20px rgba(0, 0, 0, 0.12)",
+                     transition: "transform 0.3s ease",
+                   }}
+                    onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+                    onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                >
+                <img
+                   src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png"
+                   alt="Sign in with Google"
+                   style={{
+                   height: "40px",
+                   display: "block",
+                   borderRadius: "8px",
+                   }}
+                />
+               </button>
                 </form>
 
                 <div className="text-center mt-3">
@@ -134,7 +220,7 @@ export default function Register() {
                   src="/assets/images/register.png"
                   alt="Register Illustration"
                   style={{
-                    maxWidth: "400px",
+                    maxWidth: "600px",
                     width: "100%",
                     height: "auto",
                     borderRadius: "12px",

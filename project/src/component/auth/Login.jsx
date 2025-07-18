@@ -1,11 +1,11 @@
 import { useState } from "react";
-import Footer from "../layout/Footer";
-import Navbar from "../layout/Navbar";
-// import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 import { Auth } from "../../Firebase";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../../Firebase"; 
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,26 +18,45 @@ export default function Login() {
   const handleForm = (e) => {
     e.preventDefault();
    const auth = getAuth();
-// createUserWithEmailAndPassword(auth, email, password)
+
     signInWithEmailAndPassword(Auth,email,password)
   .then((userCredential) => {
-    // Signed up 
-    const user = userCredential.user;
-    toast.success("Login Sucessfully")
+    let userId= userCredential.user.uid
+    getUserData(userId);
+   // const user = userCredential.user;
+    // toast.success("Login Sucessfully")
+    // nav("/")
   })
   .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    toast.error("Login Failed")
+    toast.error(error.message)
   });
-  };
+  }
+  const getUserData=async(userId)=>{
+    let userDoc=await getDoc(doc(db,"users",userId))
+    let userData = userDoc.data()
+    // sessionStorage.setItem("name",userData?.name)
+    sessionStorage.setItem("email",userData?.email)
+    sessionStorage.setItem("userType",userData?.userType)
+    sessionStorage.setItem("userId",userId)
+    sessionStorage.setItem("isLogin",true)
+    toast.success("Login Successfully")
+    if(userData?.userType==1){
+      nav("/admin")
+    }
+    else if(userData?.userType==2){
+      nav("/company")
+    }
+    else{
+      nav("/")
+    }
+    }
   const signInGoogle=()=>{
     let provider=new GoogleAuthProvider()
     signInWithPopup(Auth, provider)
     .then((userCred)=>{
-        console.log(userCred.user.uid);
-        toast.success("Login successfully")
-        nav("/")
+        let userId=userCred.user.uid 
+        getUserData(userId)
+    
     })
     .catch((err)=>{
       toast.error(err.message)
@@ -48,7 +67,7 @@ export default function Login() {
       {/* <Navbar /> */}
 
       <div className="site-wrap">
-        {/* Hero Section */}
+       
         <section
           className="section-hero overlay inner-page bg-image"
           style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
@@ -108,15 +127,15 @@ export default function Login() {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="form-group ">
                     <input
                       type="submit"
                       value="Log In"
                       className="btn px-4 btn-primary text-white"
                     />
-                  </div>
-                </form>
-                <button
+                  </div> 
+                  <p>OR</p>
+                   <button
                    onClick={signInGoogle}
                    style={{
                      border: "none",
@@ -140,6 +159,8 @@ export default function Login() {
                    }}
                 />
                </button>
+                </form>
+               
 
 
 

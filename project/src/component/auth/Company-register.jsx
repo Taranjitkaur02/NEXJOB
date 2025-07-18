@@ -3,6 +3,9 @@ import Footer from "../layout/Footer";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { Auth, db } from "../../Firebase";
+import { Timestamp, setDoc, doc } from "firebase/firestore";
 
 export default function CompanyRegister() {
   const [companyName, setCompanyName] = useState("");
@@ -18,15 +21,46 @@ export default function CompanyRegister() {
   const handleForm = (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match!");
-      return;
-    }
-
-    toast.success("Company Registered Successfully!");
-    nav("/");
+   createUserWithEmailAndPassword(Auth, email, password)
+  .then((userCredential) => {
+    let userId= userCredential.user.uid
+    saveData(userId)
+  })
+  .catch((error) => {
+     toast.error(error.message)
+  });
   };
-
+  const signInGoogle=()=>{
+      let provider=new GoogleAuthProvider()
+      signInWithPopup(Auth, provider)
+      .then((userCred)=>{
+         let userId = userCred.user.uid;
+        saveData(userId)
+      })
+      .catch((err)=>{
+        toast.error(err.message)
+      })
+    }
+    const saveData=async(userId)=>{
+      try{
+        let data={
+          name:companyName,
+          website:website,
+          contact:contact,
+          location:location,
+          userType:2,
+          userId:userId,
+          status:true,
+          createdAt:Timestamp.now()
+        }
+        await setDoc(doc(db,"users",userId),data)
+        toast.success("Registered successfully")
+        nav("/")
+      }
+      catch(error){
+        toast.error(error.message)
+      }
+    }
   return (
     <>
       <Navbar />

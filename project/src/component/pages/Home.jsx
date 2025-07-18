@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default  function Home(){
     return(
         <>
-        <Navbar/>
+        {/* <Navbar/> */}
  
 
   <div className="site-wrap">

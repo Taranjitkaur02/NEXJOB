@@ -26,6 +26,9 @@ import Register from "./component/auth/Register";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CompanyRegister from "./component/auth/Company-register";
+import AdminNavbar from "./component/layout/AdminNavbar";
+import AdminLayout from "./component/layout/AdminLayout";
+import CompanyLayout from "./component/layout/CompanyLayout";
 
 function App() {
   return (
@@ -52,6 +55,12 @@ function App() {
       <Route path="testimonials" element={<Testimonials/>}/>
       <Route path="register" element={<Register/>}/>
       <Route path="company-register" element={<CompanyRegister/>}/>
+     </Route>
+     <Route path="/admin" element={<AdminLayout/>}>
+     <Route index element={<Home/>}/>
+     </Route>
+     <Route path="/company" element={<CompanyLayout/>}>
+     <Route index element={<Home/>}/>
      </Route>
       <Route path="/*" element={<Error/>}/>
     </Routes>
