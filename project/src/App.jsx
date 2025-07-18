@@ -1,10 +1,5 @@
 import About from "./component/pages/About"
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  BrowserRouter
-} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Blog from "./component/pages/Blog";
 import Blog_single from "./component/pages/Blog_single";
 import Contact from "./component/pages/Contact";
@@ -16,7 +11,7 @@ import Job_single from "./component/pages/Job_single";
 import Login from "./component/auth/Login";
 import Portfolio from "./component/pages/Portfolio";
 import Portfolio_single from "./component/pages/Portfolio_single";
-import Post_job from "./component/pages/Post_job";
+import Post_job from "./component/company/Post_job";
 import Services from "./component/pages/Services";
 import Services_single from "./component/pages/Services_single";
 import Testimonials from "./component/pages/Testimonials";
@@ -29,7 +24,7 @@ import CompanyRegister from "./component/auth/Company-register";
 import AdminNavbar from "./component/layout/AdminNavbar";
 import AdminLayout from "./component/layout/AdminLayout";
 import CompanyLayout from "./component/layout/CompanyLayout";
-
+// import { HashRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <>
