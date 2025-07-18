@@ -49,7 +49,6 @@ function App() {
       <Route path="login" element={<Login/>}/>
       <Route path="portfolio" element={<Portfolio/>}/>
       <Route path="portfolio-single" element={<Portfolio_single/>}/>
-      <Route path="post-job" element={<Post_job/>}/>
       <Route path="services" element={<Services/>}/>
       <Route path="service-single" element={<Services_single/>}/>
       <Route path="testimonials" element={<Testimonials/>}/>
@@ -61,6 +60,7 @@ function App() {
      </Route>
      <Route path="/company" element={<CompanyLayout/>}>
      <Route index element={<Home/>}/>
+    <Route path="post-job" element={<Post_job/>}/>
      </Route>
       <Route path="/*" element={<Error/>}/>
     </Routes>
@@ -68,5 +68,4 @@ function App() {
     </>
   )
 }
-
 export default App

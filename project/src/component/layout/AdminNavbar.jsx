@@ -87,7 +87,7 @@ export default function AdminNavbar() {
               </ul>
             </nav>
 
-            {/* Right Side Buttons */}
+            
             <div className="right-cta-menu text-right d-flex align-items-center col-6">
               <div className="ml-auto">
                 {isLogin ? (
@@ -118,7 +118,7 @@ export default function AdminNavbar() {
                 )}
               </div>
 
-              {/* Mobile Toggle */}
+              
               <Link
                 to="/*"
                 className="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"

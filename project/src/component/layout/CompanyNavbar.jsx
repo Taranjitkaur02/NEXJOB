@@ -51,37 +51,13 @@ export default function CompanyNavbar() {
                   <Link to="/" className="nav-link">Home</Link>
                 </li>
                 <li>
-                  <Link to="/about">About</Link>
-                </li>
-                <li className="has-children">
-                  <Link to="/job-listings">Job Listings</Link>
-                  <ul className="dropdown">
-                    <li>
-                      <Link to="/job-single">Job Single</Link>
-                    </li>
-                    <li>
-                      <Link to="/post-job">Post a Job</Link>
-                    </li>
-                  </ul>
-                </li>
-                <li className="has-children">
-                  <Link to="/services">Pages</Link>
-                  <ul className="dropdown">
-                    <li><Link to="/services">Services</Link></li>
-                    <li><Link to="/service-single">Service Single</Link></li>
-                    <li><Link to="/blog-single">Blog Single</Link></li>
-                    <li><Link to="/portfolio">Portfolio</Link></li>
-                    <li><Link to="/portfolio-single">Portfolio Single</Link></li>
-                    <li><Link to="/testimonials">Testimonials</Link></li>
-                    <li><Link to="/faq">Frequently Ask Questions</Link></li>
-                    <li><Link to="/gallery">Gallery</Link></li>
-                  </ul>
+                  <Link to="/post-job">Add Jobs</Link>
                 </li>
                 <li>
-                  <Link to="/blog" className="active">Blog</Link>
+                   <Link to="/manage-jobs">Manage Jobs</Link>
                 </li>
                 <li>
-                  <Link to="/contact">Contact</Link>
+                   <Link to="/view-app">View App</Link>
                 </li>
                 <li className="d-lg-none">
                   <Link to="/post-job"><span className="mr-2">+</span> Post a Job</Link>
