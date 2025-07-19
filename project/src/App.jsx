@@ -24,6 +24,8 @@ import CompanyRegister from "./component/auth/Company-register";
 import AdminNavbar from "./component/layout/AdminNavbar";
 import AdminLayout from "./component/layout/AdminLayout";
 import CompanyLayout from "./component/layout/CompanyLayout";
+import ManageUser from "./component/admin/ManageUser";
+import ManageCompany from "./component/admin/ManageCompany";
 // import { HashRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
@@ -52,6 +54,8 @@ function App() {
      </Route>
      <Route path="/admin" element={<AdminLayout/>}>
      <Route index element={<Home/>}/>
+     <Route path="manage-user" element={<ManageUser/>}/>
+     <Route path="manage-company" element={<ManageCompany/>}/>
      </Route>
      <Route path="/company" element={<CompanyLayout/>}>
      <Route index element={<Home/>}/>

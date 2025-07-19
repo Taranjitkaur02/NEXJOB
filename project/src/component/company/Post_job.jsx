@@ -94,7 +94,7 @@ const saveData = async (uploadedUrl) => {
       >
         <div className="container">
           <div className="row">
-            <div className="col-md-7">
+            <div className="col-md-6">
               <h1 className="text-white font-weight-bold">Post A Job</h1>
               <div className="custom-breadcrumbs">
                 <Link to="/">Home</Link> <span className="mx-2 slash">/</span>
@@ -246,6 +246,7 @@ const saveData = async (uploadedUrl) => {
             </div>
           </form>
         </div>
+        
       </section>
     </div>
   );

@@ -14,8 +14,6 @@ export default function CompanyRegister() {
   const [contact, setContact] = useState("");
   const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
   const nav = useNavigate();
 
   const handleForm = (e) => {
@@ -47,6 +45,7 @@ export default function CompanyRegister() {
           name:companyName,
           website:website,
           contact:contact,
+          email:email,
           location:location,
           userType:2,
           userId:userId,
@@ -144,6 +143,9 @@ export default function CompanyRegister() {
                       className="form-control"
                       placeholder="Contact Number"
                       required
+                      maxLength={10}
+                      minLength={10}
+                      pattern="[0-9]{10}"
                       value={contact}
                       onChange={(e) => setContact(e.target.value)}
                     />
@@ -173,22 +175,12 @@ export default function CompanyRegister() {
                     />
                   </div>
 
-                  <div className="form-group mb-4">
-                    <label className="text-black">Re-Type Password</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Re-type Password"
-                      required
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                  </div>
+            
 
                   <div className="form-group">
                     <input
                       type="submit"
-                      value="Register Company"
+                      value="Register"
                       className="btn px-4 btn-primary text-white"
                     />
                   </div>
