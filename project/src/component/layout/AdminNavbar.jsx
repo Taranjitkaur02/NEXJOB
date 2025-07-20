@@ -62,7 +62,7 @@ export default function AdminNavbar() {
                   <Link to="/admin/manage-company">Manage Company</Link>
                 </li>
                 <li>
-                  <Link to="/total-jobs">Total Jobs</Link>
+                  <Link to="/admin/manage-jobs">Manage Jobs</Link>
                 </li>
                 
                 <li>

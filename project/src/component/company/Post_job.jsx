@@ -18,7 +18,7 @@ export default function Post_job() {
   const [remote, setRemote] = useState(false);
   const [imageName, setImageName] = useState();
   const[image,setImage]=useState({});
-  const [url, setUrl]=useState("")
+  // const [url, setUrl]=useState("")
   const handleForm = async (e) => {
   e.preventDefault();
 
@@ -31,15 +31,13 @@ export default function Post_job() {
       `https://api.cloudinary.com/v1_1/dhvmmiipj/image/upload`,
       formData
     );
-    const uploadedUrl = response.data.secure_url;
-    await saveData(uploadedUrl); 
-    directly
+    saveData(response.data.secure_url)
   } catch (error) {
     toast.error("Error uploading image: " + error.message);
   }
 };
 
-const saveData = async (uploadedUrl) => {
+const saveData = async (Url) => {
   try {
     let data = {
       email,
@@ -54,7 +52,7 @@ const saveData = async (uploadedUrl) => {
       description,
       remote,
       status: true,
-      image: uploadedUrl, 
+      image: Url, 
       createdAt: Timestamp.now(),
     };
 

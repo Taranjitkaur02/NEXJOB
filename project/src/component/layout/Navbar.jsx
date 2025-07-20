@@ -85,50 +85,67 @@ export default function Navbar() {
                     <span className="mr-2">+</span> Post a Job
                   </Link>
                 </li>
-
-                
               </ul>
             </nav>
 
             {/* Right CTA Buttons */}
             <div className="right-cta-menu text-right d-flex align-items-center col-6">
               <div className="ml-auto d-flex align-items-center">
-                <Link
-                  to="/post-job"
-                  className="btn btn-outline-white border-width-2 d-none d-lg-inline-block"
-                >
-                  <span className="mr-2 icon-add" />
-                  Post a Job
-                </Link>
 
-                {/* Desktop-only: Login / Logout */}
+                {/* Post Job */}
+               
+
+                {/* If NOT Logged In: Show Register Dropdown & Login */}
                 {!isLogin ? (
-                  <Link
-                    to="/login"
-                    className="btn btn-primary border-width-2 d-none d-lg-inline-block d-inline-flex align-items-center ml-3"
+                  <>
+                    {/* Register Dropdown */}
+                    <div className="dropdown d-none d-lg-inline-block ml-3">
+                      <button
+                        className="btn btn-primary border-width-2 dropdown-toggle d-inline-flex align-items-center"
+                        type="button"
+                        id="registerDropdown"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        style={{ fontWeight: "500" }}
+                      >
+                        <span className="mr-2 icon-person_add" />
+                        Register
+                      </button>
+                      <div className="dropdown-menu" aria-labelledby="registerDropdown">
+                        <Link className="dropdown-item" to="/register">Register as User</Link>
+                        <Link className="dropdown-item" to="/company-register">Register as Company</Link>
+                      </div>
+                    </div>
+
+                    {/* Login Button */}
+                    <Link
+                      to="/login"
+                      className="btn btn-primary border-width-2 d-none d-lg-inline-block d-inline-flex align-items-center ml-3"
+                    >
+                      <span className="mr-2 icon-lock_outline" />
+                      Log In
+                    </Link>
+                  </>
+                ) : (
+                  // If Logged In: Show Logout Only
+                  <button
+                    onClick={logout}
+                    className="btn border-width-2 d-none d-lg-inline-block d-inline-flex align-items-center ml-3"
+                    style={{
+                      backgroundColor: "#89BA16",
+                      color: "#fff",
+                      border: "1px solid #89BA16",
+                      borderRadius: "4px",
+                      fontSize: "16px",
+                      padding: "6px 12px",
+                      cursor: "pointer",
+                      fontWeight: "500"
+                    }}
                   >
                     <span className="mr-2 icon-lock_outline" />
-                    Log In
-                  </Link>
-                ) : (
-                 <button
-                  onClick={logout}
-                  className="btn border-width-2 d-none d-lg-inline-block d-inline-flex align-items-center ml-3"
-                  style={{
-                  backgroundColor: "#89BA16",
-                  color: "#fff",
-                  border: "1px solid #89BA16",
-                  borderRadius: "4px",
-                  fontSize: "16px",
-                  padding: "6px 12px",
-                  cursor: "pointer",
-                  fontWeight: "500"
-                  }}
-                >
-                <span className="mr-2 icon-lock_outline" />
-                  Logout 
-                </button>
-
+                    Logout
+                  </button>
                 )}
               </div>
 

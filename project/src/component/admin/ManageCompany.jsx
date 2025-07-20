@@ -29,9 +29,9 @@ export default function ManageCompany(){
       <div className="container">
         <div className="row">
           <div className="col-md-7">
-            <h1 className="text-white font-weight-bold">Manage Compnay</h1>
+            <h1 className="text-white font-weight-bold">Manage Company</h1>
             <div className="custom-breadcrumbs">
-              <Link to={"/admin"}>Home</Link> <span className="mx-2 slash">/</span>
+              <Link to={"/admin"}>Home</Link> <span className="mx-2 slash"></span>
               <span className="text-white">
               </span>
             </div>

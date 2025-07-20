@@ -26,6 +26,8 @@ import AdminLayout from "./component/layout/AdminLayout";
 import CompanyLayout from "./component/layout/CompanyLayout";
 import ManageUser from "./component/admin/ManageUser";
 import ManageCompany from "./component/admin/ManageCompany";
+import ManageJobs from "./component/admin/ManageJobs";
+import ManageCompanyJobs from "./component/ManageCompanyJobs";
 // import { HashRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
@@ -56,10 +58,12 @@ function App() {
      <Route index element={<Home/>}/>
      <Route path="manage-user" element={<ManageUser/>}/>
      <Route path="manage-company" element={<ManageCompany/>}/>
+     <Route path="manage-jobs" element={<ManageJobs/>}/>
      </Route>
      <Route path="/company" element={<CompanyLayout/>}>
      <Route index element={<Home/>}/>
-    <Route path="post-job" element={<Post_job/>}/>
+     <Route path="post-job" element={<Post_job/>}/>
+     <Route path="manage-jobs" element={<ManageCompanyJobs/>}/>
      </Route>
       <Route path="/*" element={<Error/>}/>
     </Routes>
