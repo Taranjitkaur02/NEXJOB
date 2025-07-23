@@ -5,7 +5,6 @@ import { db } from "../../Firebase"
 import { toast } from "react-toastify"
 import axios from "axios"
 export default function Post_job() {
-  const [email, setEmail] = useState("");
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState("Full Time");
@@ -18,6 +17,7 @@ export default function Post_job() {
   const [remote, setRemote] = useState(false);
   const [imageName, setImageName] = useState();
   const[image,setImage]=useState({});
+  const companyEmail = sessionStorage.getItem("email")
   // const [url, setUrl]=useState("")
   const handleForm = async (e) => {
   e.preventDefault();
@@ -25,6 +25,7 @@ export default function Post_job() {
   const formData = new FormData();
   formData.append("file", image);
   formData.append("upload_preset", "images");
+console.log(formData);
 
   try {
     const response = await axios.post(
@@ -40,7 +41,7 @@ export default function Post_job() {
 const saveData = async (Url) => {
   try {
     let data = {
-      email,
+      email:companyEmail,
       title,
       location,
       jobType,
@@ -58,7 +59,7 @@ const saveData = async (Url) => {
 
     await addDoc(collection(db, "postJob"), data);
     toast.success("Job Posted Successfully");
-    setEmail("");
+   
     setTitle("");
     setLocation("");
     setJobType("Full Time");
@@ -111,11 +112,11 @@ const saveData = async (Url) => {
             <h3 className="text-black mb-4 border-bottom pb-2">Job Details</h3>
 
             {/* Email */}
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Email Address</label>
               <input type="email" className="form-control" placeholder="you@domain.com"
                 value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
+            </div> */}
 
             {/* Job Title */}
             <div className="form-group">

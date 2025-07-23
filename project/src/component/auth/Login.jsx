@@ -41,10 +41,10 @@ export default function Login() {
     sessionStorage.setItem("isLogin",true)
     toast.success("Login Successfully")
     if(userData?.userType==1){
-      nav("/admin")
+      nav("/admin/admin-homepage")
     }
     else if(userData?.userType==2){
-      nav("/company")
+      nav("/company/company-homepage")
     }
     else{
       nav("/")

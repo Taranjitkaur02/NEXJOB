@@ -52,17 +52,13 @@ export default function Navbar() {
             <nav className="mx-auto site-navigation">
               <ul className="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
                 <li><Link to="/" className="nav-link">Home</Link></li>
-                <li><Link to="/about">About</Link></li>
+                <li><Link to="/view-skills">View Skills</Link></li>
 
-                <li className="has-children">
-                  <Link to="/job-listings">Job Listings</Link>
-                  <ul className="dropdown">
-                    <li><Link to="/job-single">Job Single</Link></li>
-                    <li><Link to="/post-job">Post a Job</Link></li>
-                  </ul>
-                </li>
+                    <li><Link to="/view-job">View Job</Link></li>
+                    <li><Link to="/apply-job">Apply Job</Link></li>
+                  
 
-                <li className="has-children">
+                {/* <li className="has-children">
                   <Link to="/services">Pages</Link>
                   <ul className="dropdown">
                     <li><Link to="/services">Services</Link></li>
@@ -74,10 +70,7 @@ export default function Navbar() {
                     <li><Link to="/faq">FAQ</Link></li>
                     <li><Link to="/gallery">Gallery</Link></li>
                   </ul>
-                </li>
-
-                <li><Link to="/blog">Blog</Link></li>
-                <li><Link to="/contact">Contact</Link></li>
+                </li> */}
 
                 {/* Mobile-only: Post Job */}
                 <li className="d-lg-none">
@@ -150,12 +143,12 @@ export default function Navbar() {
               </div>
 
               {/* Mobile Menu Toggle */}
-              <Link
+              {/* <Link
                 to="#"
                 className="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"
               >
                 <span className="icon-menu h3 m-0 p-0 mt-2" />
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

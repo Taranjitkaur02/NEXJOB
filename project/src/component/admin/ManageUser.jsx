@@ -10,6 +10,7 @@ export default function ManageUser(){
     
       onSnapshot(q,(userCol)=>{
         setuser(userCol.docs?.map((el)=>{
+          // console.log(el.data())
             return {...el.data(), id:el.id};
         })) 
         
@@ -60,7 +61,6 @@ export default function ManageUser(){
                                 return(
                                     <tr key={index}>
                                         <td>{index+1}</td>
-                                       
                                         <td>{el?.name}</td>
                                         <td>{el?.email}</td>
                                         <td>{el?.contact}</td>

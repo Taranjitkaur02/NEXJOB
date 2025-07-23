@@ -1,7 +1,8 @@
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, deleteDoc,doc} from "firebase/firestore";
 import { use, useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 import { db } from "../../Firebase";
+import { toast } from "react-toastify";
 
 export default function ManageJobs(){
     const [user, setuser]=useState([])
@@ -19,6 +20,15 @@ export default function ManageJobs(){
     useEffect(()=>{
         fetchData()
     },[])
+    const DeleteJob = async (JobId) => {
+        try {
+          await deleteDoc(doc(db, "postJob", JobId));
+          toast.success("Job deleted");
+        } catch (error) {
+          toast.error("Failed to delete Job");
+          console.error("Delete error:", error);
+        }
+      };
     return(
         <>
           <section
@@ -55,6 +65,7 @@ export default function ManageJobs(){
                                 <th>Qualification</th>
                                 <th>Experience</th>
                                 <th>Vacancies</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,6 +83,11 @@ export default function ManageJobs(){
                                         <td>{el?.qualification}</td>
                                         <td>{el?.experience}</td>
                                         <td>{el?.vacancies}</td>
+                                        <td>
+                                            <button onClick={() => DeleteJob(el.id)} className="btn btn-danger">
+                                              Delete
+                                            </button>
+                                        </td>
                                     </tr>
                                 )
                             })}
