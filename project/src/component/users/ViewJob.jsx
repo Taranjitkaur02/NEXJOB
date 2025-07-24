@@ -2,17 +2,22 @@ import { collection, onSnapshot, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../../Firebase";
+import { SyncLoader } from "react-spinners";
 
 export default function ViewJob() {
   const [jobs, setJobs] = useState([]);
+  const [load, setLoad] = useState(true); // 🟡 Loading state
 
   const fetchData = () => {
     const q = query(collection(db, "postJob"));
-
-    onSnapshot(q, (job) => {
+    onSnapshot(q, (jobSnapshot) => {
       setJobs(
-        job.docs?.map((doc) => ({...doc.data(),id: doc.id,}))
+        jobSnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }))
       );
+      setLoad(false); // ✅ Hide loader after fetch
     });
   };
 
@@ -48,61 +53,70 @@ export default function ViewJob() {
         id="next-section"
       >
         <div className="container">
-          <div className="row">
-            {jobs.map((job) => (
-              <div
-                className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5"
-                key={job.id}
-              >
-                <div className="block__16443 d-block p-4 bg-white shadow rounded">
-                  <div className="text-center mb-3">
-                    <img
-                      className="img-fluid"
-                      src={job.image}
-                      alt=""
-                      style={{ borderRadius: "50%", maxHeight: "100px" }}
-                    />
+          {load ? (
+            <SyncLoader
+              color="#89BA16"
+              size={20}
+              cssOverride={{ display: "block", margin: "50px auto" }}
+            />
+          ) : jobs.length === 0 ? (
+            <p className="text-center">No jobs found.</p>
+          ) : (
+            <div className="row">
+              {jobs.map((job) => (
+                <div
+                  className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5"
+                  key={job.id}
+                >
+                  <div className="block__16443 d-block p-4 bg-white shadow rounded">
+                    <div className="text-center mb-3">
+                      <img
+                        className="img-fluid"
+                        src={job.image}
+                        alt="Job"
+                        style={{ borderRadius: "50%", maxHeight: "100px" }}
+                      />
+                    </div>
+                    <h3 className="text-center">{job.title}</h3>
+
+                    <p>
+                      <i className="bi bi-geo-alt me-2"></i>
+                      {job.location}
+                    </p>
+
+                    <p>
+                      <i className="bi bi-clock me-2"></i>
+                      {job.jobType}
+                    </p>
+
+                    <p>
+                      <i className="bi bi-currency-rupee me-2"></i>
+                      {job.salary}
+                    </p>
+
+                    <p>
+                      <i className="bi bi-mortarboard me-2"></i>
+                      {job.qualification}
+                    </p>
+
+                    <p>
+                      <i className="bi bi-briefcase me-2"></i>
+                      {job.experience} Year Experience
+                    </p>
+
+                    <p>
+                      <i className="bi bi-person-lines-fill me-2"></i>
+                      {job.vacancies} Vacancies
+                    </p>
+
+                    <button className="btn btn-primary mt-3 w-100">
+                      Apply Now
+                    </button>
                   </div>
-                  <h3 className="text-center">{job.title}</h3>
-
-                  <p>
-                    <i className="bi bi-geo-alt" style={{ marginRight: "6px" }}></i>
-                    {job.location}
-                  </p>
-
-                  <p>
-                    <i className="bi bi-clock" style={{ marginRight: "6px" }}></i>
-                    {job.jobType}
-                  </p>
-
-                  <p>
-                    <i className="bi bi-currency-rupee" style={{ marginRight: "6px" }}></i>
-                    {job.salary}
-                  </p>
-
-                  <p>
-                    <i className="bi bi-mortarboard" style={{ marginRight: "6px" }}></i>
-                    {job.qualification}
-                  </p>
-
-                  <p>
-                    <i className="bi bi-briefcase" style={{ marginRight: "6px" }}></i>
-                    {job.experience} Year Experience
-                  </p>
-
-                  <p>
-                    <i className="bi bi-person-lines-fill" style={{ marginRight: "6px" }}></i>
-                    {job.vacancies} Vacancies
-                  </p>
-                   <button
-                    className="btn btn-primary mt-3 w-100"
-                  >
-                    Apply Now
-                  </button>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

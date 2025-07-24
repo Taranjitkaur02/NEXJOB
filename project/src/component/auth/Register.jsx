@@ -26,27 +26,27 @@ export default function Register() {
     createUserWithEmailAndPassword(Auth, email, password)
       .then((userCredential) => {
         const userId = userCredential.user.uid;
-        saveData(userId);
+        const data = {
+          name,
+          email,
+          contact,
+          qualification,
+          about,
+          skills,
+          userType: 3,
+          userId,
+          status: true,
+          createdAt: Timestamp.now(),
+        };
+        saveData(userId, data);
       })
       .catch((error) => {
         toast.error(error.message);
       });
   };
 
-  const saveData = async (userId) => {
+  const saveData = async (userId, data) => {
     try {
-      const data = {
-        name,
-        email,
-        contact,
-        qualification,
-        skills,
-        about,
-        userType: 3,
-        userId,
-        status: true,
-        createdAt: Timestamp.now(),
-      };
       await setDoc(doc(db, "users", userId), data);
       toast.success("Registered successfully");
       getUserData(userId);
@@ -58,6 +58,10 @@ export default function Register() {
   const getUserData = async (userId) => {
     const userDoc = await getDoc(doc(db, "users", userId));
     const userData = userDoc.data();
+    if (!userData.status) {
+      toast.error("Your account has been blocked!");
+      return;
+    }
     sessionStorage.setItem("name", userData.name);
     sessionStorage.setItem("email", userData.email);
     sessionStorage.setItem("userType", userData.userType);
@@ -70,32 +74,48 @@ export default function Register() {
     }
   };
 
-  const signInGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(Auth, provider)
-      .then((userCred) => {
-        const userId = userCred.user.uid;
-        saveData(userId);
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
-  };
+ const signInGoogle = () => {
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(Auth, provider)
+    .then(async (userCred) => {
+      const userId = userCred.user.uid;
+      const userDoc = await getDoc(doc(db, "users", userId));
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        if (!userData.status) {
+          toast.error("Your account has been blocked!");
+          return;
+        }
+        getUserData(userId);
+      } else {
+        const data = {
+          name: userCred.user.displayName || "",
+          email: userCred.user.email || "",
+          contact: userCred.user.phoneNumber || "",
+          qualification: "",
+          about: "",
+          skills: "",
+          userType: 3,
+          userId,
+          status: true,
+          createdAt: Timestamp.now(),
+        };
+        await setDoc(doc(db, "users", userId), data);
+        toast.success("Registered successfully");
+        getUserData(userId);
+      }
+    })
+    .catch((err) => {
+      toast.error(err.message);
+    });
+};
+
 
   return (
     <>
       <Navbar />
-
       <div className="site-wrap">
-        <div className="site-mobile-menu site-navbar-target">
-          <div className="site-mobile-menu-header">
-            <div className="site-mobile-menu-close mt-3">
-              <span className="icon-close2 js-menu-toggle" />
-            </div>
-          </div>
-          <div className="site-mobile-menu-body" />
-        </div>
-
         <section
           className="section-hero overlay inner-page bg-image"
           style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
@@ -118,7 +138,7 @@ export default function Register() {
         <section className="site-section">
           <div className="container">
             <div className="row align-items-center">
-              {/* Form Section */}
+              {/* Left Column: Form */}
               <div className="col-lg-6 mb-5">
                 <h2 className="mb-4">Sign Up To NEXJOB</h2>
                 <form
@@ -133,7 +153,6 @@ export default function Register() {
                   onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
                   onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 >
-                  {/* Row 1: Name */}
                   <div className="form-group mb-3">
                     <label className="text-black">Name</label>
                     <input
@@ -146,7 +165,6 @@ export default function Register() {
                     />
                   </div>
 
-                  {/* Row 2: Email + Password */}
                   <div className="row">
                     <div className="col-md-6 form-group mb-3">
                       <label className="text-black">Email</label>
@@ -172,7 +190,6 @@ export default function Register() {
                     </div>
                   </div>
 
-                  {/* Row 3: Contact + About */}
                   <div className="row">
                     <div className="col-md-6 form-group mb-3">
                       <label className="text-black">Contact</label>
@@ -200,7 +217,6 @@ export default function Register() {
                     </div>
                   </div>
 
-                  {/* Row 4: Qualification + Skills */}
                   <div className="row">
                     <div className="col-md-6 form-group mb-3">
                       <label className="text-black">Qualification</label>
@@ -224,7 +240,6 @@ export default function Register() {
                     </div>
                   </div>
 
-                  {/* Buttons */}
                   <div className="form-group">
                     <input
                       type="submit"
@@ -232,8 +247,8 @@ export default function Register() {
                       className="btn px-4 btn-primary text-white"
                     />
                   </div>
-                  <p >OR</p>
-                  <div className="">
+                  <p>OR</p>
+                  <div>
                     <button
                       type="button"
                       onClick={signInGoogle}
@@ -272,7 +287,7 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Right Side Image */}
+              {/* Right Column: Illustration */}
               <div className="col-lg-6 text-center">
                 <img
                   src="/assets/images/register.png"
@@ -294,9 +309,8 @@ export default function Register() {
           </div>
         </section>
 
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </>
   );
 }
-

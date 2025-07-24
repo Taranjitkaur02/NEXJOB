@@ -27,13 +27,16 @@ import CompanyLayout from "./component/layout/CompanyLayout";
 import ManageUser from "./component/admin/ManageUser";
 import ManageCompany from "./component/admin/ManageCompany";
 import ManageJobs from "./component/admin/ManageJobs";
-// import ManageCompanyJobs from "./component/ManageCompanyJobs";
-import ViewSkills from "./component/users/ViewSkills";
+
+
 import ViewJob from "./component/users/ViewJob";
 import ApplyJob from "./component/users/ApplyJob";
 import CompanyHome from "./component/company/CompanyHome";
 import ManageCompanyJobs from "./component/company/ManageCompanyJobs";
 import AdminHome from "./component/admin/AdminHome";
+import UpdateJob from "./component/company/UpdateJob";
+
+import UpdateCompany from "./component/company/UpdateProfile";
 // import { HashRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
@@ -43,7 +46,7 @@ function App() {
     <Routes>
      <Route path="/" element={<Layout/>}>
      <Route index element={<Home/>}/>
-     <Route path="view-skills" element={<ViewSkills/>}/>
+     
       <Route path="view-job" element={<ViewJob/>}/>
       <Route path="apply-job" element={<ApplyJob/>}/>
       <Route path="contact" element={<Contact/>}/>
@@ -61,15 +64,17 @@ function App() {
       <Route path="company-register" element={<CompanyRegister/>}/>
      </Route>
      <Route path="/admin" element={<AdminLayout/>}>
-     <Route path="admin-homepage" element={<AdminHome/>}/>
+     <Route index element={<AdminHome/>}/>
      <Route path="manage-user" element={<ManageUser/>}/>
      <Route path="manage-company" element={<ManageCompany/>}/>
      <Route path="manage-jobs" element={<ManageJobs/>}/>
      </Route>
      <Route path="/company" element={<CompanyLayout/>}>
-     <Route path="company-homepage" element={<CompanyHome/>}/>
+     <Route index element={<CompanyHome/>}/>
      <Route path="post-job" element={<Post_job/>}/>
      <Route path="manage-jobs" element={<ManageCompanyJobs/>}/>
+     <Route path="update-job/:id" element={<UpdateJob/>}/>
+     <Route path="update-profile" element={<UpdateCompany/>}/>
      </Route>
       <Route path="/*" element={<Error/>}/>
     </Routes>

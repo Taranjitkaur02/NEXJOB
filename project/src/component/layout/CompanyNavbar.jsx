@@ -48,7 +48,7 @@ export default function CompanyNavbar() {
             <nav className="mx-auto site-navigation">
               <ul className="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
                 <li>
-                  <Link to="/company/company-homepage" className="nav-link">Home</Link>
+                  <Link to="/company" className="nav-link">Home</Link>
                 </li>
                 <li>
                   <Link to="/company/post-job">Add Jobs</Link>

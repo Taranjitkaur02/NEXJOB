@@ -53,7 +53,7 @@ export default function AdminNavbar() {
                 style={{ whiteSpace: "nowrap" }}
               >
                 <li>
-                  <Link to="/admin/admin-homepage" className="nav-link">Home</Link>
+                  <Link to="/admin" className="nav-link">Home</Link>
                 </li>
                 <li>
                   <Link to="/admin/manage-user">Manage Users</Link>
