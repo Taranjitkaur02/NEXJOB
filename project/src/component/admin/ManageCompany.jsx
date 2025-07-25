@@ -146,7 +146,7 @@ export default function ManageCompany() {
                               onClick={() => DeleteCompany(el.id)}
                               className="btn btn-danger"
                             >
-                              Delete
+                              <i className="bi bi-trash me-1"></i>
                             </button>
                           </td>
                         </tr>

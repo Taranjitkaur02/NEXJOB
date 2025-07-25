@@ -52,13 +52,13 @@ export default function CompanyHome() {
           </div>
         </div>
       </section>
-
+      <section className="py-5 bg-image overlay-primary fixed overlay" style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}>
       {/* Company Profile Section */}
       {company && (
   <section className="site-section">
     <div className="container">
       <div
-        className="row align-items-center shadow p-4 rounded"
+        className="row align-items-center shadow p-4 rounded "
         style={{ backgroundColor: "#ECECEC" }}
       >
         {/* Left: Logo and Info */}
@@ -99,7 +99,7 @@ export default function CompanyHome() {
     </div>
   </section>
 )}
-
+      </section>
       {/* Posted Jobs Section */}
     {/* Posted Jobs Section */}
 <section className="site-section" style={{ backgroundColor: "#F7F7F7" }}>

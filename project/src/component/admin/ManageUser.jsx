@@ -91,8 +91,11 @@ export default function ManageUser() {
         ) : (
           <>
             <div className="row">
-              <div className="col table-responsive">
-                <table className="table table-hover table-striped">
+              <div className="col">
+                <table
+                  className="table table-hover table-striped w-100"
+                  style={{ tableLayout: "auto" }}
+                >
                   <thead style={{ backgroundColor: "#89BA16", color: "white" }}>
                     <tr>
                       <th>Sno</th>
@@ -112,12 +115,12 @@ export default function ManageUser() {
                       .map((el, index) => (
                         <tr key={el.id}>
                           <td>{(currentPage - 1) * LIMIT + index + 1}</td>
-                          <td>{el.name}</td>
-                          <td>{el.email}</td>
+                          <td style={{ whiteSpace: "normal" }}>{el.name}</td>
+                          <td style={{ whiteSpace: "normal" }}>{el.email}</td>
                           <td>{el.contact}</td>
-                          <td>{el.about}</td>
+                          <td style={{ whiteSpace: "normal" }}>{el.about}</td>
                           <td>{el.qualification}</td>
-                          <td>{el.skills}</td>
+                          <td style={{ whiteSpace: "normal" }}>{el.skills}</td>
                           <td>{el.status ? "Active" : "Inactive"}</td>
                           <td>
                             <Switch
@@ -148,3 +151,4 @@ export default function ManageUser() {
     </>
   );
 }
+

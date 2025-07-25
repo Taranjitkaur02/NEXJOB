@@ -309,7 +309,6 @@ export default function Register() {
           </div>
         </section>
 
-        <Footer />
       </div>
     </>
   );

@@ -1,24 +1,34 @@
-import { collection, onSnapshot, query, deleteDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  query,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../../Firebase";
 import { toast } from "react-toastify";
 import { SyncLoader } from "react-spinners";
 import Swal from "sweetalert2";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic-light-dark.css";
+
 export default function ManageJobs() {
   const [user, setUser] = useState([]);
-  const [load, setLoad] = useState(true); // ✅ loading state
+  const [load, setLoad] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const LIMIT = 10;
 
   const fetchData = () => {
     const q = query(collection(db, "postJob"));
-
     onSnapshot(q, (userCol) => {
-      setUser(
-        userCol.docs?.map((el) => {
-          return { ...el.data(), id: el.id };
-        })
-      );
-      setLoad(false); // ✅ Stop spinner after data is loaded
+      const userList = userCol.docs.map((el) => ({
+        ...el.data(),
+        id: el.id,
+      }));
+      setUser(userList);
+      setLoad(false);
     });
   };
 
@@ -26,26 +36,29 @@ export default function ManageJobs() {
     fetchData();
   }, []);
 
-  const DeleteJob =(JobId) => {
-   Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-        }).then(async (result) => {
-        if (result.isConfirmed) {
-           await deleteDoc(doc(db, "postJob", JobId));
-            Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success"
-            });
-        }
-        }); 
+  const DeleteJob = (JobId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(doc(db, "postJob", JobId));
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   };
+
+  const totalPages = Math.ceil(user.length / LIMIT);
+  const paginatedUsers = user.slice((currentPage - 1) * LIMIT, currentPage * LIMIT);
 
   return (
     <>
@@ -101,9 +114,9 @@ export default function ManageJobs() {
                   </tr>
                 </thead>
                 <tbody>
-                  {user.map((el, index) => (
+                  {paginatedUsers.map((el, index) => (
                     <tr key={index}>
-                      <td>{index + 1}</td>
+                      <td>{(currentPage - 1) * LIMIT + index + 1}</td>
                       <td>
                         <img
                           src={el?.image}
@@ -121,14 +134,25 @@ export default function ManageJobs() {
                       <td>
                         <button
                           onClick={() => DeleteJob(el.id)}
-                          className="btn btn-danger"
+                          className="btn btn-danger "
                         >
-                          Delete
+                        <i className="bi bi-trash me-1"></i>
                         </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan="10">
+                      <ResponsivePagination
+                        current={currentPage}
+                        total={totalPages}
+                        onPageChange={setCurrentPage}
+                      />
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           </div>

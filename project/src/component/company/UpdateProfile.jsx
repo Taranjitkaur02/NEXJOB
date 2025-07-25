@@ -44,11 +44,11 @@ export default function UpdateCompany() {
             logo: userData.logo || "",
           });
         } else {
-          navigate("/company-homepage");
+          navigate("/company");
         }
       } catch (error) {
         toast.error("Error loading profile");
-        navigate("/company-homepage");
+        navigate("/company");
       }
     };
     fetchData();
@@ -104,14 +104,14 @@ export default function UpdateCompany() {
         });
 
         toast.success("Profile updated successfully!");
-        navigate("/company/company-homepage");
+        navigate("/company");
       } else {
         toast.error("User not found");
-        navigate("/company-homepage");
+        navigate("/company");
       }
     } catch (err) {
       toast.error("Failed to update profile.");
-      navigate("/company-homepage");
+      navigate("/company");
     } finally {
       setLoading(false);
     }

@@ -85,34 +85,67 @@ export default function Home() {
       </section>
 
       {/* Counter Section */}
-      <section className="py-5 bg-image overlay-primary fixed overlay" style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}>
-        <div className="container">
-          <div className="row mb-5 justify-content-center">
-            <div className="col-md-7 text-center">
-              <h2 className="section-title mb-2 text-white">JobBoard Site Stats</h2>
-              <p className="lead text-white">
-                We’re growing every day and helping more people find the right job.
-              </p>
+      {/* <section className="py-5 bg-image overlay-primary fixed overlay" style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}>
+        <div className="container"> */}
+
+
+<section className="py-5">
+  <div className="container text-center">
+    <h2 className="mb-5 fw-bold text-dark">Your Job Journey Starts Here</h2>
+    <div className="row justify-content-center">
+      {[
+        { icon: "bi-person-circle", title: "1. Create Profile", link: "/register" },
+        { icon: "bi-search", title: "2. Browse Jobs", link: "/view-job" },
+        { icon: "bi-send-check", title: "3. Apply Instantly", link: "/apply-job" },
+        { icon: "bi-award", title: "4. Get Hired", link: null }, // no link for final step
+      ].map((step, i) => (
+        <div key={i} className="col-6 col-md-3 mb-4">
+          {step.link ? (
+            <Link to={step.link} className="text-decoration-none text-dark">
+              <div className="journey-card text-center p-4">
+                <i className={`bi ${step.icon} display-4 text-primary mb-3`}></i>
+                <h6 className="fw-semibold">{step.title}</h6>
+              </div>
+            </Link>
+          ) : (
+            <div className="journey-card text-center p-4 opacity-75">
+              <i className={`bi ${step.icon} display-4 text-primary mb-3`}></i>
+              <h6 className="fw-semibold">{step.title}</h6>
             </div>
-          </div>
-          <div className="row pb-0 section-counter text-white text-center">
-            <div className="col-md-4 mb-4">
-              <h1>{counters.users}</h1>
-              <p>Candidates</p>
-            </div>
-            <div className="col-md-4 mb-4">
-              <h1>{counters.jobs}</h1>
-              <p>Jobs Posted</p>
-            </div>
-            <div className="col-md-4 mb-4">
-              <h1>{counters.companies}</h1>
-              <p>Companies</p>
-            </div>
-          </div>
+          )}
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+
+  {/* Inline styling for 3D effect */}
+  <style>{`
+    .journey-card {
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      transform-style: preserve-3d;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .journey-card:hover {
+      transform: rotateY(5deg) rotateX(5deg) scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      z-index: 1;
+    }
+
+    .journey-card:hover h6 {
+      color: #89BA16;
+    }
+  `}</style>
+</section>
+
+
+        {/* </div>
+      </section> */}
 
       {/* Recent Jobs Section */}
+      
       <section className="site-section">
         <div className="container">
           <div className="row mb-5 justify-content-center">
@@ -150,6 +183,7 @@ export default function Home() {
           <p className="mb-3">Your next opportunity is just one click away.</p>
           <Link to="/register" className="btn btn-warning btn-lg">Sign Up</Link>
         </div>
+        
       </section>
     </>
   );
