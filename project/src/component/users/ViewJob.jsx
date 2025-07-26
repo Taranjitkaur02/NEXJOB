@@ -6,8 +6,7 @@ import { SyncLoader } from "react-spinners";
 
 export default function ViewJob() {
   const [jobs, setJobs] = useState([]);
-  const [load, setLoad] = useState(true); // 🟡 Loading state
-
+  const [load, setLoad] = useState(true);
   const fetchData = () => {
     const q = query(collection(db, "postJob"));
     onSnapshot(q, (jobSnapshot) => {
@@ -17,7 +16,7 @@ export default function ViewJob() {
           id: doc.id,
         }))
       );
-      setLoad(false); // ✅ Hide loader after fetch
+      setLoad(false); 
     });
   };
 
@@ -109,9 +108,10 @@ export default function ViewJob() {
                       {job.vacancies} Vacancies
                     </p>
 
-                    <button className="btn btn-primary mt-3 w-100">
+                    <Link to={`/job-form/${job.id}`} className="btn btn-primary mt-3 w-100">
                       Apply Now
-                    </button>
+                    </Link>
+
                   </div>
                 </div>
               ))}

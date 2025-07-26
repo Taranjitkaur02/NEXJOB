@@ -55,7 +55,11 @@ export default function Navbar() {
                 <li><Link to="/view-skills">View Skills</Link></li>
 
                     <li><Link to="/view-job">View Job</Link></li>
-                    <li><Link to="/apply-job">Apply Job</Link></li>
+                   <li><Link to="/interview/applicationId">Interview</Link></li>
+
+
+
+
                   
 
                 {/* <li className="has-children">

@@ -57,7 +57,7 @@ export default function CompanyNavbar() {
                    <Link to="/company/manage-jobs">Manage Jobs</Link>
                 </li>
                 <li>
-                   <Link to="/company/view-app">View Application</Link>
+                   <Link to="/company/view-application">View Application</Link>
                 </li>
                 <li className="d-lg-none">
                   <Link to="/company/post-job"><span className="mr-2">+</span> Post a Job</Link>

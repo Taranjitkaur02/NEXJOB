@@ -18,11 +18,17 @@ export default function Post_job() {
   const [remote, setRemote] = useState(false);
   const [imageName, setImageName] = useState("");
   const [image, setImage] = useState({});
+
   const companyEmail = sessionStorage.getItem("email");
-  const userId = sessionStorage.getItem("userId");
+  const userId = sessionStorage.getItem("userId"); // ✅ Must be stored in every job
 
   const handleForm = async (e) => {
     e.preventDefault();
+
+    if (!userId) {
+      toast.error("User not logged in. Cannot post job.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("file", image);
@@ -30,20 +36,18 @@ export default function Post_job() {
 
     try {
       const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/dhvmmiipj/image/upload`,
+        "https://api.cloudinary.com/v1_1/dhvmmiipj/image/upload",
         formData
       );
       saveData(response.data.secure_url);
     } catch (error) {
-      toast.error("Error uploading image: " + error.message);
+      toast.error("Image upload failed: " + error.message);
     }
   };
 
-  const saveData = async (Url) => {
+  const saveData = async (imageUrl) => {
     try {
       const data = {
-        email: companyEmail,
-        userId: userId, // ✅ include userId here
         title,
         location,
         jobType,
@@ -55,7 +59,9 @@ export default function Post_job() {
         description,
         remote,
         status: true,
-        image: Url,
+        image: imageUrl,
+        email: companyEmail,
+        userId, // ✅ this is the companyId that will be used in applications
         createdAt: Timestamp.now(),
       };
 
@@ -76,7 +82,7 @@ export default function Post_job() {
       setImage({});
       setImageName("");
     } catch (err) {
-      toast.error(err.message);
+      toast.error("Error saving job: " + err.message);
     }
   };
 
@@ -122,9 +128,9 @@ export default function Post_job() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="e.g. Software Engineer"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g. Software Engineer"
                 required
               />
             </div>
@@ -134,9 +140,9 @@ export default function Post_job() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="e.g. Delhi"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
+                placeholder="e.g. Delhi"
                 required
               />
             </div>
@@ -173,9 +179,9 @@ export default function Post_job() {
               <input
                 type="number"
                 className="form-control"
-                placeholder="e.g. 40000"
                 value={salary}
                 onChange={(e) => setSalary(e.target.value)}
+                placeholder="e.g. 40000"
               />
             </div>
 
@@ -184,9 +190,9 @@ export default function Post_job() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="e.g. HTML, CSS, JS"
                 value={skills}
                 onChange={(e) => setSkills(e.target.value)}
+                placeholder="e.g. HTML, CSS, JS"
               />
             </div>
 
@@ -195,9 +201,9 @@ export default function Post_job() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="e.g. B.Tech, MCA"
                 value={qualification}
                 onChange={(e) => setQualification(e.target.value)}
+                placeholder="e.g. B.Tech, MCA"
               />
             </div>
 
@@ -206,9 +212,9 @@ export default function Post_job() {
               <input
                 type="number"
                 className="form-control"
-                placeholder="e.g. 2"
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
+                placeholder="e.g. 2"
               />
             </div>
 
@@ -217,9 +223,9 @@ export default function Post_job() {
               <input
                 type="number"
                 className="form-control"
-                placeholder="e.g. 3"
                 value={vacancies}
                 onChange={(e) => setVacancies(e.target.value)}
+                placeholder="e.g. 3"
               />
             </div>
 
@@ -228,9 +234,9 @@ export default function Post_job() {
               <textarea
                 className="form-control"
                 rows="5"
-                placeholder="Write the job description here..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                placeholder="Write the job description here..."
               ></textarea>
             </div>
 
@@ -257,3 +263,5 @@ export default function Post_job() {
     </div>
   );
 }
+
+
