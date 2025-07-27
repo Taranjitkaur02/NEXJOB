@@ -1,120 +1,126 @@
 import { useEffect, useState } from "react";
-import { collection, query, where, onSnapshot, doc, getDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  doc,
+  getDoc,
+  deleteDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "../../Firebase";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { SyncLoader } from "react-spinners";
 
 export default function ViewApplication() {
   const [applications, setApplications] = useState([]);
   const [interviews, setInterviews] = useState([]);
-  const [jobs, setJobs] = useState([]);  // To store job details
-  const { companyId } = useParams(); // Getting the companyId from the URL
+  const [jobsMap, setJobsMap] = useState({});
+  const [companyNames, setCompanyNames] = useState({});
+  const [isFullyLoaded, setIsFullyLoaded] = useState(false);
 
-  // Fetching job applications for the company
+  const { companyId } = useParams();
+
   useEffect(() => {
     if (!companyId) return;
 
-    const fetchApplications = () => {
-      const q = query(
-        collection(db, "jobApplications"),
-        where("companyId", "==", companyId) // Fetch only the applications related to this company
+    const q = collection(db, "jobApplications");
+
+    const unsub = onSnapshot(q, async (snapshot) => {
+      const allApps = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      const filteredApps = allApps.filter(
+        (app) => app.companyId === companyId
       );
 
-      const unsub = onSnapshot(q, (snapshot) => {
-        const applicationList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setApplications(applicationList);
-      });
+      setApplications(filteredApps);
 
-      return () => unsub(); // Clean up the subscription
-    };
+      // ✅ Fetch job + company info AFTER apps are loaded
+      await fetchJobsAndCompanies(filteredApps);
+      setIsFullyLoaded(true); // ✅ Only after everything is fetched
+    });
 
-    fetchApplications();
+    return () => unsub();
   }, [companyId]);
 
-  // Fetching interviews related to the applications
   useEffect(() => {
-    if (!companyId) return;
+    const unsub = onSnapshot(collection(db, "interviews"), (snapshot) => {
+      const interviewList = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setInterviews(interviewList);
+    });
 
-    const fetchInterviews = () => {
-      const q = query(
-        collection(db, "interviews"),
-        where("companyId", "==", companyId) // Fetch only the interviews related to this company
-      );
+    return () => unsub();
+  }, []);
 
-      const unsub = onSnapshot(q, (snapshot) => {
-        const interviewList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setInterviews(interviewList);
-      });
+  const fetchJobsAndCompanies = async (apps) => {
+    const newJobsMap = {};
+    const newCompanyNames = {};
 
-      return () => unsub(); // Clean up the subscription
-    };
+    for (const app of apps) {
+      if (!jobsMap[app.jobId]) {
+        const jobRef = doc(db, "postJob", app.jobId);
+        const jobSnap = await getDoc(jobRef);
 
-    fetchInterviews();
-  }, [companyId]);
+        if (jobSnap.exists()) {
+          const jobData = jobSnap.data();
 
-  // Fetch job title using jobId from the application
-  useEffect(() => {
-    const fetchJobs = () => {
-      applications.forEach((application) => {
-        const jobRef = doc(db, "postJob", application.jobId); // Get the job document reference
-        getDoc(jobRef).then((jobDoc) => {
-          if (jobDoc.exists()) {
-            setJobs((prevJobs) => [
-              ...prevJobs,
-              { jobId: application.jobId, jobTitle: jobDoc.data().title, companyName: jobDoc.data().companyName },
-            ]);
+          newJobsMap[app.jobId] = {
+            jobTitle: jobData.title || "Untitled",
+          };
+
+          if (jobData.userId && !companyNames[jobData.userId]) {
+            const userRef = doc(db, "users", jobData.userId);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists() && userSnap.data().userType === 2) {
+              newCompanyNames[jobData.userId] =
+                userSnap.data().name || "Unnamed Company";
+            }
           }
-        });
-      });
-    };
-
-    if (applications.length > 0) {
-      fetchJobs();
+        }
+      }
     }
-  }, [applications]);
 
-  // Helper function to get interview date (Only showing the date without time)
+    setJobsMap((prev) => ({ ...prev, ...newJobsMap }));
+    setCompanyNames((prev) => ({ ...prev, ...newCompanyNames }));
+  };
+
   const getInterviewDate = (applicationId) => {
-    const interview = interviews.find((interview) => interview.applicationId === applicationId);
-
+    const interview = interviews.find((i) => i.applicationId === applicationId);
     if (interview && interview.date) {
       try {
-        // Check if it's a Firestore Timestamp
-        if (interview.date instanceof Timestamp) {
-          const date = interview.date.toDate(); // Convert to JavaScript Date
+        const dateObj =
+          interview.date instanceof Timestamp
+            ? interview.date.toDate()
+            : new Date(interview.date);
 
-          // Only show the date, without the time
-          return date.toLocaleDateString('en-US', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric'
-          });
-        } else if (typeof interview.date === "string") {
-          // If it's a string, convert it manually
-          const date = new Date(interview.date);
-
-          // Only show the date, without the time
-          return date.toLocaleDateString('en-US', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric'
-          });
-        } else {
-          return "Invalid Date"; // Fallback in case of error
-        }
-      } catch (error) {
-        console.error("Error in date conversion: ", error);
+        return dateObj.toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+      } catch (err) {
+        console.error("Date error:", err);
         return "Invalid Date";
       }
     } else {
-      return "No interview scheduled yet."; // If no interview date is found
+      return "No interview scheduled yet.";
+    }
+  };
+
+  const handleDelete = async (applicationId) => {
+    try {
+      await deleteDoc(doc(db, "jobApplications", applicationId));
+      toast.success("Application deleted successfully.");
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("Failed to delete application.");
     }
   };
 
@@ -139,54 +145,83 @@ export default function ViewApplication() {
         </div>
       </section>
 
-      {/* Applications Display Section */}
+      {/* Applications Section */}
       <section
         className="site-section services-section bg-light block__62849"
         id="next-section"
       >
         <div className="container">
-          <div className="row">
-            {applications.length === 0 ? (
-              <p className="text-center">No applications found for this company.</p>
-            ) : (
-              applications.map((application) => {
-                // Find the job title for the specific application
-                const job = jobs.find((job) => job.jobId === application.jobId);
+          {!isFullyLoaded ? (
+            <div
+              style={{
+                height: "50vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <SyncLoader color="#89BA16" size={20} />
+            </div>
+          ) : (
+            <div className="row">
+              {applications.length === 0 ? (
+                <p className="text-center w-100">No applications found for this company.</p>
+              ) : (
+                applications.map((application) => {
+                  const job = jobsMap[application.jobId];
+                  const companyName = companyNames[application.companyId];
 
-                return (
-                  <div className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5" key={application.id}>
-                    {/* Card with Hover Effect */}
-                    <div className="card shadow-lg rounded p-4 bg-white hover-card">
-                      <div className="card-body">
-                        {/* Company Name */}
-                        <h4 className="text-center mb-3">{job ? job.companyName : "Company Name"}</h4>
+                  if (!job || !companyName) return null;
 
-                        {/* Card Content */}
-                        <h5 className="card-title">{application.userEmail}</h5>
-                        <p className="card-text">
-                          Resume: <a href={application.resume} target="_blank" rel="noopener noreferrer">View Resume</a>
-                        </p>
-                        <p className="card-text">
-                          Applied on: {new Date(application.createdAt.seconds * 1000).toLocaleString()}
-                        </p>
+                  return (
+                    <div
+                      className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5"
+                      key={application.id}
+                    >
+                      <div className="card shadow-lg rounded p-4 bg-white hover-card">
+                        <div className="card-body">
+                          <h4 className="text-center mb-3">{companyName}</h4>
 
-                        {/* Job Title for which the application was made */}
-                        <p className="card-text">
-                          <strong>Applied for: </strong>{job ? job.jobTitle : "Job not found"}
-                        </p>
+                          <h5 className="card-title">{application.userEmail}</h5>
+                          <p className="card-text">
+                            Resume:{" "}
+                            <a
+                              href={application.resume}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              View Resume
+                            </a>
+                          </p>
+                          <p className="card-text">
+                            Applied on:{" "}
+                            {application.createdAt?.seconds
+                              ? new Date(application.createdAt.seconds * 1000).toLocaleString()
+                              : "Date not available"}
+                          </p>
+                          <p className="card-text">
+                            <strong>Applied for: </strong>
+                            {job ? job.jobTitle : "Job not found"}
+                          </p>
+                          <p className="card-text">
+                            <strong>Interview Date: </strong>
+                            {getInterviewDate(application.id)}
+                          </p>
 
-                        {/* Interview Scheduled Date */}
-                        <p className="card-text">
-                          <strong>Interview Date: </strong>
-                          {getInterviewDate(application.id)} {/* Fetch interview date */}
-                        </p>
+                          <button
+                            className="btn btn-danger btn-sm mt-3 w-100"
+                            onClick={() => handleDelete(application.id)}
+                          >
+                            Delete Application
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
+                  );
+                })
+              )}
+            </div>
+          )}
         </div>
       </section>
     </>

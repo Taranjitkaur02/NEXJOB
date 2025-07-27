@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
-import { doc, getDoc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "../../Firebase";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { SyncLoader } from "react-spinners";
 
 export default function ScheduleInterview() {
   const { jobId, applicationId } = useParams();
+  const navigate = useNavigate(); // ✅ for redirection
 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -91,7 +98,6 @@ export default function ScheduleInterview() {
       return;
     }
 
-    // ✅ Disallow scheduling for past date/time (including yesterday or earlier today)
     if (selectedDateTime <= now) {
       toast.error("Cannot schedule/update interview for a past date or time.");
       return;
@@ -125,7 +131,7 @@ export default function ScheduleInterview() {
     }
   };
 
-  // Start meeting (validates time again)
+  // Start meeting
   const handleStartMeeting = async () => {
     if (!date || !time) {
       toast.error("Scheduled date or time is missing.");
@@ -145,11 +151,6 @@ export default function ScheduleInterview() {
       return;
     }
 
-    if (scheduledTime < now.setHours(now.getHours() - 24)) {
-      toast.error("Scheduled time is in the past. Please update the interview.");
-      return;
-    }
-
     try {
       await updateDoc(doc(db, "interviews", applicationId), {
         isMeetingStarted: true,
@@ -164,6 +165,7 @@ export default function ScheduleInterview() {
     }
   };
 
+  // ✅ End meeting and redirect
   const handleEndMeeting = async () => {
     try {
       await updateDoc(doc(db, "interviews", applicationId), {
@@ -171,6 +173,7 @@ export default function ScheduleInterview() {
         isMeetingEnded: true,
       });
       toast.success("Meeting ended.");
+      navigate("/company/view-application"); 
     } catch (err) {
       console.error("Error ending meeting:", err);
       toast.error("Failed to end meeting.");
@@ -189,7 +192,8 @@ export default function ScheduleInterview() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Manage Company</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/admin">Home</Link> <span className="mx-2 slash"></span>
+                <Link to="/admin">Home</Link>{" "}
+                <span className="mx-2 slash"></span>
               </div>
             </div>
           </div>

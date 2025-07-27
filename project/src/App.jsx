@@ -44,6 +44,8 @@ import ScheduleInterview from "./component/company/ScheduleInterview";
 import UserInterviewSchedule from "./component/users/UserInteviewSchedule";
 import ViewApplication from "./component/admin/ViewApplication";
 import UserProfile from "./component/users/UserProfile";
+import AdminManageInterview from "./component/admin/AdminManageInterview";
+import AdminJobsList from "./component/admin/AdminJobList";
 function App() {
   return (
     <>
@@ -78,6 +80,8 @@ function App() {
      <Route path="manage-company" element={<ManageCompany/>}/>
      <Route path="manage-jobs" element={<ManageJobs/>}/>
      <Route path="company/applications/:companyId" element={<ViewApplication/>}/>
+     <Route path="manage-interviews" element={<AdminJobsList/>}/>
+     <Route path="interview/:jobId" element={<AdminManageInterview/>}/>
      </Route>
      <Route path="/company" element={<CompanyLayout/>}>
      <Route index element={<CompanyHome/>}/>

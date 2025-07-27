@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Select from 'react-select'; // Import react-select
-
+import Select from 'react-select';
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import { toast } from "react-toastify";
@@ -8,9 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Auth, db } from "../../Firebase";
 import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
-
-// Qualification Options
-// Qualification Options
 const qualificationOptions = [
   { value: 'btech-cs', label: 'B.Tech in Computer Science' },
   { value: 'btech-cse', label: 'B.Tech in Computer Science and Engineering' },
@@ -40,76 +36,50 @@ const qualificationOptions = [
   { value: 'bca-data-science', label: 'BCA in Data Science' }
 ];
 
-
-// Skills Options (Technical)
+// Skills Options
 const technicalSkillsOptions = [
-  { value: 'html', label: 'HTML' },
-  { value: 'css', label: 'CSS' },
-  { value: 'javascript', label: 'JavaScript' },
-  { value: 'python', label: 'Python' },
-  { value: 'java', label: 'Java' },
-  { value: 'ruby', label: 'Ruby' },
-  { value: 'php', label: 'PHP' },
-  { value: 'csharp', label: 'C#' },
-  { value: 'typescript', label: 'TypeScript' },
-  { value: 'react', label: 'React' },
-  { value: 'angular', label: 'Angular' },
-  { value: 'vue', label: 'Vue.js' },
-  { value: 'nodejs', label: 'Node.js' },
-  { value: 'mongodb', label: 'MongoDB' },
-  { value: 'mysql', label: 'MySQL' },
-  { value: 'graphql', label: 'GraphQL' },
-  { value: 'docker', label: 'Docker' },
-  { value: 'kubernetes', label: 'Kubernetes' },
-  { value: 'cloud', label: 'Cloud Computing (AWS, Azure, GCP)' },
-  { value: 'ml', label: 'Machine Learning' },
-  { value: 'data-science', label: 'Data Science' },
-  { value: 'ai', label: 'Artificial Intelligence' },
-  { value: 'devops', label: 'DevOps' },
-  { value: 'cloud-computing', label: 'Cloud Computing' },
-  { value: 'network-security', label: 'Network Security' },
-  { value: 'web-development', label: 'Web Development' },
-  { value: 'mobile-development', label: 'Mobile Development' },
-  { value: 'machine-learning', label: 'Machine Learning' },
-  { value: 'api-development', label: 'API Development' },
-  { value: 'system-design', label: 'System Design' },
-  { value: 'game-development', label: 'Game Development' },
-  { value: 'blockchain', label: 'Blockchain Development' },
-  { value: 'database-management', label: 'Database Management' },
-  { value: 'ios-development', label: 'iOS Development' },
+  { value: 'html', label: 'HTML' }, { value: 'css', label: 'CSS' }, { value: 'javascript', label: 'JavaScript' },
+  { value: 'python', label: 'Python' }, { value: 'java', label: 'Java' }, { value: 'ruby', label: 'Ruby' },
+  { value: 'php', label: 'PHP' }, { value: 'csharp', label: 'C#' }, { value: 'typescript', label: 'TypeScript' },
+  { value: 'react', label: 'React' }, { value: 'angular', label: 'Angular' }, { value: 'vue', label: 'Vue.js' },
+  { value: 'nodejs', label: 'Node.js' }, { value: 'mongodb', label: 'MongoDB' }, { value: 'mysql', label: 'MySQL' },
+  { value: 'graphql', label: 'GraphQL' }, { value: 'docker', label: 'Docker' }, { value: 'kubernetes', label: 'Kubernetes' },
+  { value: 'cloud', label: 'Cloud Computing (AWS, Azure, GCP)' }, { value: 'ml', label: 'Machine Learning' },
+  { value: 'data-science', label: 'Data Science' }, { value: 'ai', label: 'Artificial Intelligence' },
+  { value: 'devops', label: 'DevOps' }, { value: 'cloud-computing', label: 'Cloud Computing' },
+  { value: 'network-security', label: 'Network Security' }, { value: 'web-development', label: 'Web Development' },
+  { value: 'mobile-development', label: 'Mobile Development' }, { value: 'machine-learning', label: 'Machine Learning' },
+  { value: 'api-development', label: 'API Development' }, { value: 'system-design', label: 'System Design' },
+  { value: 'game-development', label: 'Game Development' }, { value: 'blockchain', label: 'Blockchain Development' },
+  { value: 'database-management', label: 'Database Management' }, { value: 'ios-development', label: 'iOS Development' },
   { value: 'android-development', label: 'Android Development' }
 ];
 
-
-// Skills Options (Soft Skills)
 const softSkillsOptions = [
-  { value: 'leadership', label: 'Leadership' },
-  { value: 'communication', label: 'Communication' },
-  { value: 'teamwork', label: 'Teamwork' },
-  { value: 'problem-solving', label: 'Problem Solving' },
-  { value: 'time-management', label: 'Time Management' },
-  { value: 'adaptability', label: 'Adaptability' },
-  { value: 'empathy', label: 'Empathy' },
-  { value: 'creativity', label: 'Creativity' },
-  { value: 'negotiation', label: 'Negotiation' },
-  { value: 'conflict-resolution', label: 'Conflict Resolution' },
-  { value: 'critical-thinking', label: 'Critical Thinking' },
-  { value: 'presentation', label: 'Presentation' },
-  // Add more soft skills as needed
+  { value: 'leadership', label: 'Leadership' }, { value: 'communication', label: 'Communication' },
+  { value: 'teamwork', label: 'Teamwork' }, { value: 'problem-solving', label: 'Problem Solving' },
+  { value: 'time-management', label: 'Time Management' }, { value: 'adaptability', label: 'Adaptability' },
+  { value: 'empathy', label: 'Empathy' }, { value: 'creativity', label: 'Creativity' },
+  { value: 'negotiation', label: 'Negotiation' }, { value: 'conflict-resolution', label: 'Conflict Resolution' },
+  { value: 'critical-thinking', label: 'Critical Thinking' }, { value: 'presentation', label: 'Presentation' }
 ];
-
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [contact, setContact] = useState("");
-  const [qualification, setQualification] = useState(null); // For qualification
-  const [skills, setSkills] = useState([]); // For skills (multi-select)
+  const [qualification, setQualification] = useState(null);
+  const [skills, setSkills] = useState([]);
   const [about, setAbout] = useState("");
   const nav = useNavigate();
 
   const handleForm = (e) => {
     e.preventDefault();
+    if (contact.length !== 10) {
+      toast.error("Contact number must be exactly 10 digits");
+      return;
+    }
+
     createUserWithEmailAndPassword(Auth, email, password)
       .then((userCredential) => {
         const userId = userCredential.user.uid;
@@ -117,9 +87,9 @@ export default function Register() {
           name,
           email,
           contact,
-          qualification: qualification?.label, // Save the label of selected qualification
+          qualification: qualification?.label,
           about,
-          skills: skills?.map(skill => skill.label).join(', '), // Save all selected skills
+          skills: skills?.map(skill => skill.label).join(', '),
           userType: 3,
           userId,
           status: true,
@@ -154,11 +124,7 @@ export default function Register() {
     sessionStorage.setItem("userType", userData.userType);
     sessionStorage.setItem("userId", userId);
     sessionStorage.setItem("isLogin", true);
-    if (userData.userType === 2) {
-      nav("/company");
-    } else {
-      nav("/");
-    }
+    nav("/");
   };
 
   const signInGoogle = () => {
@@ -167,7 +133,6 @@ export default function Register() {
       .then(async (userCred) => {
         const userId = userCred.user.uid;
         const userDoc = await getDoc(doc(db, "users", userId));
-
         if (userDoc.exists()) {
           const userData = userDoc.data();
           if (!userData.status) {
@@ -193,20 +158,14 @@ export default function Register() {
           getUserData(userId);
         }
       })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+      .catch((err) => toast.error(err.message));
   };
 
   return (
     <>
-      <Navbar />
+    
       <div className="site-wrap">
-        <section
-          className="section-hero overlay inner-page bg-image"
-          style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
-          id="home-section"
-        >
+        <section className="section-hero overlay inner-page bg-image" style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}>
           <div className="container">
             <div className="row">
               <div className="col-md-7">
@@ -232,141 +191,89 @@ export default function Register() {
                   style={{
                     boxShadow: "0 10px 25px rgba(0, 0, 0, 0.12)",
                     borderRadius: "12px",
-                    backgroundColor: "#ffffff",
-                    transition: "transform 0.3s ease",
+                    backgroundColor: "#ffffff"
                   }}
                 >
-                  {/* Name */}
                   <div className="form-group mb-3">
                     <label className="text-black">Name</label>
+                    <input type="text" className="form-control" placeholder="Name" required value={name} onChange={(e) => setName(e.target.value)} />
+                  </div>
+
+                  <div className="form-group mb-3">
+                    <label className="text-black">Contact</label>
                     <input
-                      type="text"
+                      type="tel"
                       className="form-control"
-                      placeholder="Name"
+                      placeholder="Contact Number"
                       required
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      value={contact}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^\d{0,10}$/.test(val)) {
+                          setContact(val);
+                        }
+                      }}
+                      minLength={10}
+                      maxLength={10}
                     />
                   </div>
 
-                  {/* Email & Password */}
                   <div className="row">
                     <div className="col-md-6 form-group mb-3">
                       <label className="text-black">Email</label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        placeholder="Email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
+                      <input type="email" className="form-control" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="col-md-6 form-group mb-3">
                       <label className="text-black">Password</label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Password"
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
+                      <input type="password" className="form-control" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                   </div>
 
-                  {/* Qualification Dropdown */}
+                  <div className="form-group mb-3">
+                    <label className="text-black">About</label>
+                    <textarea className="form-control" placeholder="Tell us something about yourself" rows="3" required value={about} onChange={(e) => setAbout(e.target.value)} />
+                  </div>
+
                   <div className="form-group mb-3">
                     <label className="text-black">Qualification</label>
-                    <Select
-                      options={qualificationOptions}
-                      value={qualification}
-                      onChange={setQualification}
-                      placeholder="Select your qualification"
-                    />
+                    <Select options={qualificationOptions} value={qualification} onChange={setQualification} placeholder="Select your qualification" />
                   </div>
 
-                  {/* Skills Dropdown */}
                   <div className="form-group mb-3">
                     <label className="text-black">Skills</label>
-                    <Select
-                      isMulti
-                      options={[...technicalSkillsOptions, ...softSkillsOptions]}
-                      value={skills}
-                      onChange={setSkills}
-                      placeholder="Select your skills"
-                    />
+                    <Select isMulti options={[...technicalSkillsOptions, ...softSkillsOptions]} value={skills} onChange={setSkills} placeholder="Select your skills" />
                   </div>
 
-                  {/* Submit Button */}
                   <div className="form-group">
-                    <input
-                      type="submit"
-                      value="Sign Up"
-                      className="btn px-4 btn-primary text-white"
-                    />
+                    <input type="submit" value="Sign Up" className="btn px-4 btn-primary text-white" />
                   </div>
 
-                  {/* Google Sign-In */}
                   <p>OR</p>
                   <div>
-                    <button
-                      type="button"
-                      onClick={signInGoogle}
-                      style={{
-                        border: "none",
-                        background: "none",
-                        padding: 0,
-                        display: "inline-block",
-                        borderRadius: "8px",
-                        boxShadow: "0 8px 20px rgba(0, 0, 0, 0.12)",
-                        transition: "transform 0.3s ease",
-                      }}
-                    >
-                      <img
-                        src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png"
-                        alt="Sign in with Google"
-                        style={{
-                          height: "40px",
-                          display: "block",
-                          borderRadius: "8px",
-                        }}
-                      />
+                    <button type="button" onClick={signInGoogle} style={{ border: "none", background: "none", padding: 0 }}>
+                      <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" alt="Sign in with Google" style={{ height: "40px", borderRadius: "8px" }} />
                     </button>
                   </div>
                 </form>
 
                 <div className="text-center mt-3">
                   <p>
-                    Already have an account?{" "}
-                    <Link to="/login" className="text-primary">
-                      Log In
-                    </Link>
+                    Already have an account? <Link to="/login" className="text-primary">Log In</Link>
                   </p>
                 </div>
               </div>
 
               <div className="col-lg-6 text-center">
-                <img
-                  src="/assets/images/register.png"
-                  alt="Register Illustration"
-                  style={{
-                    maxWidth: "600px",
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "12px",
-                    margin: "0 auto",
-                  }}
-                />
+                <img src="/assets/images/register.png" alt="Register Illustration" style={{ maxWidth: "600px", width: "100%", height: "auto", borderRadius: "12px", margin: "0 auto" }} />
                 <p className="mt-0" style={{ fontSize: "1.1rem", color: "#555" }}>
-                  <strong>Join thousands of job seekers.</strong><br />
-                  Start your journey with NEXJOB today!
+                  <strong>Join thousands of job seekers.</strong><br />Start your journey with NEXJOB today!
                 </p>
               </div>
             </div>
           </div>
         </section>
       </div>
+      
     </>
   );
 }

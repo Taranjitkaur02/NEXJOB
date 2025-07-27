@@ -4,7 +4,6 @@ import {
   query,
   where,
   onSnapshot,
-  deleteDoc,
   doc,
   setDoc,
   updateDoc,
@@ -41,13 +40,25 @@ export default function CompanyApplicants() {
 
   const handleShortlist = async (app) => {
     try {
-      // Step 1: Update the application with shortlisted flag
-      const appRef = doc(db, "jobApplications", app.id);
-      await updateDoc(appRef, { shortlisted: true });
+      await updateDoc(doc(db, "jobApplications", app.id), {
+        shortlisted: true,
+        status: 1,
+      });
 
-      // Step 2: Create a notification
-      const notificationRef = doc(db, "notifications", `${app.userId}_${jobId}`);
-      await setDoc(notificationRef, {
+      const interviewId = `${jobId}_${app.userId}`;
+      await setDoc(doc(db, "interviews", interviewId), {
+        jobId,
+        companyId,
+        userId: app.userId,
+        applicationId: app.id,
+        date: null,
+        link: "",
+        isMeetingStarted: false,
+        isMeetingEnded: false,
+        createdAt: new Date().toISOString(),
+      });
+
+      await setDoc(doc(db, "notifications", `${app.userId}_${jobId}`), {
         userId: app.userId,
         jobId,
         companyId,
@@ -57,21 +68,73 @@ export default function CompanyApplicants() {
         message: "You have been shortlisted for an interview.",
       });
 
-      // Step 3: Navigate to schedule interview page
+      toast.success("User shortlisted!");
       navigate(`/company/schedule-interview/${jobId}/${app.id}`);
     } catch (err) {
-      console.error("Failed to notify user:", err);
-      toast.error("Failed to notify user.");
+      console.error("Shortlist error:", err);
+      toast.error("Failed to shortlist user.");
     }
   };
 
-  const handleReject = async (appId) => {
+  const handleReject = async (app) => {
     try {
-      await deleteDoc(doc(db, "jobApplications", appId));
-      toast.success("Application rejected.");
+      await updateDoc(doc(db, "jobApplications", app.id), {
+        status: 4,
+      });
+
+      const interviewId = `${jobId}_${app.userId}`;
+      await setDoc(doc(db, "interviews", interviewId), {
+        jobId,
+        companyId,
+        userId: app.userId,
+        applicationId: app.id,
+        date: null,
+        link: "",
+        isMeetingStarted: false,
+        isMeetingEnded: false,
+        createdAt: new Date().toISOString(),
+      });
+
+      await setDoc(doc(db, "notifications", `${app.userId}_${jobId}_rejected`), {
+        userId: app.userId,
+        jobId,
+        companyId,
+        status: "rejected",
+        timestamp: new Date(),
+        seen: false,
+        message: "Your application has been rejected.",
+      });
+
+      // Remove the rejected card from the UI
+      setApplications((prev) => prev.filter((item) => item.id !== app.id));
+
+      toast.success("User rejected.");
     } catch (err) {
-      console.error("Error rejecting application:", err);
-      toast.error("Failed to reject application.");
+      console.error("Reject error:", err);
+      toast.error("Failed to reject user.");
+    }
+  };
+
+  const handleSelect = async (app) => {
+    try {
+      await updateDoc(doc(db, "jobApplications", app.id), {
+        status: 5,
+      });
+
+      await setDoc(doc(db, "notifications", `${app.userId}_${jobId}_selected`), {
+        userId: app.userId,
+        jobId,
+        companyId,
+        status: "selected",
+        timestamp: new Date(),
+        seen: false,
+        message: "Congratulations! You have been selected for the job.",
+      });
+
+      toast.success("User marked as Selected.");
+    } catch (err) {
+      console.error("Select error:", err);
+      toast.error("Failed to update selection.");
     }
   };
 
@@ -106,10 +169,10 @@ export default function CompanyApplicants() {
           ) : (
             applications.map((app) => (
               <div className="col-md-4 mb-4" key={app.id}>
-                <div className="card shadow rounded p-3 text-center">
+                <div className="card shadow rounded p-3 text-center d-flex flex-column h-100">
                   <img
                     src={app.resume}
-                    alt="Resume Preview"
+                    alt="Resume"
                     className="img-fluid mb-3"
                     style={{
                       height: "180px",
@@ -119,21 +182,57 @@ export default function CompanyApplicants() {
                     }}
                     onClick={() => window.open(app.resume, "_blank")}
                   />
-                  <p className="text-muted">{app.userEmail}</p>
+                  <p className="text-muted mb-1">{app.userEmail}</p>
+                  <p className="fw-bold">
+                    Status:{" "}
+                    {app.status === 5
+                      ? "Selected"
+                      : app.status === 4
+                      ? "Rejected"
+                      : app.status === 1
+                      ? "Shortlisted"
+                      : "Applied"}
+                  </p>
 
-                  <div className="d-flex justify-content-center flex-wrap mt-2">
-                    <button
-                      className="btn btn-success btn-lg mx-2 mb-2"
-                      onClick={() => handleShortlist(app)}
-                    >
-                      <i className="fa fa-check me-1"></i> Shortlist
-                    </button>
-                    <button
-                      className="btn btn-danger btn-lg mx-2 mb-2"
-                      onClick={() => handleReject(app.id)}
-                    >
-                      <i className="fa fa-times me-1"></i> Reject
-                    </button>
+                  {/* Buttons */}
+                  <div className="mt-auto">
+                    <div className="row g-2">
+                      <div className="col-6">
+                        {app.status === 1 ? (
+                          <button
+                            className="btn btn-outline-primary btn-sm w-100"
+                            onClick={() =>
+                              navigate(`/company/schedule-interview/${jobId}/${app.id}`)
+                            }
+                          >
+                            <i className="bi bi-calendar-check me-1"></i> Interview
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-outline-success btn-sm w-100"
+                            onClick={() => handleShortlist(app)}
+                          >
+                            <i className="bi bi-check-circle me-1"></i> Shortlist
+                          </button>
+                        )}
+                      </div>
+                      <div className="col-6">
+                        <button
+                          className="btn btn-outline-danger btn-sm w-100"
+                          onClick={() => handleReject(app)}
+                        >
+                          <i className="bi bi-x-circle me-1"></i> Reject
+                        </button>
+                      </div>
+                      <div className="col-12 mt-2">
+                        <button
+                          className="btn btn-outline-info btn-sm w-100"
+                          onClick={() => handleSelect(app)}
+                        >
+                          <i className="bi bi-star me-1"></i> Select
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -144,3 +243,4 @@ export default function CompanyApplicants() {
     </>
   );
 }
+

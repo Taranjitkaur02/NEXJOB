@@ -81,74 +81,77 @@ export default function ManageUser() {
       {/* Main Content */}
       <div className="container my-5">
         {load ? (
-          <SyncLoader
-            color="#89BA16"
-            size={20}
-            cssOverride={{ display: "block", margin: "50px auto" }}
-          />
+          // ✅ Center the loader
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "60vh",
+            }}
+          >
+            <SyncLoader color="#89BA16" size={20} />
+          </div>
         ) : users.length === 0 ? (
           <p className="text-center">No users found.</p>
         ) : (
-          <>
-            <div className="row">
-              <div className="col">
-                <table
-                  className="table table-hover table-striped w-100"
-                  style={{ tableLayout: "auto" }}
-                >
-                  <thead style={{ backgroundColor: "#89BA16", color: "white" }}>
-                    <tr>
-                      <th>Sno</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Contact</th>
-                      <th>About</th>
-                      <th>Qualification</th>
-                      <th>Skills</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users
-                      .slice((currentPage - 1) * LIMIT, currentPage * LIMIT)
-                      .map((el, index) => (
-                        <tr key={el.id}>
-                          <td>{(currentPage - 1) * LIMIT + index + 1}</td>
-                          <td style={{ whiteSpace: "normal" }}>{el.name}</td>
-                          <td style={{ whiteSpace: "normal" }}>{el.email}</td>
-                          <td>{el.contact}</td>
-                          <td style={{ whiteSpace: "normal" }}>{el.about}</td>
-                          <td>{el.qualification}</td>
-                          <td style={{ whiteSpace: "normal" }}>{el.skills}</td>
-                          <td>{el.status ? "Active" : "Inactive"}</td>
-                          <td>
-                            <Switch
-                              checked={el.status || false}
-                              onChange={() => changeStatus(el.id, el.status)}
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td colSpan={9}>
-                        <ResponsivePagination
-                          current={currentPage}
-                          total={totalPages}
-                          onPageChange={setCurrentPage}
-                        />
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
+          <div className="row">
+            <div className="col">
+              <table
+                className="table table-hover table-striped w-100"
+                style={{ tableLayout: "auto" }}
+              >
+                <thead style={{ backgroundColor: "#89BA16", color: "white" }}>
+                  <tr>
+                    <th>Sno</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>About</th>
+                    <th>Qualification</th>
+                    <th>Skills</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users
+                    .slice((currentPage - 1) * LIMIT, currentPage * LIMIT)
+                    .map((el, index) => (
+                      <tr key={el.id}>
+                        <td>{(currentPage - 1) * LIMIT + index + 1}</td>
+                        <td style={{ whiteSpace: "normal" }}>{el.name}</td>
+                        <td style={{ whiteSpace: "normal" }}>{el.email}</td>
+                        <td>{el.contact}</td>
+                        <td style={{ whiteSpace: "normal" }}>{el.about}</td>
+                        <td>{el.qualification}</td>
+                        <td style={{ whiteSpace: "normal" }}>{el.skills}</td>
+                        <td>{el.status ? "Active" : "Inactive"}</td>
+                        <td>
+                          <Switch
+                            checked={el.status || false}
+                            onChange={() => changeStatus(el.id, el.status)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan={9}>
+                      <ResponsivePagination
+                        current={currentPage}
+                        total={totalPages}
+                        onPageChange={setCurrentPage}
+                      />
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
-          </>
+          </div>
         )}
       </div>
     </>
   );
 }
-

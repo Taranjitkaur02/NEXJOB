@@ -1,116 +1,120 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   collection,
   query,
   where,
-  onSnapshot,
   doc,
   getDoc,
+  deleteDoc,
+  onSnapshot,
 } from "firebase/firestore";
-import { db, Auth } from "../../Firebase";
+import { db } from "../../Firebase";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import { SyncLoader } from "react-spinners";
-import { onAuthStateChanged } from "firebase/auth";
 
-// Format Firebase Timestamp to readable date and time
-const formatDateTime = (timestamp) => {
-  if (timestamp instanceof Object && timestamp.toDate) {
-    const dateObj = timestamp.toDate();
-    const date = dateObj.toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-    const time = dateObj.toLocaleTimeString("en-IN", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-    return { date, time };
-  }
-  return { date: "-", time: "-" };
-};
-
-export default function UserInterviewSchedule() {
-  const [meetings, setMeetings] = useState([]);
+const UserInterviewDetails = () => {
+  const [interviews, setInterviews] = useState([]);
+  const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentUserId, setCurrentUserId] = useState(null);
+  const [now, setNow] = useState(new Date());
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(Auth, (user) => {
-      if (user) {
-        setCurrentUserId(user.uid);
-      } else {
-        toast.error("Please log in to view your interviews.");
-        setLoading(false);
-      }
-    });
-    return () => unsubscribe();
+    const interval = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if (!currentUserId) return;
+    const id = sessionStorage.getItem("userId");
+    if (id) {
+      setUserId(id);
+    } else {
+      console.warn("No userId found in sessionStorage.");
+    }
+  }, []);
 
-    const q = query(
-      collection(db, "interviews"),
-      where("userId", "==", currentUserId)
-    );
+  useEffect(() => {
+    if (!userId) return;
 
-    const unsubscribe = onSnapshot(
-      q,
-      async (querySnapshot) => {
-        if (!querySnapshot.empty) {
-          try {
-            const interviewList = [];
+    const q = query(collection(db, "interviews"), where("userId", "==", userId));
 
-            for (const docSnap of querySnapshot.docs) {
-              const interviewData = docSnap.data();
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      try {
+        const rawData = await Promise.all(
+          querySnapshot.docs.map(async (docSnap) => {
+            const data = docSnap.data();
 
-              const jobRef = doc(db, "postJob", interviewData.jobId);
-              const jobSnap = await getDoc(jobRef);
-              if (!jobSnap.exists()) continue;
+            const jobSnap = await getDoc(doc(db, "postJob", data.jobId));
+            const companySnap = await getDoc(doc(db, "users", data.companyId));
 
-              const companyRef = doc(db, "users", interviewData.companyId);
-              const companySnap = await getDoc(companyRef);
+            return {
+              id: docSnap.id,
+              jobId: data.jobId,
+              jobTitle: jobSnap.exists() ? jobSnap.data().title : "Unknown Job",
+              companyName: companySnap.exists() ? companySnap.data().name : "Unknown Company",
+              interviewDate: data.date?.toDate ? data.date.toDate() : null,
+              interviewLink: data.link || "",
+              isMeetingStarted: data.isMeetingStarted || false,
+              isMeetingEnded: data.isMeetingEnded || false,
+              status: data.status ?? null,
+            };
+          })
+        );
 
-              if (companySnap.exists()) {
-                interviewList.push({
-                  id: docSnap.id,
-                  ...interviewData,
-                  companyName: companySnap.data().name || "Unknown",
-                  companyLocation: companySnap.data().location || "Unknown",
-                  companyEmail: companySnap.data().email || "Unknown",
-                });
-              }
+        // Exclude only admin-removed status
+        const filteredData = rawData.filter(
+          (item) => item.status !== 2 && item.status !== 4
+        );
+
+        const deduped = Object.values(
+          filteredData.reduce((acc, curr) => {
+            const existing = acc[curr.jobId];
+            if (
+              !existing ||
+              (!existing.interviewDate && curr.interviewDate) ||
+              (curr.interviewDate > existing.interviewDate)
+            ) {
+              acc[curr.jobId] = curr;
             }
+            return acc;
+          }, {})
+        );
 
-            setMeetings(interviewList);
-          } catch (error) {
-            console.error("Error fetching interviews:", error);
-            toast.error("Failed to fetch interviews.");
-          }
-        } else {
-          setMeetings([]);
-        }
-
+        setInterviews(deduped);
         setLoading(false);
-      },
-      (error) => {
-        console.error("Error in onSnapshot:", error);
-        toast.error("Failed to fetch interviews.");
+      } catch (error) {
+        console.error("Error processing interviews:", error);
         setLoading(false);
       }
-    );
+    });
 
     return () => unsubscribe();
-  }, [currentUserId]);
+  }, [userId]);
 
-  const handleJoin = (link) => {
-    if (link) {
-      window.open(link, "_blank");
-    } else {
-      toast.error("Meeting link not available.");
+  const getStatus = (interview) => {
+    const status = interview.status;
+
+    if (status === 5) return "Selected";
+    if (interview.isMeetingEnded) return "Ended";
+
+    if (!interview.interviewDate) {
+      if (status === 1) return "Shortlisted";
+      return "Rejected";
+    }
+
+    const start = interview.interviewDate;
+    const end = new Date(start.getTime() + 30 * 60 * 1000);
+
+    if (now >= end) return "Ended";
+    if (now >= start && now < end) return "Live";
+    return "Upcoming";
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, "interviews", id));
+      setInterviews((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Failed to delete interview:", error);
     }
   };
 
@@ -124,69 +128,97 @@ export default function UserInterviewSchedule() {
         <div className="container">
           <div className="row">
             <div className="col-md-7">
-              <h1 className="text-white font-weight-bold">Your Scheduled Interviews</h1>
+              <h1 className="text-white font-weight-bold">Schedule Interview</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/">Home</Link> <span className="mx-2 slash"></span>
+                <Link to="/">Home</Link>
+                <span className="mx-2 slash">/</span>
+                <span className="text-white">Interviews</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="container my-5 col-md-8">
+      <div className="container mt-5">
         {loading ? (
-          <SyncLoader
-            color="#89BA16"
-            size={15}
-            cssOverride={{ display: "block", margin: "50px auto" }}
-          />
-        ) : meetings.length > 0 ? (
-          meetings.map((meeting) => {
-            const { date, time } = formatDateTime(meeting.date);
-
-            return (
-              <div className="card shadow p-4 mb-4" key={meeting.id}>
-                <h4 className="mb-3">Interview Details</h4>
-                <p><strong>Company:</strong> {meeting.companyName}</p>
-                <p><strong>Location:</strong> {meeting.companyLocation}</p>
-                <p><strong>Email:</strong> {meeting.companyEmail}</p>
-                <p><strong>Date:</strong> {date}</p>
-                <p><strong>Time:</strong> {time}</p>
-
-                {meeting.isMeetingEnded ? (
-                  <>
-                    <p className="text-danger">The interview has ended.</p>
-                    <p>
-                      <strong>Meeting Link:</strong>{" "}
-                      <span className="text-muted">No longer available</span>
-                    </p>
-                  </>
-                ) : meeting.isMeetingStarted ? (
-                  <>
-                    <p>
-                      <strong>Meeting Link:</strong>{" "}
-                      {meeting.link ? (
-                        <a href={meeting.link} target="_blank" rel="noopener noreferrer">
-                          {meeting.link}
-                        </a>
-                      ) : (
-                        "N/A"
-                      )}
-                    </p>
-                    <button className="btn btn-primary" onClick={() => handleJoin(meeting.link)}>
-                      Join Interview
-                    </button>
-                  </>
-                ) : (
-                  <p className="text-muted">The interview has not started yet.</p>
-                )}
-              </div>
-            );
-          })
+          <div className="text-center my-5">
+            <SyncLoader color="#89BA16" size={15} />
+          </div>
+        ) : interviews.length === 0 ? (
+          <p>No interviews scheduled.</p>
         ) : (
-          <p className="text-center">No interviews scheduled for this user.</p>
+          <div className="row">
+            {interviews.map((interview) => {
+              const status = getStatus(interview);
+              const isJoinAvailable =
+                status === "Live" &&
+                !interview.isMeetingEnded &&
+                !!interview.interviewLink;
+
+              return (
+                <div className="col-md-4 mb-4" key={interview.id}>
+                  <div className="card shadow p-3 h-100">
+                    <h5>{interview.jobTitle}</h5>
+                    <p><strong>Company:</strong> {interview.companyName}</p>
+                    <p>
+                      <strong>Date:</strong>{" "}
+                      {interview.interviewDate
+                        ? interview.interviewDate.toLocaleDateString()
+                        : "N/A"}
+                    </p>
+                    <p>
+                      <strong>Time:</strong>{" "}
+                      {interview.interviewDate
+                        ? interview.interviewDate.toLocaleTimeString()
+                        : "N/A"}
+                    </p>
+                    <p><strong>Status:</strong> {status}</p>
+
+                    {isJoinAvailable ? (
+                      <a
+                        href={interview.interviewLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn w-100 mt-2"
+                        style={{ backgroundColor: "#89BA16", color: "white" }}
+                      >
+                        Join Interview
+                      </a>
+                    ) : (
+                      <button
+                        className="btn w-100 mt-2"
+                        style={{ backgroundColor: "#89BA16", color: "white" }}
+                        disabled
+                      >
+                        {status === "Ended"
+                          ? "Interview Ended"
+                          : status === "Upcoming"
+                          ? "Interview Not Started Yet"
+                          : status === "Shortlisted"
+                          ? "Waiting for Schedule"
+                          : "Not Available"}
+                      </button>
+                    )}
+
+                    {(status === "Ended" || status === "Rejected") && (
+                      <button
+                        className="btn btn-danger w-100 mt-2"
+                        onClick={() => handleDelete(interview.id)}
+                      >
+                        Delete Interview
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         )}
       </div>
     </>
   );
-}
+};
+
+export default UserInterviewDetails;
+
+

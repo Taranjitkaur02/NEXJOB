@@ -1,12 +1,21 @@
 import { useState, useEffect } from "react";
-import { collection, query, where, onSnapshot, getCountFromServer, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  getCountFromServer,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "../../Firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { SyncLoader } from "react-spinners";
 import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic-light-dark.css";
-import Switch from "react-switch"; // Import Switch for the toggle functionality
-import Swal from "sweetalert2"; // For confirmation alerts
+import Switch from "react-switch";
+import Swal from "sweetalert2";
+import { FaCheck, FaEye } from "react-icons/fa";
 
 export default function ManageCompany() {
   const [companies, setCompanies] = useState([]);
@@ -16,50 +25,57 @@ export default function ManageCompany() {
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
-  // Fetch all companies and set pagination
-  const fetchData = () => {
+  useEffect(() => {
     const q = query(collection(db, "users"), where("userType", "==", 2));
-
-    // This is to get the company data
-    const unsub = onSnapshot(q, async (userCol) => {
-      const data = userCol.docs.map((el) => ({
-        ...el.data(),
-        id: el.id,
+    const unsub = onSnapshot(q, async (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
       }));
       setCompanies(data);
       setLoad(false);
 
-      // Count the total number of documents to set the total pages for pagination
       const countSnap = await getCountFromServer(q);
       setTotalPages(Math.ceil(countSnap.data().count / LIMIT));
     });
 
-    return () => unsub(); // Cleanup subscription
-  };
-
-  useEffect(() => {
-    fetchData();
+    return () => unsub();
   }, []);
 
-  // Function to toggle the status of the company
   const changeStatus = async (companyId, currentStatus) => {
     Swal.fire({
       title: `Are you sure you want to ${currentStatus ? "block" : "unblock"} this company?`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: `Yes, ${currentStatus ? "Block" : "Unblock"}!`,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: `Yes, ${currentStatus ? "Block" : "Unblock"} it`,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await updateDoc(doc(db, "users", companyId), {
-          status: !currentStatus, // Toggle the status
-        });
-        Swal.fire("Success", `Company has been ${currentStatus ? "blocked" : "unblocked"}.`, "success");
+        try {
+          await updateDoc(doc(db, "users", companyId), {
+            status: !currentStatus,
+          });
+          Swal.fire({
+            icon: "success",
+            title: `Company has been ${currentStatus ? "blocked" : "unblocked"}.`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } catch (err) {
+          Swal.fire({
+            icon: "error",
+            title: "Error updating status",
+            text: err.message,
+          });
+        }
       }
     });
   };
 
   return (
     <div>
+      {/* Hero Section */}
       <section
         className="section-hero overlay inner-page bg-image"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
@@ -70,7 +86,9 @@ export default function ManageCompany() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Manage Company</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/admin">Home</Link> <span className="mx-2 slash"></span>
+                <Link to="/admin">Home</Link>
+                <span className="mx-2 slash"></span>
+                <span className="text-white">Companies</span>
               </div>
             </div>
           </div>
@@ -79,85 +97,97 @@ export default function ManageCompany() {
 
       <div className="container my-5">
         {load ? (
-          <SyncLoader
-            color="#89BA16"
-            size={20}
-            cssOverride={{ display: "block", margin: "50px auto" }}
-          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "60vh",
+            }}
+          >
+            <SyncLoader color="#89BA16" size={20} />
+          </div>
         ) : companies.length === 0 ? (
           <p className="text-center">No companies found.</p>
         ) : (
-          <>
-            <div className="row">
-              <div className="col table-responsive">
-                <table className="table table-hover table-striped">
-                  <thead style={{ backgroundColor: "#89BA16", color: "white" }}>
-                    <tr>
-                      <th>Sno</th>
-                      <th>Company Name</th>
-                      <th>Email</th>
-                      <th>Contact</th>
-                      <th>Location</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                      <th>View Application</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {companies
-                      .slice((currentPage - 1) * LIMIT, currentPage * LIMIT)
-                      .map((el, index) => (
-                        <tr key={el.id}>
-                          <td>{(currentPage - 1) * LIMIT + index + 1}</td>
-                          <td>{el?.name}</td>
-                          <td>{el?.email}</td>
-                          <td>{el?.contact}</td>
-                          <td>{el?.location}</td>
-                          <td>
-                            {/* Display Status as text */}
-                            {el.status ? "Active" : "Inactive"}
-                          </td>
-                          <td>
-                            {/* Toggle Switch for status */}
-                            <Switch
-                              checked={el.status || false}
-                              onChange={() => changeStatus(el.id, el.status)}
-                              onColor="#89BA16" // Active color (green shade)
-                              offColor="#888"   // Inactive color (gray shade)
-                              onHandleColor="#fff" // White handle when on
-                              offHandleColor="#fff" // White handle when off
-                              uncheckedIcon={false}
-                              checkedIcon={false}
-                              className="ml-3"
-                            />
-                            </td>
-                            <td>
-                            {/* View Application Button after the toggle */}
-                            <button
-                              onClick={() => navigate(`/admin/company/applications/${el.id}`)} // Keep View Application button
-                              className="btn btn-outline-primary ml-2"
-                            >
-                              <i className="bi bi-eye"></i> 
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td colSpan={7}>
-                        <ResponsivePagination
-                          current={currentPage}
-                          total={totalPages}
-                          onPageChange={setCurrentPage}
-                        />
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
+          <div className="row">
+            <div className="col table-responsive">
+              <table className="table table-hover table-striped">
+                <thead style={{ backgroundColor: "#89BA16", color: "white" }}>
+                  <tr>
+                    <th>Sno</th>
+                    <th>Company Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    <th>View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {companies
+                    .slice((currentPage - 1) * LIMIT, currentPage * LIMIT)
+                    .map((el, index) => (
+                      <tr key={el.id}>
+                        <td>{(currentPage - 1) * LIMIT + index + 1}</td>
+                        <td>{el.name}</td>
+                        <td>{el.email}</td>
+                        <td>{el.contact || "—"}</td>
+                        <td>{el.location || "—"}</td>
+                        <td>{el.status ? "Active" : "Inactive"}</td>
+                        <td>
+                          <Switch
+                            checked={el.status || false}
+                            onChange={() => changeStatus(el.id, el.status)}
+                            onColor="#006400"
+                            offColor="#888"
+                            onHandleColor="#fff"
+                            offHandleColor="#fff"
+                            uncheckedIcon={false}
+                            checkedIcon={
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  height: "100%",
+                                  color: "white",
+                                  fontSize: 14,
+                                }}
+                              >
+                                <FaCheck />
+                              </div>
+                            }
+                            className="ml-2"
+                          />
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-outline-primary btn-sm"
+                            onClick={() => navigate(`/admin/company/applications/${el.id}`)}
+                            title="View Applications"
+                          >
+                            <FaEye />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan={8}>
+                      <ResponsivePagination
+                        current={currentPage}
+                        total={totalPages}
+                        onPageChange={setCurrentPage}
+                      />
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

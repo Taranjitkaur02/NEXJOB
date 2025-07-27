@@ -64,7 +64,9 @@ export default function AdminNavbar() {
                 <li>
                   <Link to="/admin/manage-jobs">Jobs</Link>
                 </li>
-                
+                <li>
+                  <Link to="/admin/manage-interviews">Interviews</Link>
+                </li>
                 <li>
                   <Link to={"/admin/contact"}>Contact Application</Link>
                 </li>
