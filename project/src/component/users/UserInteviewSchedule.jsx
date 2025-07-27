@@ -1,80 +1,110 @@
 import { useState, useEffect } from "react";
-import { collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore";
-import { db, Auth } from "../../Firebase"; // Firebase setup file
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { db, Auth } from "../../Firebase";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { SyncLoader } from "react-spinners";
-import { onAuthStateChanged } from "firebase/auth"; // Importing Firebase Auth listener
+import { onAuthStateChanged } from "firebase/auth";
+
+// Format Firebase Timestamp to readable date and time
+const formatDateTime = (timestamp) => {
+  if (timestamp instanceof Object && timestamp.toDate) {
+    const dateObj = timestamp.toDate();
+    const date = dateObj.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+    const time = dateObj.toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+    return { date, time };
+  }
+  return { date: "-", time: "-" };
+};
 
 export default function UserInterviewSchedule() {
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentUserId, setCurrentUserId] = useState(null); // State to store current user ID
+  const [currentUserId, setCurrentUserId] = useState(null);
 
-  // Get the logged-in user's ID dynamically using Firebase Authentication
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(Auth, (user) => {
       if (user) {
-        setCurrentUserId(user.uid); // Set the current user ID
+        setCurrentUserId(user.uid);
       } else {
         toast.error("Please log in to view your interviews.");
         setLoading(false);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
   useEffect(() => {
-    if (!currentUserId) {
-      return; // If no user ID is set, don't proceed
-    }
+    if (!currentUserId) return;
 
-    console.log(" Fetching interviews for userId:", currentUserId);
-
-    // Fetch only the interviews where the `userId` matches the logged-in user's ID
-    const q = query(collection(db, "interviews"), where("userId", "==", currentUserId));
+    const q = query(
+      collection(db, "interviews"),
+      where("userId", "==", currentUserId)
+    );
 
     const unsubscribe = onSnapshot(
       q,
       async (querySnapshot) => {
         if (!querySnapshot.empty) {
-          const interviewList = [];
-          
-          // Loop through each interview and fetch the corresponding company data
-          for (const docSnap of querySnapshot.docs) {
-            const interviewData = docSnap.data();
-            const companyRef = doc(db, "users", interviewData.companyId);  // Assuming `companyId` is stored in each interview
-            const companySnap = await getDoc(companyRef);
-            
-            if (companySnap.exists()) {
-              interviewList.push({
-                id: docSnap.id,
-                ...interviewData,
-                companyName: companySnap.data().name,  // Add company name to the interview data
-                companyLocation: companySnap.data().location, // Add company location
-                companyEmail: companySnap.data().email,  // Add company email
-              });
+          try {
+            const interviewList = [];
+
+            for (const docSnap of querySnapshot.docs) {
+              const interviewData = docSnap.data();
+
+              const jobRef = doc(db, "postJob", interviewData.jobId);
+              const jobSnap = await getDoc(jobRef);
+              if (!jobSnap.exists()) continue;
+
+              const companyRef = doc(db, "users", interviewData.companyId);
+              const companySnap = await getDoc(companyRef);
+
+              if (companySnap.exists()) {
+                interviewList.push({
+                  id: docSnap.id,
+                  ...interviewData,
+                  companyName: companySnap.data().name || "Unknown",
+                  companyLocation: companySnap.data().location || "Unknown",
+                  companyEmail: companySnap.data().email || "Unknown",
+                });
+              }
             }
+
+            setMeetings(interviewList);
+          } catch (error) {
+            console.error("Error fetching interviews:", error);
+            toast.error("Failed to fetch interviews.");
           }
-          
-          console.log(" Found interviews with company data:", interviewList);
-          setMeetings(interviewList);
         } else {
-          console.warn(" No interviews found for userId:", currentUserId);
           setMeetings([]);
         }
+
         setLoading(false);
       },
       (error) => {
-        console.error(" Error fetching interviews:", error);
+        console.error("Error in onSnapshot:", error);
         toast.error("Failed to fetch interviews.");
         setLoading(false);
       }
     );
 
     return () => unsubscribe();
-  }, [currentUserId]); // Depend on currentUserId to refetch on user change
+  }, [currentUserId]);
 
   const handleJoin = (link) => {
     if (link) {
@@ -111,42 +141,48 @@ export default function UserInterviewSchedule() {
             cssOverride={{ display: "block", margin: "50px auto" }}
           />
         ) : meetings.length > 0 ? (
-          meetings.map((meeting) => (
-            <div className="card shadow p-4 mb-4" key={meeting.id}>
-              <h4 className="mb-3">Interview Details</h4>
-              <p>
-                <strong>Company:</strong> {meeting.companyName || "N/A"}
-              </p>
-              <p>
-                <strong>Location:</strong> {meeting.companyLocation || "N/A"}
-              </p>
-              <p>
-                <strong>Email:</strong> {meeting.companyEmail || "N/A"}
-              </p>
-              <p>
-                <strong>Date:</strong> {meeting.date || "N/A"}
-              </p>
-              <p>
-                <strong>Meeting Link:</strong>{" "}
-                {meeting.link ? (
-                  <a href={meeting.link} target="_blank" rel="noopener noreferrer">
-                    {meeting.link}
-                  </a>
+          meetings.map((meeting) => {
+            const { date, time } = formatDateTime(meeting.date);
+
+            return (
+              <div className="card shadow p-4 mb-4" key={meeting.id}>
+                <h4 className="mb-3">Interview Details</h4>
+                <p><strong>Company:</strong> {meeting.companyName}</p>
+                <p><strong>Location:</strong> {meeting.companyLocation}</p>
+                <p><strong>Email:</strong> {meeting.companyEmail}</p>
+                <p><strong>Date:</strong> {date}</p>
+                <p><strong>Time:</strong> {time}</p>
+
+                {meeting.isMeetingEnded ? (
+                  <>
+                    <p className="text-danger">The interview has ended.</p>
+                    <p>
+                      <strong>Meeting Link:</strong>{" "}
+                      <span className="text-muted">No longer available</span>
+                    </p>
+                  </>
+                ) : meeting.isMeetingStarted ? (
+                  <>
+                    <p>
+                      <strong>Meeting Link:</strong>{" "}
+                      {meeting.link ? (
+                        <a href={meeting.link} target="_blank" rel="noopener noreferrer">
+                          {meeting.link}
+                        </a>
+                      ) : (
+                        "N/A"
+                      )}
+                    </p>
+                    <button className="btn btn-primary" onClick={() => handleJoin(meeting.link)}>
+                      Join Interview
+                    </button>
+                  </>
                 ) : (
-                  "N/A"
+                  <p className="text-muted">The interview has not started yet.</p>
                 )}
-              </p>
-              {meeting.isMeetingStarted && !meeting.isMeetingEnded ? (
-                <button className="btn btn-primary" onClick={() => handleJoin(meeting.link)}>
-                  Join Interview
-                </button>
-              ) : meeting.isMeetingEnded ? (
-                <p className="text-danger">The interview has ended.</p>
-              ) : (
-                <p className="text-muted">The interview has not started yet.</p>
-              )}
-            </div>
-          ))
+              </div>
+            );
+          })
         ) : (
           <p className="text-center">No interviews scheduled for this user.</p>
         )}

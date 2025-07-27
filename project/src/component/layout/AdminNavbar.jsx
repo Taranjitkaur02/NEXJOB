@@ -56,25 +56,17 @@ export default function AdminNavbar() {
                   <Link to="/admin" className="nav-link">Home</Link>
                 </li>
                 <li>
-                  <Link to="/admin/manage-user">Manage Users</Link>
+                  <Link to="/admin/manage-user">Users</Link>
                 </li>
                  <li>
-                  <Link to="/admin/manage-company">Manage Company</Link>
+                  <Link to="/admin/manage-company">Company</Link>
                 </li>
                 <li>
-                  <Link to="/admin/manage-jobs">Manage Jobs</Link>
+                  <Link to="/admin/manage-jobs">Jobs</Link>
                 </li>
                 
                 <li>
-                  <Link to="/accepted-application">Accepted Application</Link>
-                </li>
-                <li className="has-children">
-                  <Link to="#">Recent Jobs</Link>
-                  <ul className="dropdown">
-                    <li><Link to="#">Frontend - Infosys</Link></li>
-                    <li><Link to="#">UI/UX - TCS</Link></li>
-                    <li><Link to="#">Backend - Wipro</Link></li>
-                  </ul>
+                  <Link to={"/admin/contact"}>Contact Application</Link>
                 </li>
                 <li className="d-lg-none">
                   {isLogin ? (

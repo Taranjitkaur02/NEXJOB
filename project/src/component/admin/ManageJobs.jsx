@@ -127,7 +127,7 @@ export default function ManageJobs() {
                       <td>{el?.title}</td>
                       <td>{el?.location}</td>
                       <td>{el?.jobType}</td>
-                      <td>{el?.salary}</td>
+                      <td><i class="bi bi-currency-rupee"></i>{el?.salary}</td>
                       <td>{el?.qualification}</td>
                       <td>{el?.experience}</td>
                       <td>{el?.vacancies}</td>

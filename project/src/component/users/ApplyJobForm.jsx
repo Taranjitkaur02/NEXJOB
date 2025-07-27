@@ -87,7 +87,7 @@ export default function ApplyJobForm() {
         resume: resumeUrl,
         createdAt: Timestamp.now(),
       });
-
+      
       toast.success("Application submitted!");
       setResume(null);
       setResumeName("");

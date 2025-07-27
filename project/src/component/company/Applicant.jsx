@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  deleteDoc,
+  doc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../Firebase";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function CompanyApplicants() {
   const [applications, setApplications] = useState([]);
@@ -29,8 +39,40 @@ export default function CompanyApplicants() {
     return () => unsub();
   }, [jobId, companyId]);
 
-  const handleScheduleClick = (appId) => {
-    navigate(`/company/schedule-interview/${jobId}/${appId}`);
+  const handleShortlist = async (app) => {
+    try {
+      // Step 1: Update the application with shortlisted flag
+      const appRef = doc(db, "jobApplications", app.id);
+      await updateDoc(appRef, { shortlisted: true });
+
+      // Step 2: Create a notification
+      const notificationRef = doc(db, "notifications", `${app.userId}_${jobId}`);
+      await setDoc(notificationRef, {
+        userId: app.userId,
+        jobId,
+        companyId,
+        status: "shortlisted",
+        timestamp: new Date(),
+        seen: false,
+        message: "You have been shortlisted for an interview.",
+      });
+
+      // Step 3: Navigate to schedule interview page
+      navigate(`/company/schedule-interview/${jobId}/${app.id}`);
+    } catch (err) {
+      console.error("Failed to notify user:", err);
+      toast.error("Failed to notify user.");
+    }
+  };
+
+  const handleReject = async (appId) => {
+    try {
+      await deleteDoc(doc(db, "jobApplications", appId));
+      toast.success("Application rejected.");
+    } catch (err) {
+      console.error("Error rejecting application:", err);
+      toast.error("Failed to reject application.");
+    }
   };
 
   return (
@@ -78,12 +120,21 @@ export default function CompanyApplicants() {
                     onClick={() => window.open(app.resume, "_blank")}
                   />
                   <p className="text-muted">{app.userEmail}</p>
-                  <button
-                    className="btn btn-outline-success btn-sm"
-                    onClick={() => handleScheduleClick(app.id)}
-                  >
-                    Schedule Interview
-                  </button>
+
+                  <div className="d-flex justify-content-center flex-wrap mt-2">
+                    <button
+                      className="btn btn-success btn-lg mx-2 mb-2"
+                      onClick={() => handleShortlist(app)}
+                    >
+                      <i className="fa fa-check me-1"></i> Shortlist
+                    </button>
+                    <button
+                      className="btn btn-danger btn-lg mx-2 mb-2"
+                      onClick={() => handleReject(app.id)}
+                    >
+                      <i className="fa fa-times me-1"></i> Reject
+                    </button>
+                  </div>
                 </div>
               </div>
             ))

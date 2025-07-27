@@ -1,23 +1,110 @@
+import React, { useState } from 'react';
+import Select from 'react-select'; // Import react-select
+
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Auth, db } from "../../Firebase";
 import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
+
+// Qualification Options
+// Qualification Options
+const qualificationOptions = [
+  { value: 'btech-cs', label: 'B.Tech in Computer Science' },
+  { value: 'btech-cse', label: 'B.Tech in Computer Science and Engineering' },
+  { value: 'btech-it', label: 'B.Tech in Information Technology' },
+  { value: 'mtech-cs', label: 'M.Tech in Computer Science' },
+  { value: 'mtech-cse', label: 'M.Tech in Computer Science and Engineering' },
+  { value: 'mtech-it', label: 'M.Tech in Information Technology' },
+  { value: 'bca', label: 'BCA (Bachelor of Computer Applications)' },
+  { value: 'mca', label: 'MCA (Master of Computer Applications)' },
+  { value: 'diploma-cs', label: 'Diploma in Computer Science' },
+  { value: 'diploma-cse', label: 'Diploma in Computer Science and Engineering' },
+  { value: 'diploma-it', label: 'Diploma in Information Technology' },
+  { value: 'btech-cloud-computing', label: 'B.Tech in Cloud Computing' },
+  { value: 'mtech-cloud-computing', label: 'M.Tech in Cloud Computing' },
+  { value: 'btech-cybersecurity', label: 'B.Tech in Cybersecurity' },
+  { value: 'mtech-cybersecurity', label: 'M.Tech in Cybersecurity' },
+  { value: 'btech-ai', label: 'B.Tech in Artificial Intelligence' },
+  { value: 'mtech-ai', label: 'M.Tech in Artificial Intelligence' },
+  { value: 'msc-data-science', label: 'M.Sc. in Data Science' },
+  { value: 'btech-game-development', label: 'B.Tech in Game Development' },
+  { value: 'msc-game-development', label: 'M.Sc. in Game Development' },
+  { value: 'msc-mobile-development', label: 'M.Sc. in Mobile Development' },
+  { value: 'btech-mobile-development', label: 'B.Tech in Mobile Development' },
+  { value: 'mba-business-analytics', label: 'MBA in Business Analytics' },
+  { value: 'msc-statistics', label: 'M.Sc. in Statistics' },
+  { value: 'bsc-computer-science', label: 'B.Sc. in Computer Science' },
+  { value: 'bca-data-science', label: 'BCA in Data Science' }
+];
+
+
+// Skills Options (Technical)
+const technicalSkillsOptions = [
+  { value: 'html', label: 'HTML' },
+  { value: 'css', label: 'CSS' },
+  { value: 'javascript', label: 'JavaScript' },
+  { value: 'python', label: 'Python' },
+  { value: 'java', label: 'Java' },
+  { value: 'ruby', label: 'Ruby' },
+  { value: 'php', label: 'PHP' },
+  { value: 'csharp', label: 'C#' },
+  { value: 'typescript', label: 'TypeScript' },
+  { value: 'react', label: 'React' },
+  { value: 'angular', label: 'Angular' },
+  { value: 'vue', label: 'Vue.js' },
+  { value: 'nodejs', label: 'Node.js' },
+  { value: 'mongodb', label: 'MongoDB' },
+  { value: 'mysql', label: 'MySQL' },
+  { value: 'graphql', label: 'GraphQL' },
+  { value: 'docker', label: 'Docker' },
+  { value: 'kubernetes', label: 'Kubernetes' },
+  { value: 'cloud', label: 'Cloud Computing (AWS, Azure, GCP)' },
+  { value: 'ml', label: 'Machine Learning' },
+  { value: 'data-science', label: 'Data Science' },
+  { value: 'ai', label: 'Artificial Intelligence' },
+  { value: 'devops', label: 'DevOps' },
+  { value: 'cloud-computing', label: 'Cloud Computing' },
+  { value: 'network-security', label: 'Network Security' },
+  { value: 'web-development', label: 'Web Development' },
+  { value: 'mobile-development', label: 'Mobile Development' },
+  { value: 'machine-learning', label: 'Machine Learning' },
+  { value: 'api-development', label: 'API Development' },
+  { value: 'system-design', label: 'System Design' },
+  { value: 'game-development', label: 'Game Development' },
+  { value: 'blockchain', label: 'Blockchain Development' },
+  { value: 'database-management', label: 'Database Management' },
+  { value: 'ios-development', label: 'iOS Development' },
+  { value: 'android-development', label: 'Android Development' }
+];
+
+
+// Skills Options (Soft Skills)
+const softSkillsOptions = [
+  { value: 'leadership', label: 'Leadership' },
+  { value: 'communication', label: 'Communication' },
+  { value: 'teamwork', label: 'Teamwork' },
+  { value: 'problem-solving', label: 'Problem Solving' },
+  { value: 'time-management', label: 'Time Management' },
+  { value: 'adaptability', label: 'Adaptability' },
+  { value: 'empathy', label: 'Empathy' },
+  { value: 'creativity', label: 'Creativity' },
+  { value: 'negotiation', label: 'Negotiation' },
+  { value: 'conflict-resolution', label: 'Conflict Resolution' },
+  { value: 'critical-thinking', label: 'Critical Thinking' },
+  { value: 'presentation', label: 'Presentation' },
+  // Add more soft skills as needed
+];
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [contact, setContact] = useState("");
-  const [qualification, setQualification] = useState("");
-  const [skills, setSkills] = useState("");
+  const [qualification, setQualification] = useState(null); // For qualification
+  const [skills, setSkills] = useState([]); // For skills (multi-select)
   const [about, setAbout] = useState("");
   const nav = useNavigate();
 
@@ -30,9 +117,9 @@ export default function Register() {
           name,
           email,
           contact,
-          qualification,
+          qualification: qualification?.label, // Save the label of selected qualification
           about,
-          skills,
+          skills: skills?.map(skill => skill.label).join(', '), // Save all selected skills
           userType: 3,
           userId,
           status: true,
@@ -74,43 +161,42 @@ export default function Register() {
     }
   };
 
- const signInGoogle = () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(Auth, provider)
-    .then(async (userCred) => {
-      const userId = userCred.user.uid;
-      const userDoc = await getDoc(doc(db, "users", userId));
+  const signInGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(Auth, provider)
+      .then(async (userCred) => {
+        const userId = userCred.user.uid;
+        const userDoc = await getDoc(doc(db, "users", userId));
 
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        if (!userData.status) {
-          toast.error("Your account has been blocked!");
-          return;
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          if (!userData.status) {
+            toast.error("Your account has been blocked!");
+            return;
+          }
+          getUserData(userId);
+        } else {
+          const data = {
+            name: userCred.user.displayName || "",
+            email: userCred.user.email || "",
+            contact: userCred.user.phoneNumber || "",
+            qualification: "",
+            about: "",
+            skills: "",
+            userType: 3,
+            userId,
+            status: true,
+            createdAt: Timestamp.now(),
+          };
+          await setDoc(doc(db, "users", userId), data);
+          toast.success("Registered successfully");
+          getUserData(userId);
         }
-        getUserData(userId);
-      } else {
-        const data = {
-          name: userCred.user.displayName || "",
-          email: userCred.user.email || "",
-          contact: userCred.user.phoneNumber || "",
-          qualification: "",
-          about: "",
-          skills: "",
-          userType: 3,
-          userId,
-          status: true,
-          createdAt: Timestamp.now(),
-        };
-        await setDoc(doc(db, "users", userId), data);
-        toast.success("Registered successfully");
-        getUserData(userId);
-      }
-    })
-    .catch((err) => {
-      toast.error(err.message);
-    });
-};
-
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
 
   return (
     <>
@@ -138,7 +224,6 @@ export default function Register() {
         <section className="site-section">
           <div className="container">
             <div className="row align-items-center">
-              {/* Left Column: Form */}
               <div className="col-lg-6 mb-5">
                 <h2 className="mb-4">Sign Up To NEXJOB</h2>
                 <form
@@ -150,9 +235,8 @@ export default function Register() {
                     backgroundColor: "#ffffff",
                     transition: "transform 0.3s ease",
                   }}
-                  onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 >
+                  {/* Name */}
                   <div className="form-group mb-3">
                     <label className="text-black">Name</label>
                     <input
@@ -165,6 +249,7 @@ export default function Register() {
                     />
                   </div>
 
+                  {/* Email & Password */}
                   <div className="row">
                     <div className="col-md-6 form-group mb-3">
                       <label className="text-black">Email</label>
@@ -190,56 +275,30 @@ export default function Register() {
                     </div>
                   </div>
 
-                  <div className="row">
-                    <div className="col-md-6 form-group mb-3">
-                      <label className="text-black">Contact</label>
-                      <input
-                        type="tel"
-                        className="form-control"
-                        placeholder="Contact"
-                        value={contact}
-                        onChange={(e) => setContact(e.target.value)}
-                        maxLength={10}
-                        minLength={10}
-                        pattern="[0-9]{10}"
-                        required
-                      />
-                    </div>
-                    <div className="col-md-6 form-group mb-3">
-                      <label className="text-black">About</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="About"
-                        value={about}
-                        onChange={(e) => setAbout(e.target.value)}
-                      />
-                    </div>
+                  {/* Qualification Dropdown */}
+                  <div className="form-group mb-3">
+                    <label className="text-black">Qualification</label>
+                    <Select
+                      options={qualificationOptions}
+                      value={qualification}
+                      onChange={setQualification}
+                      placeholder="Select your qualification"
+                    />
                   </div>
 
-                  <div className="row">
-                    <div className="col-md-6 form-group mb-3">
-                      <label className="text-black">Qualification</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Qualification"
-                        value={qualification}
-                        onChange={(e) => setQualification(e.target.value)}
-                      />
-                    </div>
-                    <div className="col-md-6 form-group mb-3">
-                      <label className="text-black">Skills</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Skills"
-                        value={skills}
-                        onChange={(e) => setSkills(e.target.value)}
-                      />
-                    </div>
+                  {/* Skills Dropdown */}
+                  <div className="form-group mb-3">
+                    <label className="text-black">Skills</label>
+                    <Select
+                      isMulti
+                      options={[...technicalSkillsOptions, ...softSkillsOptions]}
+                      value={skills}
+                      onChange={setSkills}
+                      placeholder="Select your skills"
+                    />
                   </div>
 
+                  {/* Submit Button */}
                   <div className="form-group">
                     <input
                       type="submit"
@@ -247,6 +306,8 @@ export default function Register() {
                       className="btn px-4 btn-primary text-white"
                     />
                   </div>
+
+                  {/* Google Sign-In */}
                   <p>OR</p>
                   <div>
                     <button
@@ -261,8 +322,6 @@ export default function Register() {
                         boxShadow: "0 8px 20px rgba(0, 0, 0, 0.12)",
                         transition: "transform 0.3s ease",
                       }}
-                      onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-                      onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                     >
                       <img
                         src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png"
@@ -287,7 +346,6 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Right Column: Illustration */}
               <div className="col-lg-6 text-center">
                 <img
                   src="/assets/images/register.png"
@@ -308,7 +366,6 @@ export default function Register() {
             </div>
           </div>
         </section>
-
       </div>
     </>
   );

@@ -1,22 +1,12 @@
-import {
-  collection,
-  onSnapshot,
-  query,
-  where,
-  doc,
-  deleteDoc,
-  updateDoc,
-  getCountFromServer,
-} from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { collection, query, where, onSnapshot, getCountFromServer, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../Firebase";
-import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 import { SyncLoader } from "react-spinners";
-import Swal from "sweetalert2";
-import Switch from "react-switch";
 import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic-light-dark.css";
+import Switch from "react-switch"; // Import Switch for the toggle functionality
+import Swal from "sweetalert2"; // For confirmation alerts
 
 export default function ManageCompany() {
   const [companies, setCompanies] = useState([]);
@@ -24,10 +14,14 @@ export default function ManageCompany() {
   const [currentPage, setCurrentPage] = useState(1);
   const LIMIT = 10;
   const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate();
 
+  // Fetch all companies and set pagination
   const fetchData = () => {
     const q = query(collection(db, "users"), where("userType", "==", 2));
-    onSnapshot(q, async (userCol) => {
+
+    // This is to get the company data
+    const unsub = onSnapshot(q, async (userCol) => {
       const data = userCol.docs.map((el) => ({
         ...el.data(),
         id: el.id,
@@ -35,51 +29,37 @@ export default function ManageCompany() {
       setCompanies(data);
       setLoad(false);
 
+      // Count the total number of documents to set the total pages for pagination
       const countSnap = await getCountFromServer(q);
       setTotalPages(Math.ceil(countSnap.data().count / LIMIT));
     });
+
+    return () => unsub(); // Cleanup subscription
   };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const DeleteCompany = (companyId) => {
+  // Function to toggle the status of the company
+  const changeStatus = async (companyId, currentStatus) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: `Are you sure you want to ${currentStatus ? "block" : "unblock"} this company?`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await deleteDoc(doc(db, "users", companyId));
-        Swal.fire("Deleted!", "Company has been deleted.", "success");
-      }
-    });
-  };
-
-  const changeStatus = (companyId, status) => {
-    Swal.fire({
-      title: `Are you sure you want to ${status ? "block" : "unblock"} this company?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: `Yes, ${status ? "Block" : "Unblock"}!`,
+      confirmButtonText: `Yes, ${currentStatus ? "Block" : "Unblock"}!`,
     }).then(async (result) => {
       if (result.isConfirmed) {
         await updateDoc(doc(db, "users", companyId), {
-          status: !status,
+          status: !currentStatus, // Toggle the status
         });
-        Swal.fire("Success!", `Company has been ${status ? "blocked" : "unblocked"}.`, "success");
+        Swal.fire("Success", `Company has been ${currentStatus ? "blocked" : "unblocked"}.`, "success");
       }
     });
   };
 
   return (
-    <>
-      {/* Hero Section */}
+    <div>
       <section
         className="section-hero overlay inner-page bg-image"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
@@ -97,7 +77,6 @@ export default function ManageCompany() {
         </div>
       </section>
 
-      {/* Table Section */}
       <div className="container my-5">
         {load ? (
           <SyncLoader
@@ -120,8 +99,8 @@ export default function ManageCompany() {
                       <th>Contact</th>
                       <th>Location</th>
                       <th>Status</th>
-                      <th>Toggle</th>
-                      <th>Delete</th>
+                      <th>Actions</th>
+                      <th>View Application</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -134,19 +113,31 @@ export default function ManageCompany() {
                           <td>{el?.email}</td>
                           <td>{el?.contact}</td>
                           <td>{el?.location}</td>
-                          <td>{el?.status ? "Active" : "Inactive"}</td>
                           <td>
-                            <Switch
-                              checked={el?.status || false}
-                              onChange={() => changeStatus(el.id, el?.status)}
-                            />
+                            {/* Display Status as text */}
+                            {el.status ? "Active" : "Inactive"}
                           </td>
                           <td>
+                            {/* Toggle Switch for status */}
+                            <Switch
+                              checked={el.status || false}
+                              onChange={() => changeStatus(el.id, el.status)}
+                              onColor="#89BA16" // Active color (green shade)
+                              offColor="#888"   // Inactive color (gray shade)
+                              onHandleColor="#fff" // White handle when on
+                              offHandleColor="#fff" // White handle when off
+                              uncheckedIcon={false}
+                              checkedIcon={false}
+                              className="ml-3"
+                            />
+                            </td>
+                            <td>
+                            {/* View Application Button after the toggle */}
                             <button
-                              onClick={() => DeleteCompany(el.id)}
-                              className="btn btn-danger"
+                              onClick={() => navigate(`/admin/company/applications/${el.id}`)} // Keep View Application button
+                              className="btn btn-outline-primary ml-2"
                             >
-                              <i className="bi bi-trash me-1"></i>
+                              <i className="bi bi-eye"></i> 
                             </button>
                           </td>
                         </tr>
@@ -154,7 +145,7 @@ export default function ManageCompany() {
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td colSpan={8}>
+                      <td colSpan={7}>
                         <ResponsivePagination
                           current={currentPage}
                           total={totalPages}
@@ -169,6 +160,6 @@ export default function ManageCompany() {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../Firebase";
 import { useParams, Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,17 +9,19 @@ export default function ScheduleInterview() {
   const { jobId, applicationId } = useParams();
 
   const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [meetingURL, setMeetingURL] = useState("");
   const [loading, setLoading] = useState(true);
   const [companyId, setCompanyId] = useState("");
   const [userId, setUserId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isInterviewScheduled, setIsInterviewScheduled] = useState(false);
 
   // Fetch application data
   useEffect(() => {
     const fetchApplication = async () => {
       if (!applicationId) {
-        toast.error("Missing applicationId from URL.");
+        toast.error("Missing applicationId.");
         setLoading(false);
         return;
       }
@@ -27,9 +29,8 @@ export default function ScheduleInterview() {
       try {
         const appRef = doc(db, "jobApplications", applicationId);
         const appSnap = await getDoc(appRef);
-
         if (!appSnap.exists()) {
-          toast.error("Application not found in Firestore.");
+          toast.error("Application not found.");
           setLoading(false);
           return;
         }
@@ -38,8 +39,8 @@ export default function ScheduleInterview() {
         setCompanyId(data.companyId || "");
         setUserId(data.userId || "");
       } catch (error) {
-        console.error("Error loading application:", error);
-        toast.error("Failed to load application data.");
+        console.error("Error fetching application:", error);
+        toast.error("Failed to fetch application.");
       } finally {
         setLoading(false);
       }
@@ -54,29 +55,45 @@ export default function ScheduleInterview() {
       try {
         const interviewRef = doc(db, "interviews", applicationId);
         const interviewSnap = await getDoc(interviewRef);
-
         if (interviewSnap.exists()) {
           const data = interviewSnap.data();
-          setDate(data.date || "");
-          setMeetingURL(data.link || "");
-        } else {
-          setDate("");
+          const interviewDate = data.date?.toDate();
+          if (interviewDate) {
+            setDate(interviewDate.toISOString().slice(0, 10));
+            setTime(interviewDate.toTimeString().slice(0, 5));
+            setMeetingURL(data.link || "");
+            setIsInterviewScheduled(true);
+          }
         }
-      } catch (error) {
-        console.error("Error loading interview:", error.message);
-        toast.error("Failed to load interview data.");
+      } catch (err) {
+        console.error("Error fetching interview:", err);
+        toast.error("Failed to fetch interview.");
       }
     };
 
     if (applicationId) fetchInterview();
   }, [applicationId]);
 
-  // Handle scheduling
+  // Schedule or update interview
   const handleSchedule = async (e) => {
     e.preventDefault();
 
-    if (!date || !companyId || !userId) {
-      toast.error("Please fill all fields correctly.");
+    if (!date || !time || !companyId || !userId) {
+      toast.error("Please fill all fields.");
+      return;
+    }
+
+    const selectedDateTime = new Date(`${date}T${time}`);
+    const now = new Date();
+
+    if (isNaN(selectedDateTime.getTime())) {
+      toast.error("Invalid date/time format.");
+      return;
+    }
+
+    // ✅ Disallow scheduling for past date/time (including yesterday or earlier today)
+    if (selectedDateTime <= now) {
+      toast.error("Cannot schedule/update interview for a past date or time.");
       return;
     }
 
@@ -87,10 +104,10 @@ export default function ScheduleInterview() {
     try {
       await setDoc(doc(db, "interviews", applicationId), {
         jobId: jobId || "",
-        applicationId: applicationId || "",
+        applicationId,
         companyId,
         userId,
-        date,
+        date: Timestamp.fromDate(selectedDateTime),
         link: jitsiLink,
         isMeetingStarted: false,
         isMeetingEnded: false,
@@ -98,7 +115,8 @@ export default function ScheduleInterview() {
       });
 
       setMeetingURL(jitsiLink);
-      toast.success("Interview scheduled successfully!");
+      setIsInterviewScheduled(true);
+      toast.success("Interview scheduled successfully.");
     } catch (err) {
       console.error("Error scheduling interview:", err);
       toast.error("Failed to schedule interview.");
@@ -107,10 +125,28 @@ export default function ScheduleInterview() {
     }
   };
 
-  // Start meeting
+  // Start meeting (validates time again)
   const handleStartMeeting = async () => {
-    if (!meetingURL) {
-      toast.error("No meeting URL found. Schedule the interview first.");
+    if (!date || !time) {
+      toast.error("Scheduled date or time is missing.");
+      return;
+    }
+
+    const scheduledTime = new Date(`${date}T${time}`);
+    const now = new Date();
+
+    if (isNaN(scheduledTime.getTime())) {
+      toast.error("Invalid scheduled date/time.");
+      return;
+    }
+
+    if (scheduledTime > now) {
+      toast.error("You can only start the interview on or after the scheduled time.");
+      return;
+    }
+
+    if (scheduledTime < now.setHours(now.getHours() - 24)) {
+      toast.error("Scheduled time is in the past. Please update the interview.");
       return;
     }
 
@@ -128,17 +164,16 @@ export default function ScheduleInterview() {
     }
   };
 
-  // End meeting
   const handleEndMeeting = async () => {
     try {
       await updateDoc(doc(db, "interviews", applicationId), {
         isMeetingStarted: false,
         isMeetingEnded: true,
       });
-      toast.success("Meeting ended!");
+      toast.success("Meeting ended.");
     } catch (err) {
       console.error("Error ending meeting:", err);
-      toast.error("Failed to end the meeting.");
+      toast.error("Failed to end meeting.");
     }
   };
 
@@ -162,7 +197,9 @@ export default function ScheduleInterview() {
       </section>
 
       <div className="container my-5 col-md-8">
-        <h2 className="mb-4 text-center">Schedule Interview</h2>
+        <h2 className="mb-4 text-center">
+          {isInterviewScheduled ? "Update Interview" : "Schedule Interview"}
+        </h2>
 
         {loading ? (
           <SyncLoader
@@ -184,12 +221,29 @@ export default function ScheduleInterview() {
                 />
               </div>
 
+              <div className="form-group mb-4">
+                <label className="form-label fw-bold">Interview Time</label>
+                <input
+                  type="time"
+                  className="form-control"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  required
+                />
+              </div>
+
               <button
                 type="submit"
                 className="btn btn-success w-100"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Scheduling..." : "Schedule Interview"}
+                {isInterviewScheduled
+                  ? isSubmitting
+                    ? "Updating..."
+                    : "Update Interview"
+                  : isSubmitting
+                  ? "Scheduling..."
+                  : "Schedule Interview"}
               </button>
             </form>
 
@@ -198,7 +252,7 @@ export default function ScheduleInterview() {
                 <button className="btn btn-primary me-2" onClick={handleStartMeeting}>
                   Start Interview
                 </button>
-                <button className="btn btn-danger mx-3" onClick={handleEndMeeting}>
+                <button className="btn btn-danger ms-2" onClick={handleEndMeeting}>
                   End Interview
                 </button>
               </div>

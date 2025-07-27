@@ -106,7 +106,7 @@ export default function ManageUser() {
                       <th>Qualification</th>
                       <th>Skills</th>
                       <th>Status</th>
-                      <th>Toggle</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>

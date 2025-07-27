@@ -42,6 +42,8 @@ import CompanyViewApplications from "./component/company/CompanyViewApplication"
 import CompanyApplicants from "./component/company/Applicant";
 import ScheduleInterview from "./component/company/ScheduleInterview";
 import UserInterviewSchedule from "./component/users/UserInteviewSchedule";
+import ViewApplication from "./component/admin/ViewApplication";
+import UserProfile from "./component/users/UserProfile";
 function App() {
   return (
     <>
@@ -55,6 +57,7 @@ function App() {
       <Route path="apply-job" element={<ApplyJob/>}/>
       <Route path="interview/:applicationId" element={<UserInterviewSchedule/>}/>
       <Route path="job-form/:jobId" element={<ApplyJobForm />} />
+      <Route path="user-profile" element={<UserProfile/>}/>
       <Route path="contact" element={<Contact/>}/>
       <Route path="faq" element={<Faq/>}/>
       <Route path="gallery" element={<Gallery/>}/>
@@ -74,6 +77,7 @@ function App() {
      <Route path="manage-user" element={<ManageUser/>}/>
      <Route path="manage-company" element={<ManageCompany/>}/>
      <Route path="manage-jobs" element={<ManageJobs/>}/>
+     <Route path="company/applications/:companyId" element={<ViewApplication/>}/>
      </Route>
      <Route path="/company" element={<CompanyLayout/>}>
      <Route index element={<CompanyHome/>}/>
