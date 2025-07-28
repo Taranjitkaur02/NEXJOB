@@ -38,9 +38,8 @@ export default function ViewApplication() {
 
       setApplications(filteredApps);
 
-      // ✅ Fetch job + company info AFTER apps are loaded
       await fetchJobsAndCompanies(filteredApps);
-      setIsFullyLoaded(true); // ✅ Only after everything is fetched
+      setIsFullyLoaded(true);
     });
 
     return () => unsub();
@@ -126,6 +125,28 @@ export default function ViewApplication() {
 
   return (
     <>
+      {/* 3D Card Animation Style */}
+      <style>{`
+        .hover-card {
+          transition: transform 0.4s ease, box-shadow 0.4s ease;
+          transform-style: preserve-3d;
+          will-change: transform;
+        }
+
+        .hover-card:hover {
+        transform: perspective(1000px) translateZ(20px) scale(1.03);
+        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 0 20px rgba(137, 186, 22, 0.2);
+        }
+
+
+        @media (hover: none) {
+          .hover-card:hover {
+            transform: none;
+            box-shadow: none;
+          }
+        }
+      `}</style>
+
       {/* Hero Section */}
       <section
         className="section-hero overlay inner-page bg-image"
@@ -146,10 +167,7 @@ export default function ViewApplication() {
       </section>
 
       {/* Applications Section */}
-      <section
-        className="site-section services-section bg-light block__62849"
-        id="next-section"
-      >
+      <section className="site-section services-section bg-light block__62849" id="next-section">
         <div className="container">
           {!isFullyLoaded ? (
             <div
@@ -178,10 +196,9 @@ export default function ViewApplication() {
                       className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5"
                       key={application.id}
                     >
-                      <div className="card shadow-lg rounded p-4 bg-white hover-card">
+                      <div className="card hover-card p-4 bg-white rounded shadow">
                         <div className="card-body">
                           <h4 className="text-center mb-3">{companyName}</h4>
-
                           <h5 className="card-title">{application.userEmail}</h5>
                           <p className="card-text">
                             Resume:{" "}
@@ -200,14 +217,11 @@ export default function ViewApplication() {
                               : "Date not available"}
                           </p>
                           <p className="card-text">
-                            <strong>Applied for: </strong>
-                            {job ? job.jobTitle : "Job not found"}
+                            <strong>Applied for:</strong> {job.jobTitle}
                           </p>
                           <p className="card-text">
-                            <strong>Interview Date: </strong>
-                            {getInterviewDate(application.id)}
+                            <strong>Interview Date:</strong> {getInterviewDate(application.id)}
                           </p>
-
                           <button
                             className="btn btn-danger btn-sm mt-3 w-100"
                             onClick={() => handleDelete(application.id)}

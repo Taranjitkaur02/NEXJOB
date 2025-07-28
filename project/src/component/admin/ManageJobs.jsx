@@ -74,7 +74,7 @@ export default function ManageJobs() {
               <h1 className="text-white font-weight-bold">Manage Jobs</h1>
               <div className="custom-breadcrumbs">
                 <Link to={"/admin"}>Home</Link>{" "}
-                <span className="mx-2 slash"></span>
+                <span className="mx-2 slash">/</span>
                 <span className="text-white">Manage Jobs</span>
               </div>
             </div>

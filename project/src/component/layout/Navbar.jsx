@@ -53,8 +53,9 @@ export default function Navbar() {
               <ul className="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
                 <li><Link to="/" className="nav-link">Home</Link></li>
                 <li><Link to="/view-skills">View Skills</Link></li>
-                <li><Link to="/view-job">View Job</Link></li>
+                <li><Link to="/view-job">Job Listing</Link></li>
                 <li><Link to="/interview/applicationId">Interview</Link></li>
+                <li><Link to="/contact">Contact</Link></li>
                 <li className="d-lg-none">
                   <Link to="/post-job">
                     <span className="mr-2">+</span> Post a Job

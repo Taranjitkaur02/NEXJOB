@@ -105,9 +105,7 @@ export default function CompanyApplicants() {
         message: "Your application has been rejected.",
       });
 
-      // Remove the rejected card from the UI
       setApplications((prev) => prev.filter((item) => item.id !== app.id));
-
       toast.success("User rejected.");
     } catch (err) {
       console.error("Reject error:", err);
@@ -140,6 +138,18 @@ export default function CompanyApplicants() {
 
   return (
     <>
+      {/* Hover Animation Style */}
+      <style>{`
+        .hover-effect {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-effect:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+      `}</style>
+
       {/* Hero Section */}
       <section
         className="section-hero overlay inner-page bg-image"
@@ -151,7 +161,8 @@ export default function CompanyApplicants() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Manage Company</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/admin">Home</Link> <span className="mx-2 slash"></span>
+                <Link to="/admin">Home</Link>{" "}
+                <span className="mx-2 slash"></span>
               </div>
             </div>
           </div>
@@ -169,7 +180,7 @@ export default function CompanyApplicants() {
           ) : (
             applications.map((app) => (
               <div className="col-md-4 mb-4" key={app.id}>
-                <div className="card shadow rounded p-3 text-center d-flex flex-column h-100">
+                <div className="card shadow rounded p-3 text-center d-flex flex-column h-100 hover-effect">
                   <img
                     src={app.resume}
                     alt="Resume"
@@ -202,17 +213,21 @@ export default function CompanyApplicants() {
                           <button
                             className="btn btn-outline-primary btn-sm w-100"
                             onClick={() =>
-                              navigate(`/company/schedule-interview/${jobId}/${app.id}`)
+                              navigate(
+                                `/company/schedule-interview/${jobId}/${app.id}`
+                              )
                             }
                           >
-                            <i className="bi bi-calendar-check me-1"></i> Interview
+                            <i className="bi bi-calendar-check me-1"></i>{" "}
+                            Interview
                           </button>
                         ) : (
                           <button
                             className="btn btn-outline-success btn-sm w-100"
                             onClick={() => handleShortlist(app)}
                           >
-                            <i className="bi bi-check-circle me-1"></i> Shortlist
+                            <i className="bi bi-check-circle me-1"></i>{" "}
+                            Shortlist
                           </button>
                         )}
                       </div>
@@ -243,4 +258,5 @@ export default function CompanyApplicants() {
     </>
   );
 }
+
 

@@ -87,7 +87,7 @@ export default function ManageCompany() {
               <h1 className="text-white font-weight-bold">Manage Company</h1>
               <div className="custom-breadcrumbs">
                 <Link to="/admin">Home</Link>
-                <span className="mx-2 slash"></span>
+                <span className="mx-2 slash">/</span>
                 <span className="text-white">Companies</span>
               </div>
             </div>

@@ -3,28 +3,15 @@ import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Auth, db } from "../../Firebase";
 import { Timestamp, setDoc, doc } from "firebase/firestore";
-import Select from "react-select";
 
-
-// Assuming you already have the cities array
 const cityOptions = [
   { value: 'amritsar', label: 'Amritsar' },
   { value: 'jalandhar', label: 'Jalandhar' },
   { value: 'ludhiana', label: 'Ludhiana' },
   { value: 'patiala', label: 'Patiala' },
-  { value: 'bathinda', label: 'Bathinda' },
-  { value: 'mohali', label: 'Mohali' },
-  { value: 'hoshiarpur', label: 'Hoshiarpur' },
-  { value: 'moga', label: 'Moga' },
-  { value: 'ferozepur', label: 'Ferozepur' },
-  { value: 'kapurthala', label: 'Kapurthala' },
-  { value: 'tarn-taran', label: 'Tarn Taran' },
-  { value: 'faridkot', label: 'Faridkot' },
-  { value: 'rupnagar', label: 'Rupnagar' },
-  { value: 'sangrur', label: 'Sangrur' },
   { value: 'delhi', label: 'Delhi' },
   { value: 'mumbai', label: 'Mumbai' },
   { value: 'bangalore', label: 'Bangalore' },
@@ -32,52 +19,16 @@ const cityOptions = [
   { value: 'kolkata', label: 'Kolkata' },
   { value: 'hyderabad', label: 'Hyderabad' },
   { value: 'pune', label: 'Pune' },
-  { value: 'ahmedabad', label: 'Ahmedabad' },
   { value: 'chandigarh', label: 'Chandigarh' },
   { value: 'surat', label: 'Surat' },
   { value: 'jaipur', label: 'Jaipur' },
   { value: 'lucknow', label: 'Lucknow' },
   { value: 'indore', label: 'Indore' },
-  { value: 'patna', label: 'Patna' },
   { value: 'bhopal', label: 'Bhopal' },
-  { value: 'nagpur', label: 'Nagpur' },
-  { value: 'kanpur', label: 'Kanpur' },
-  { value: 'vadodara', label: 'Vadodara' },
-  { value: 'coimbatore', label: 'Coimbatore' },
-  { value: 'trivandrum', label: 'Trivandrum' },
-  { value: 'rajkot', label: 'Rajkot' },
-  { value: 'ranchi', label: 'Ranchi' },
-  { value: 'vijayawada', label: 'Vijayawada' },
   { value: 'noida', label: 'Noida' },
-  { value: 'mysore', label: 'Mysore' },
-  { value: 'patiala', label: 'Patiala' },
-  { value: 'jamshedpur', label: 'Jamshedpur' },
-  { value: 'aurangabad', label: 'Aurangabad' },
-  { value: 'belgaum', label: 'Belgaum' },
-  { value: 'tamilnadu', label: 'Tamil Nadu' },
   { value: 'meerut', label: 'Meerut' },
-  { value: 'faridabad', label: 'Faridabad' },
-  { value: 'howrah', label: 'Howrah' },
-  { value: 'dhanbad', label: 'Dhanbad' },
-  { value: 'ludhiana', label: 'Ludhiana' },
-  { value: 'jodhpur', label: 'Jodhpur' },
-  { value: 'kanchipuram', label: 'Kanchipuram' },
-  { value: 'ghaziabad', label: 'Ghaziabad' },
-  { value: 'gwalior', label: 'Gwalior' },
   { value: 'shimla', label: 'Shimla' },
-  { value: 'mussoorie', label: 'Mussoorie' },
-  { value: 'kannur', label: 'Kannur' },
-  { value: 'nagapattinam', label: 'Nagapattinam' },
-  { value: 'puducherry', label: 'Puducherry' },
-  { value: 'tirunelveli', label: 'Tirunelveli' },
-  { value: 'mangalore', label: 'Mangalore' },
-  { value: 'ujjain', label: 'Ujjain' },
-  { value: 'bhubaneswar', label: 'Bhubaneswar' },
-  { value: 'imphal', label: 'Imphal' },
-  { value: 'agartala', label: 'Agartala' },
-  { value: 'gangtok', label: 'Gangtok' },
-  { value: 'portblair', label: 'Port Blair' },
-  { value: 'dehradun', label: 'Dehradun' }
+  { value: 'dehradun', label: 'Dehradun' },
 ];
 
 export default function CompanyRegister() {
@@ -104,18 +55,25 @@ export default function CompanyRegister() {
 
   const saveData = async (userId) => {
     try {
-      let data = {
+      const data = {
         name: companyName,
-        website: website,
-        contact: contact,
-        email: email,
-        location: location,
+        website,
+        contact,
+        email,
+        location,
         userType: 2,
-        userId: userId,
+        userId,
         status: true,
         createdAt: Timestamp.now(),
       };
+
       await setDoc(doc(db, "users", userId), data);
+
+      // ✅ Set sessionStorage before redirect
+      sessionStorage.setItem("isLogin", "true");
+      sessionStorage.setItem("userType", "2");
+      sessionStorage.setItem("userId", userId);
+
       toast.success("Registered successfully");
       nav("/company");
     } catch (error) {
@@ -125,7 +83,7 @@ export default function CompanyRegister() {
 
   return (
     <>
-      <Navbar />
+ 
       <div className="site-wrap">
         <section
           className="section-hero overlay inner-page bg-image"
@@ -149,7 +107,6 @@ export default function CompanyRegister() {
         <section className="site-section">
           <div className="container">
             <div className="row align-items-center">
-              {/* Left: Form */}
               <div className="col-lg-6 mb-5">
                 <h2 className="mb-4">Register Your Company on NEXJOB</h2>
                 <form
@@ -262,7 +219,6 @@ export default function CompanyRegister() {
                 </div>
               </div>
 
-              {/* Right: Illustration */}
               <div className="col-lg-6 text-center">
                 <img
                   src="/assets/images/register.png"
@@ -282,6 +238,8 @@ export default function CompanyRegister() {
           </div>
         </section>
       </div>
+      
     </>
   );
 }
+

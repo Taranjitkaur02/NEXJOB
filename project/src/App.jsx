@@ -2,7 +2,7 @@ import About from "./component/pages/About"
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Blog from "./component/pages/Blog";
 import Blog_single from "./component/pages/Blog_single";
-import Contact from "./component/pages/Contact";
+import Contact from "./component/users/Contact";
 import Faq from "./component/pages/Faq";
 import Gallery from "./component/pages/Gallery";
 import Home from "./component/pages/Home";
@@ -46,6 +46,8 @@ import ViewApplication from "./component/admin/ViewApplication";
 import UserProfile from "./component/users/UserProfile";
 import AdminManageInterview from "./component/admin/AdminManageInterview";
 import AdminJobsList from "./component/admin/AdminJobList";
+import AdminContactMessages from "./component/admin/AdminContactMessages";
+import CompanyContact from "./component/company/CompanyContact";
 function App() {
   return (
     <>
@@ -82,6 +84,7 @@ function App() {
      <Route path="company/applications/:companyId" element={<ViewApplication/>}/>
      <Route path="manage-interviews" element={<AdminJobsList/>}/>
      <Route path="interview/:jobId" element={<AdminManageInterview/>}/>
+     <Route path="contact" element={<AdminContactMessages/>}/>
      </Route>
      <Route path="/company" element={<CompanyLayout/>}>
      <Route index element={<CompanyHome/>}/>
@@ -91,8 +94,8 @@ function App() {
      <Route path="update-profile" element={<UpdateCompany/>}/>
      <Route path="view-application" element={<CompanyViewApplications/>}/>
      <Route path="applicants/:jobId" element={<CompanyApplicants />} />
-    <Route path="schedule-interview/:jobId/:applicationId" element={<ScheduleInterview />} />
-
+     <Route path="schedule-interview/:jobId/:applicationId" element={<ScheduleInterview />} />
+      <Route path="company-contact" element={<CompanyContact/>}/>
      </Route>
       <Route path="/*" element={<Error/>}/>
     </Routes>

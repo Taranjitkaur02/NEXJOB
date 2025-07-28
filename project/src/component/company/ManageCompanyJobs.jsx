@@ -98,32 +98,32 @@ export default function ManageCompanyJobs() {
                     <h3 className="text-center">{el.title}</h3>
 
                     <p>
-                      <i className="bi bi-geo-alt me-2"></i>
+                      <i className="bi bi-geo-alt me-2"></i>{" "}
                       {el.location}
                     </p>
 
                     <p>
-                      <i className="bi bi-clock me-2"></i>
+                      <i className="bi bi-clock me-2"></i>{" "}
                       {el.jobType}
                     </p>
 
                     <p>
-                      <i className="bi bi-currency-rupee me-2"></i>
+                      <i className="bi bi-currency-rupee me-2"></i>{" "}
                       {el.salary}
                     </p>
 
                     <p>
-                      <i className="bi bi-mortarboard me-2"></i>
+                      <i className="bi bi-mortarboard me-2"></i>{" "}
                       {el.qualification}
                     </p>
 
                     <p>
-                      <i className="bi bi-briefcase me-2"></i>
+                      <i className="bi bi-briefcase me-2"></i>{" "}
                       {el.experience} Year Experience
                     </p>
 
                     <p>
-                      <i className="bi bi-person-lines-fill me-2"></i>
+                      <i className="bi bi-person-lines-fill me-2"></i>{" "}
                       {el.vacancies} Vacancies
                     </p>
 

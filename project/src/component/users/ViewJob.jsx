@@ -3,7 +3,7 @@ import { db } from "../../Firebase";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import Select from "react-select";
 import { SyncLoader } from "react-spinners";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function ViewJob() {
   const [jobs, setJobs] = useState([]);
@@ -11,28 +11,27 @@ export default function ViewJob() {
   const [companyFilter, setCompanyFilter] = useState(null);
   const [load, setLoad] = useState(true);
 
+  const location = useLocation();
+
   // Fetch companies from the 'users' collection (userType = 2)
   const fetchCompanies = () => {
-    const q = query(collection(db, "users"), where("userType", "==", 2)); // User type 2 for companies
+    const q = query(collection(db, "users"), where("userType", "==", 2));
     onSnapshot(q, (snapshot) => {
       const companies = snapshot.docs.map((doc) => ({
-        value: doc.data().userId, // Use 'userId' as the value for filtering jobs
-        label: doc.data().name,   // Use 'name' for displaying company name
+        value: doc.data().userId,
+        label: doc.data().name,
       }));
       setCompanyOptions(companies);
     });
   };
 
   // Fetch jobs based on selected company filter
-  const fetchData = () => {
+  const fetchData = (companyId = null) => {
     let q = query(collection(db, "postJob"));
-
-    // Apply company filter: filter jobs where userId matches the selected company's userId
-    if (companyFilter) {
-      q = query(q, where("userId", "==", companyFilter.value)); // Match userId in postJob
+    if (companyId) {
+      q = query(q, where("userId", "==", companyId));
     }
 
-    // Fetch jobs from postJob collection based on the company filter
     onSnapshot(q, (jobSnapshot) => {
       const jobsData = jobSnapshot.docs.map((doc) => ({
         ...doc.data(),
@@ -45,29 +44,47 @@ export default function ViewJob() {
 
   // Fetch companies on component mount
   useEffect(() => {
-    fetchCompanies(); // Fetch company names from the 'users' collection
+    fetchCompanies();
   }, []);
 
-  // Trigger job fetch whenever the company filter changes
+  // Apply filter from query string (e.g., ?companyId=abc123)
   useEffect(() => {
-    fetchData(); // Fetch jobs whenever the company filter is changed
+    const params = new URLSearchParams(location.search);
+    const companyId = params.get("companyId");
+
+    if (companyId && companyOptions.length > 0) {
+      const matchedCompany = companyOptions.find((opt) => opt.value === companyId);
+      if (matchedCompany) {
+        setCompanyFilter(matchedCompany); // this will trigger fetchData via other effect
+      } else {
+        fetchData(); // fallback
+      }
+    } else {
+      fetchData(); // default all jobs
+    }
+  }, [location.search, companyOptions]);
+
+  // Trigger job fetch when dropdown filter changes
+  useEffect(() => {
+    if (companyFilter) {
+      fetchData(companyFilter.value);
+    }
   }, [companyFilter]);
 
-  // Custom styles for react-select dropdown
   const customStyles = {
     control: (provided) => ({
       ...provided,
-      width: "100%",  // Ensures full width of the control
-      minWidth: "200px",  // Set minimum width
+      width: "100%",
+      minWidth: "200px",
     }),
     menu: (provided) => ({
       ...provided,
-      width: "100%", // Ensures the dropdown menu has full width
-      minWidth: "200px",  // Set minimum width for the menu
+      width: "100%",
+      minWidth: "200px",
     }),
     option: (provided) => ({
       ...provided,
-      padding: "10px", // Increase padding for better readability
+      padding: "10px",
     }),
   };
 
@@ -93,7 +110,7 @@ export default function ViewJob() {
         </div>
       </section>
 
-      {/* Filter Section - Only Company Filter */}
+      {/* Filter Section */}
       <section className="filter-section py-5 bg-light">
         <div className="container">
           <div className="row">
@@ -103,14 +120,14 @@ export default function ViewJob() {
                 onChange={setCompanyFilter}
                 placeholder="Filter by Company"
                 value={companyFilter}
-                styles={customStyles} // Applying custom styles here
+                styles={customStyles}
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Jobs Display Section */}
+      {/* Jobs Section */}
       <section className="site-section services-section bg-light block__62849" id="next-section">
         <div className="container">
           {load ? (
@@ -123,7 +140,12 @@ export default function ViewJob() {
                 <div className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5" key={job.id}>
                   <div className="block__16443 d-block p-4 bg-white shadow rounded">
                     <div className="text-center mb-3">
-                      <img className="img-fluid" src={job.image} alt="Job" style={{ borderRadius: "50%", maxHeight: "100px" }} />
+                      <img
+                        className="img-fluid"
+                        src={job.image || "/assets/images/default_company.png"}
+                        alt="Job"
+                        style={{ borderRadius: "50%", maxHeight: "100px" }}
+                      />
                     </div>
                     <h3 className="text-center">{job.title}</h3>
                     <p><i className="bi bi-geo-alt me-2"></i>{job.location}</p>

@@ -27,11 +27,7 @@ export default function AdminManageInterview() {
 
     const loadJobTitle = async () => {
       const jobSnap = await getDoc(doc(db, "postJob", jobId));
-      if (jobSnap.exists()) {
-        setJobTitle(jobSnap.data().title || "Untitled Job");
-      } else {
-        setJobTitle("Unknown Job");
-      }
+      setJobTitle(jobSnap.exists() ? jobSnap.data().title || "Untitled Job" : "Unknown Job");
     };
 
     const interviewQuery = query(
@@ -40,13 +36,9 @@ export default function AdminManageInterview() {
     );
 
     const unsubscribe = onSnapshot(interviewQuery, async (snapshot) => {
-      const allDocs = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      // Deduplicate by applicationId — keep latest interview with scheduled date if available
+      const allDocs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       const latestInterviewMap = {};
+
       for (const doc of allDocs) {
         const existing = latestInterviewMap[doc.applicationId];
         if (
@@ -59,56 +51,36 @@ export default function AdminManageInterview() {
       }
 
       const interviewDocs = Object.values(latestInterviewMap);
-
       const statusLookup = {};
       const userLookup = {};
       const companyLookup = {};
 
       for (const interview of interviewDocs) {
-        // ✅ Fetch jobApplication status
         const appSnap = await getDoc(doc(db, "jobApplications", interview.applicationId));
         if (appSnap.exists()) {
           const statusCode = appSnap.data().status;
-          let statusText = "Applied";
-
-          switch (statusCode) {
-            case 1:
-              statusText = "Shortlisted";
-              break;
-            case 2:
-              statusText = "Rejected";
-              break;
-            case 3:
-              statusText = "Interview Scheduled";
-              break;
-            case 4:
-              statusText = "Rejected (Final)";
-              break;
-            case 5:
-              statusText = "Selected";
-              break;
-            default:
-              statusText = "Applied";
-          }
-
-          statusLookup[interview.applicationId] = statusText;
+          statusLookup[interview.applicationId] = {
+            1: "Shortlisted",
+            2: "Rejected",
+            3: "Interview Scheduled",
+            4: "Rejected (Final)",
+            5: "Selected",
+          }[statusCode] || "Applied";
         }
 
-        // ✅ Fetch user info
         if (!userLookup[interview.userId]) {
           const userSnap = await getDoc(doc(db, "users", interview.userId));
           if (userSnap.exists()) {
-            const userData = userSnap.data();
-            if (userData.userType === 3) {
+            const data = userSnap.data();
+            if (data.userType === 3) {
               userLookup[interview.userId] = {
-                name: userData.name || "User",
-                email: userData.email || "N/A",
+                name: data.name || "User",
+                email: data.email || "N/A",
               };
             }
           }
         }
 
-        // ✅ Fetch company name
         if (!companyLookup[interview.companyId]) {
           const compSnap = await getDoc(doc(db, "users", interview.companyId));
           if (compSnap.exists()) {
@@ -144,12 +116,32 @@ export default function AdminManageInterview() {
 
   return (
     <>
-      {/* Hero Section - Always Visible */}
+      {/* 3D card animation */}
+      <style>{`
+        .interview-card {
+          transition: transform 0.4s ease, box-shadow 0.4s ease;
+          transform-style: preserve-3d;
+          will-change: transform;
+        }
+
+        .interview-card:hover {
+          transform: perspective(1000px) translateZ(20px) scale(1.03);
+        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 0 20px rgba(137, 186, 22, 0.2);
+        }
+
+        @media (hover: none) {
+          .interview-card:hover {
+            transform: none;
+            box-shadow: none;
+          }
+        }
+      `}</style>
+
       <section
         className="section-hero overlay inner-page bg-image"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
       >
-        <div className="container">
+        <div className="container py-5">
           <h1 className="text-white">Interviews for: {jobTitle}</h1>
           <Link
             to="/admin/manage-interviews"
@@ -171,34 +163,20 @@ export default function AdminManageInterview() {
         ) : (
           <div className="row">
             {interviews.map((int) => {
-              const user = userInfo[int.userId] || {
-                name: int.userId,
-                email: "Unknown",
-              };
+              const user = userInfo[int.userId] || { name: int.userId, email: "Unknown" };
               const companyName = companyNames[int.companyId] || int.companyId;
               const status = statusMap[int.applicationId] || "Applied";
 
               return (
                 <div className="col-md-4 mb-4" key={int.id}>
-                  <div className="card shadow p-3">
-                    <p>
-                      <strong>User Name:</strong> {user.name}
-                    </p>
-                    <p>
-                      <strong>User Email:</strong> {user.email}
-                    </p>
-                    <p>
-                      <strong>Company:</strong> {companyName}
-                    </p>
-                    <p>
-                      <strong>Status:</strong> {status}
-                    </p>
-                    <p>
-                      <strong>Date:</strong>{" "}
-                      {int.date?.toDate?.().toLocaleString() || "Not Scheduled"}
-                    </p>
+                  <div className="bg-white rounded shadow p-4 interview-card h-100">
+                    <p><strong>User Name:</strong> {user.name}</p>
+                    <p><strong>User Email:</strong> {user.email}</p>
+                    <p><strong>Company:</strong> {companyName}</p>
+                    <p><strong>Status:</strong> {status}</p>
+                    <p><strong>Date:</strong> {int.date?.toDate?.().toLocaleString() || "Not Scheduled"}</p>
                     <button
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-danger btn-sm w-100"
                       onClick={() => handleDelete(int.id)}
                     >
                       Delete

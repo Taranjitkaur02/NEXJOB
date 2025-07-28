@@ -50,15 +50,14 @@ export default function CompanyNavbar() {
                 <li>
                   <Link to="/company" className="nav-link">Home</Link>
                 </li>
+                
                 <li>
-                  <Link to="/company/post-job">Add Jobs</Link>
-                </li>
-                <li>
-                   <Link to="/company/manage-jobs">Manage Jobs</Link>
+                   <Link to="/company/manage-jobs">Jobs</Link>
                 </li>
                 <li>
                    <Link to="/company/view-application">View Application</Link>
                 </li>
+                <li><Link to="/company/company-contact">Contact</Link></li>
                 <li className="d-lg-none">
                   <Link to="/company/post-job"><span className="mr-2">+</span> Post a Job</Link>
                 </li>

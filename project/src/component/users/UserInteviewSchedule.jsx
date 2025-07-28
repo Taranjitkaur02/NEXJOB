@@ -60,7 +60,6 @@ const UserInterviewDetails = () => {
           })
         );
 
-        // Exclude only admin-removed status
         const filteredData = rawData.filter(
           (item) => item.status !== 2 && item.status !== 4
         );
@@ -120,6 +119,27 @@ const UserInterviewDetails = () => {
 
   return (
     <>
+      {/* 3D Card Animation Style */}
+      <style>{`
+        .interview-card {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border-radius: 12px;
+        }
+
+        .interview-card:hover {
+          transform: translateY(-8px) scale(1.02);
+          box-shadow: 0 15px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .interview-card .btn {
+          transition: transform 0.2s ease;
+        }
+
+        .interview-card .btn:hover {
+          transform: scale(1.03);
+        }
+      `}</style>
+
       <section
         className="section-hero overlay inner-page bg-image"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
@@ -157,7 +177,7 @@ const UserInterviewDetails = () => {
 
               return (
                 <div className="col-md-4 mb-4" key={interview.id}>
-                  <div className="card shadow p-3 h-100">
+                  <div className="card shadow p-3 h-100 interview-card">
                     <h5>{interview.jobTitle}</h5>
                     <p><strong>Company:</strong> {interview.companyName}</p>
                     <p>
@@ -220,5 +240,6 @@ const UserInterviewDetails = () => {
 };
 
 export default UserInterviewDetails;
+
 
 

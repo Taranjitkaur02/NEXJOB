@@ -186,7 +186,7 @@ export default function Contact() {
         </section>
 
         {/* Testimonials */}
-        <section className="site-section bg-light">
+        {/* <section className="site-section bg-light">
           <div className="container">
             <div className="row mb-5">
               <div className="col-12 text-center" data-aos="fade">
@@ -232,7 +232,7 @@ export default function Contact() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* <Footer /> */}
       </div>
