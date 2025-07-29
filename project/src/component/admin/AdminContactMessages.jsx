@@ -40,6 +40,7 @@ export default function AdminContactMessages() {
 
   return (
     <>
+    {/* style */}
       <style>{`
         .block__16443 {
           transition: transform 0.4s ease, box-shadow 0.4s ease;
@@ -124,7 +125,7 @@ export default function AdminContactMessages() {
                       className="btn w-100 mt-3"
                       style={{ backgroundColor: "#89BA16", color: "white" }}
                     >
-                      Mark as Resolved
+                       Resolved
                     </button>
                   </div>
                 </div>

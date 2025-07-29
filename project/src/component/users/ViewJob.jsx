@@ -12,62 +12,68 @@ export default function ViewJob() {
   const [load, setLoad] = useState(true);
 
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const skillFilter = searchParams.get("skill")?.toLowerCase();
 
-  // Fetch companies from the 'users' collection (userType = 2)
+  // Fetch companies
   const fetchCompanies = () => {
     const q = query(collection(db, "users"), where("userType", "==", 2));
     onSnapshot(q, (snapshot) => {
       const companies = snapshot.docs.map((doc) => ({
-        value: doc.data().userId,
+        value: doc.id,
         label: doc.data().name,
       }));
       setCompanyOptions(companies);
     });
   };
 
-  // Fetch jobs based on selected company filter
-  const fetchData = (companyId = null) => {
-    let q = query(collection(db, "postJob"));
+  // Fetch jobs based on filters
+  const fetchData = (companyId = null, skill = null) => {
+    let baseQuery = query(collection(db, "postJob"), where("status", "==", true));
+
     if (companyId) {
-      q = query(q, where("userId", "==", companyId));
+      baseQuery = query(baseQuery, where("userId", "==", companyId));
     }
 
-    onSnapshot(q, (jobSnapshot) => {
-      const jobsData = jobSnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+    onSnapshot(baseQuery, (snapshot) => {
+      let jobsData = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+      if (skill) {
+        jobsData = jobsData.filter((job) => job.skills?.toLowerCase().includes(skill));
+      }
+
       setJobs(jobsData);
       setLoad(false);
     });
   };
 
-  // Fetch companies on component mount
+  // On mount
   useEffect(() => {
     fetchCompanies();
   }, []);
 
-  // Apply filter from query string (e.g., ?companyId=abc123)
+  // Apply filters from URL
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const companyId = params.get("companyId");
+    const companyId = searchParams.get("companyId");
+    const skill = searchParams.get("skill")?.toLowerCase();
 
     if (companyId && companyOptions.length > 0) {
       const matchedCompany = companyOptions.find((opt) => opt.value === companyId);
       if (matchedCompany) {
-        setCompanyFilter(matchedCompany); // this will trigger fetchData via other effect
+        setCompanyFilter(matchedCompany);
+        fetchData(companyId, skill);
       } else {
-        fetchData(); // fallback
+        fetchData(null, skill);
       }
     } else {
-      fetchData(); // default all jobs
+      fetchData(null, skill);
     }
   }, [location.search, companyOptions]);
 
-  // Trigger job fetch when dropdown filter changes
+  // On company dropdown change
   useEffect(() => {
     if (companyFilter) {
-      fetchData(companyFilter.value);
+      fetchData(companyFilter.value, skillFilter);
     }
   }, [companyFilter]);
 

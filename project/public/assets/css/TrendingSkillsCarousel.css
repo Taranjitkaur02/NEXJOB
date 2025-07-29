@@ -1,0 +1,26 @@
+.skill-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 40px 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  height: 400px;
+  width: 300px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.skill-icon {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 20px auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.skill-card:hover .skill-icon {
+  transform: scale(1.2); /* Zoom on hover */
+}

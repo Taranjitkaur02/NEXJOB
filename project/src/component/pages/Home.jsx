@@ -34,11 +34,14 @@ export default function Home() {
   const uniqueCompanies = [...new Map(jobs.map(job => [job.userId, job])).values()];
 
   useEffect(() => {
+    if (uniqueCompanies.length === 0) return;
+
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % uniqueCompanies.length);
     }, 1500);
+
     return () => clearInterval(interval);
-  }, [uniqueCompanies]);
+  }, [uniqueCompanies.length]);
 
   return (
     <>
@@ -55,17 +58,17 @@ export default function Home() {
           <div className="text-center mt-5">
             <h2 className="mb-4" style={{ color: "#89BA16" }}>Top Companies Hiring</h2>
 
-            {uniqueCompanies.length > 0 && (
+            {uniqueCompanies.length > 0 && uniqueCompanies[currentIndex] && (
               <div
                 className="company-logo-wrapper"
-                onClick={() => navigate(`/view-job?companyId=${uniqueCompanies[currentIndex].userId}`)}
+                onClick={() => navigate(`/view-job?companyId=${uniqueCompanies[currentIndex]?.userId}`)}
               >
                 <img
-                  src={uniqueCompanies[currentIndex].image || "/assets/images/default_company.png"}
-                  alt={uniqueCompanies[currentIndex].company}
+                  src={uniqueCompanies[currentIndex]?.image || "/assets/images/default_company.png"}
+                  alt={uniqueCompanies[currentIndex]?.company || "Company"}
                   className="company-logo-img"
                 />
-                <p className="company-logo-name">{uniqueCompanies[currentIndex].company}</p>
+                <p className="company-logo-name">{uniqueCompanies[currentIndex]?.company}</p>
               </div>
             )}
           </div>
