@@ -22,7 +22,7 @@ export default function ManageUser() {
   const [currentPage, setCurrentPage] = useState(1);
   const LIMIT = 10;
   const [totalPages, setTotalPages] = useState(1);
-
+  //fetch data 
   const fetchData = () => {
     const q = query(collection(db, "users"), where("userType", "==", 3));
     onSnapshot(q, async (userCol) => {
@@ -41,7 +41,7 @@ export default function ManageUser() {
   useEffect(() => {
     fetchData();
   }, []);
-
+  //toggle user status(active/inactive)
   const changeStatus = (userId, currentStatus) => {
     Swal.fire({
       title: `Are you sure you want to ${currentStatus ? "block" : "unblock"} this user?`,
@@ -81,7 +81,7 @@ export default function ManageUser() {
       {/* Main Content */}
       <div className="container my-5">
         {load ? (
-          // ✅ Center the loader
+          
           <div
             style={{
               display: "flex",

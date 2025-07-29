@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 import { SyncLoader } from "react-spinners";
 
 export default function AdminManageInterview() {
-  const { jobId } = useParams();
+  const { jobId } = useParams();//component loads
   const [interviews, setInterviews] = useState([]);
   const [jobTitle, setJobTitle] = useState("Loading...");
   const [statusMap, setStatusMap] = useState({});
@@ -29,7 +29,7 @@ export default function AdminManageInterview() {
       const jobSnap = await getDoc(doc(db, "postJob", jobId));
       setJobTitle(jobSnap.exists() ? jobSnap.data().title || "Untitled Job" : "Unknown Job");
     };
-
+    //list of all the interviews
     const interviewQuery = query(
       collection(db, "interviews"),
       where("jobId", "==", jobId)
@@ -54,9 +54,10 @@ export default function AdminManageInterview() {
       const statusLookup = {};
       const userLookup = {};
       const companyLookup = {};
-
+      //loop through each interview document
       for (const interview of interviewDocs) {
         const appSnap = await getDoc(doc(db, "jobApplications", interview.applicationId));
+        //aplication status 
         if (appSnap.exists()) {
           const statusCode = appSnap.data().status;
           statusLookup[interview.applicationId] = {
@@ -67,7 +68,7 @@ export default function AdminManageInterview() {
             5: "Selected",
           }[statusCode] || "Applied";
         }
-
+        //user info
         if (!userLookup[interview.userId]) {
           const userSnap = await getDoc(doc(db, "users", interview.userId));
           if (userSnap.exists()) {
@@ -80,7 +81,7 @@ export default function AdminManageInterview() {
             }
           }
         }
-
+        //company info
         if (!companyLookup[interview.companyId]) {
           const compSnap = await getDoc(doc(db, "users", interview.companyId));
           if (compSnap.exists()) {
@@ -88,7 +89,7 @@ export default function AdminManageInterview() {
           }
         }
       }
-
+      //sace data in state
       setInterviews(interviewDocs);
       setStatusMap(statusLookup);
       setUserInfo(userLookup);
@@ -136,7 +137,7 @@ export default function AdminManageInterview() {
           }
         }
       `}</style>
-
+      {/*hero section */}
       <section
         className="section-hero overlay inner-page bg-image"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}

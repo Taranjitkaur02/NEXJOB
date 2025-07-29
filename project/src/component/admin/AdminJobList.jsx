@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { SyncLoader } from "react-spinners";
 
 export default function AdminJobsList() {
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [jobs, setJobs] = useState([]); //array of job
+  const [loading, setLoading] = useState(true);//spinner
+  const navigate = useNavigate();//navigate to interview page
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "postJob"), (snapshot) => {
@@ -90,7 +90,7 @@ export default function AdminJobsList() {
                     <i className="bi bi-briefcase me-2"></i>
                     {job.jobType || "Type not defined"}
                   </p>
-
+                        {/*interview button */}
                   <div className="mt-auto">
                     <button
                       className="btn btn-outline-primary w-100 mt-3"

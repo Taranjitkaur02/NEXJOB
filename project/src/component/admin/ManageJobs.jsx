@@ -8,7 +8,6 @@ import {
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../../Firebase";
-import { toast } from "react-toastify";
 import { SyncLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import ResponsivePagination from "react-responsive-pagination";
@@ -19,7 +18,7 @@ export default function ManageJobs() {
   const [load, setLoad] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const LIMIT = 10;
-
+  //fetch jobs data
   const fetchData = () => {
     const q = query(collection(db, "postJob"));
     onSnapshot(q, (userCol) => {
@@ -35,7 +34,7 @@ export default function ManageJobs() {
   useEffect(() => {
     fetchData();
   }, []);
-
+  //delete 
   const DeleteJob = (JobId) => {
     Swal.fire({
       title: "Are you sure?",

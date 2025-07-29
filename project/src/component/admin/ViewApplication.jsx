@@ -20,7 +20,6 @@ export default function ViewApplication() {
   const [isFullyLoaded, setIsFullyLoaded] = useState(false);
 
   const { companyId } = useParams();
-
   useEffect(() => {
     if (!companyId) return;
 
@@ -44,7 +43,7 @@ export default function ViewApplication() {
 
     return () => unsub();
   }, [companyId]);
-
+  //fetch interview
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "interviews"), (snapshot) => {
       const interviewList = snapshot.docs.map((doc) => ({
@@ -56,7 +55,7 @@ export default function ViewApplication() {
 
     return () => unsub();
   }, []);
-
+  //fetch job and comapny name
   const fetchJobsAndCompanies = async (apps) => {
     const newJobsMap = {};
     const newCompanyNames = {};
@@ -88,7 +87,7 @@ export default function ViewApplication() {
     setJobsMap((prev) => ({ ...prev, ...newJobsMap }));
     setCompanyNames((prev) => ({ ...prev, ...newCompanyNames }));
   };
-
+  //get interview date
   const getInterviewDate = (applicationId) => {
     const interview = interviews.find((i) => i.applicationId === applicationId);
     if (interview && interview.date) {
@@ -112,7 +111,7 @@ export default function ViewApplication() {
       return "No interview scheduled yet.";
     }
   };
-
+  //delete the application
   const handleDelete = async (applicationId) => {
     try {
       await deleteDoc(doc(db, "jobApplications", applicationId));

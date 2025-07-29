@@ -12,11 +12,12 @@ import {
 import { db } from "../../Firebase";
 
 export default function AdminHome() {
-  const [counters, setCounters] = useState({ users: 0, companies: 0, jobs: 0 });
-  const [recentJobs, setRecentJobs] = useState([]);
+  const [counters, setCounters] = useState({ users: 0, companies: 0, jobs: 0 });//counter
+  const [recentJobs, setRecentJobs] = useState([]);//hold last 5 jobs
 
   const fetchCounters = async () => {
     try {
+      {/* get the total number of users,company and job post in counter */}
       const usersSnap = await getCountFromServer(query(collection(db, "users"), where("userType", "==", 3)));
       const companiesSnap = await getCountFromServer(query(collection(db, "users"), where("userType", "==", 2)));
       const jobsSnap = await getCountFromServer(collection(db, "postJob"));
@@ -30,7 +31,7 @@ export default function AdminHome() {
       console.error("Error fetching counters:", error);
     }
   };
-
+  //fetch the recent 5 jobs
   const fetchRecentJobs = () => {
     const q = query(collection(db, "postJob"), orderBy("createdAt", "desc"), limit(5));
     onSnapshot(q, (snapshot) => {
@@ -46,6 +47,7 @@ export default function AdminHome() {
 
   return (
     <>
+    {/*Hero section */}
       <section
         className="home-section section-hero overlay bg-image d-flex align-items-center"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")', minHeight: "70vh" }}
@@ -60,6 +62,7 @@ export default function AdminHome() {
         className="py-5 bg-image overlay-primary fixed overlay"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
       >
+        {/*counter */}
         <div className="container">
           <div className="row mb-5 justify-content-center">
             <div className="col-md-7 text-center">
@@ -83,7 +86,7 @@ export default function AdminHome() {
           </div>
         </div>
       </section>
-
+      {/*recent jobs */}
       <section className="site-section">
         <div className="container">
           <div className="row mb-5 justify-content-center">

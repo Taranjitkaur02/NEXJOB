@@ -12,12 +12,12 @@ import { SyncLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 
 export default function AdminContactMessages() {
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  const [messages, setMessages] = useState([]);//hold contact form
+  const [loading, setLoading] = useState(true);//spinner
+//get data from firebase 
   useEffect(() => {
     const q = query(collection(db, "contactMessages"), orderBy("createdAt", "desc"));
-
+  
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -29,7 +29,7 @@ export default function AdminContactMessages() {
 
     return () => unsubscribe();
   }, []);
-
+  // deleting a message
   const handleResolve = async (id) => {
     try {
       await deleteDoc(doc(db, "contactMessages", id));

@@ -26,6 +26,7 @@ export default function ManageCompany() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    //fetch companies
     const q = query(collection(db, "users"), where("userType", "==", 2));
     const unsub = onSnapshot(q, async (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
@@ -41,7 +42,7 @@ export default function ManageCompany() {
 
     return () => unsub();
   }, []);
-
+//change company state from block to unclock or viceverse
   const changeStatus = async (companyId, currentStatus) => {
     Swal.fire({
       title: `Are you sure you want to ${currentStatus ? "block" : "unblock"} this company?`,
@@ -126,6 +127,7 @@ export default function ManageCompany() {
                   </tr>
                 </thead>
                 <tbody>
+                  {/*display the data on card */}
                   {companies
                     .slice((currentPage - 1) * LIMIT, currentPage * LIMIT)
                     .map((el, index) => (
