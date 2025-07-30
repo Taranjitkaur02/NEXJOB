@@ -21,7 +21,6 @@ export default function UpdateCompany() {
     location: "",
     logo: "",
   });
-
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const userId = sessionStorage.getItem("userId");
@@ -60,8 +59,6 @@ export default function UpdateCompany() {
   const handleImage = (e) => {
     setImage(e.target.files[0]);
   };
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -196,13 +193,9 @@ export default function UpdateCompany() {
               />
             </div>
 
-         
-
             <button
               type="submit"
-              className="btn btn-primary px-4 py-2 shadow"
-             
-            >
+              className="btn btn-primary px-4 py-2 shadow">
               Update
             </button>
           </form>

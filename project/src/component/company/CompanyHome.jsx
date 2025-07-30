@@ -23,14 +23,12 @@ export default function CompanyHome() {
       setCompany(data);
     }
   };
-
   const fetchCompanyJobs = () => {
     const q = query(collection(db, "postJob"), where("email", "==", email));
     onSnapshot(q, (snapshot) => {
       setJobs(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     });
   };
-
   useEffect(() => {
     fetchCompanyDetails();
     fetchCompanyJobs();
@@ -54,47 +52,47 @@ export default function CompanyHome() {
       <section className="py-5 bg-image overlay-primary fixed overlay" style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}>
       {/* Company Profile Section */}
       {company && (
-  <section className="site-section">
-    <div className="container">
-      <div
-        className="row align-items-center shadow p-4 rounded "
-        style={{ backgroundColor: "#ECECEC" }}
-      >
-        <div className="col-md-6 text-center text-md-left mb-3 mb-md-0">
-          <img
-            src={(jobs[0] && jobs[0].image) || "/assets/images/default_company.png"}
-            alt="Company Logo"
-            className="img-fluid mb-3"
-            style={{ width: "150px", borderRadius: "12px" }}
-          />
-          <h3 className="mb-3">{" "}{company.name}</h3>
-          <p className="mb-2">
-            <i className="bi bi-geo-alt-fill me-2"></i>{" "}
-            {company.location}
-          </p>
-          <p className="mb-2">
-            <i className="bi bi-envelope-fill me-2"></i>{" "}
-            {company.email}
-          </p>
-          <p className="mb-2">
-            <i className="bi bi-globe2 me-2"></i>{" "}
-            {company.website }
-          </p>
-          <p className="mb-2">
-            <i className="bi bi-telephone-fill me-2">{" "}</i>
-            {company.contact}
-          </p>
-        </div>
-        <div className="col-md-6 text-center text-md-right">
-          <Link to="/company/update-profile" className="btn btn-outline-primary">
-            Update Company Profile
-          </Link>
-        </div>
-      </div>
-    </div>
-  </section>
-)}
-      </section>
+        <section className="site-section">
+          <div className="container">
+            <div
+              className="row align-items-center shadow p-4 rounded "
+              style={{ backgroundColor: "#ECECEC" }}
+            >
+              <div className="col-md-6 text-center text-md-left mb-3 mb-md-0">
+                <img
+                  src={(jobs[0] && jobs[0].image) || "/assets/images/default_company.png"}
+                  alt="Company Logo"
+                  className="img-fluid mb-3"
+                  style={{ width: "150px", borderRadius: "12px" }}
+                />
+                <h3 className="mb-3">{" "}{company.name}</h3>
+                <p className="mb-2">
+                  <i className="bi bi-geo-alt-fill me-2"></i>{" "}
+                  {company.location}
+                </p>
+                <p className="mb-2">
+                  <i className="bi bi-envelope-fill me-2"></i>{" "}
+                  {company.email}
+                </p>
+                <p className="mb-2">
+                  <i className="bi bi-globe2 me-2"></i>{" "}
+                  {company.website }
+                </p>
+                <p className="mb-2">
+                  <i className="bi bi-telephone-fill me-2">{" "}</i>
+                  {company.contact}
+                </p>
+              </div>
+              <div className="col-md-6 text-center text-md-right">
+                <Link to="/company/update-profile" className="btn btn-outline-primary">
+                  Update Company Profile
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+     )}
+    </section>
 <section className="site-section" style={{ backgroundColor: "#F7F7F7" }}>
   <div className="container py-5">
     <div className="row mb-5 justify-content-center">

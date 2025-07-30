@@ -56,7 +56,7 @@ export default function Home() {
 
         
           <div className="text-center mt-5">
-            <h2 className="mb-4" style={{ color: "#89BA16" }}>Top Companies Hiring</h2>
+            <h2 className="mb-4 text-white font-weight-bold" >Top Companies Hiring</h2>
 
             {uniqueCompanies.length > 0 && uniqueCompanies[currentIndex] && (
               <div
@@ -75,9 +75,9 @@ export default function Home() {
         </div>
       </section>
 
-     <section className="py-5">
+ <section className="py-5">
   <div className="container text-center">
-    <h2 className="mb-5 fw-bold text-dark">Your Job Journey Starts Here</h2>
+    <h2 className="mb-5 fw-bold text-dark font-weight-bold">Your Job Journey Starts Here</h2>
     <div className="row justify-content-center">
       {[
         { icon: "bi-person-circle", title: "1. Create Profile", link: "/register" },
@@ -106,13 +106,13 @@ export default function Home() {
 </section>
 
 
-      <section className="site-section">
-        <div className="container">
-          <div className="row mb-5 justify-content-center">
-            <div className="col-md-7 text-center">
-              <h2 className="section-title mb-2">Recent Job Listings</h2>
-            </div>
-          </div>
+ <section className="site-section">
+    <div className="container">
+      <div className="row mb-5 justify-content-center">
+        <div className="col-md-7 text-center">
+            <h2 className="section-title mb-2">Recent Job Listings</h2>
+        </div>
+      </div>
           <ul className="job-listings mb-5">
             {jobs.slice(0, 6).map((job) => (
               <li key={job.id} className="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
@@ -134,19 +134,19 @@ export default function Home() {
               </li>
             ))}
           </ul>
-        </div>
-      </section>
+    </div>
+  </section>
 
-      <section className="py-5 bg-image overlay-primary fixed overlay" style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}>
+  <section className="py-5 bg-image overlay-primary fixed overlay" style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}>
         <div className="container text-white text-center">
           <h2>Looking For A Job?</h2>
           <p className="mb-3">Your next opportunity is just one click away.</p>
           <Link to="/register" className="btn btn-warning btn-lg">Sign Up</Link>
         </div>
-      </section>
+   </section>
 
     
-      <style>{`
+  <style>{`
         .company-logo-wrapper {
           display: inline-block;
           cursor: pointer;
@@ -192,7 +192,8 @@ export default function Home() {
         .journey-card:hover h6 {
           color: #89BA16;
         }
-      `}</style>
+      `}
+  </style>
     </>
   );
 }

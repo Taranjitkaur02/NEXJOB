@@ -20,13 +20,11 @@ export default function CompanyApplicants() {
 
   useEffect(() => {
     if (!jobId || !companyId) return;
-
     const q = query(
       collection(db, "jobApplications"),
       where("jobId", "==", jobId),
       where("companyId", "==", companyId)
     );
-
     const unsub = onSnapshot(q, (snapshot) => {
       const appList = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -34,19 +32,17 @@ export default function CompanyApplicants() {
       }));
       setApplications(appList);
     });
-
     return () => unsub();
   }, [jobId, companyId]);
+     const handleShortlist = async (app) => {
+     try {
+          await updateDoc(doc(db, "jobApplications", app.id), {
+          shortlisted: true,
+          status: 1,
+        });
 
-  const handleShortlist = async (app) => {
-    try {
-      await updateDoc(doc(db, "jobApplications", app.id), {
-        shortlisted: true,
-        status: 1,
-      });
-
-      const interviewId = `${jobId}_${app.userId}`;
-      await setDoc(doc(db, "interviews", interviewId), {
+     const interviewId = `${jobId}_${app.userId}`;
+       await setDoc(doc(db, "interviews", interviewId), {
         jobId,
         companyId,
         userId: app.userId,
@@ -58,7 +54,7 @@ export default function CompanyApplicants() {
         createdAt: new Date().toISOString(),
       });
 
-      await setDoc(doc(db, "notifications", `${app.userId}_${jobId}`), {
+        await setDoc(doc(db, "notifications", `${app.userId}_${jobId}`), {
         userId: app.userId,
         jobId,
         companyId,
@@ -66,7 +62,7 @@ export default function CompanyApplicants() {
         timestamp: new Date(),
         seen: false,
         message: "You have been shortlisted for an interview.",
-      });
+        });
 
       toast.success("User shortlisted!");
       navigate(`/company/schedule-interview/${jobId}/${app.id}`);
@@ -75,13 +71,11 @@ export default function CompanyApplicants() {
       toast.error("Failed to shortlist user.");
     }
   };
-
   const handleReject = async (app) => {
     try {
       await updateDoc(doc(db, "jobApplications", app.id), {
         status: 4,
       });
-
       const interviewId = `${jobId}_${app.userId}`;
       await setDoc(doc(db, "interviews", interviewId), {
         jobId,
@@ -94,7 +88,6 @@ export default function CompanyApplicants() {
         isMeetingEnded: false,
         createdAt: new Date().toISOString(),
       });
-
       await setDoc(doc(db, "notifications", `${app.userId}_${jobId}_rejected`), {
         userId: app.userId,
         jobId,
@@ -104,7 +97,6 @@ export default function CompanyApplicants() {
         seen: false,
         message: "Your application has been rejected.",
       });
-
       setApplications((prev) => prev.filter((item) => item.id !== app.id));
       toast.success("User rejected.");
     } catch (err) {
@@ -112,13 +104,11 @@ export default function CompanyApplicants() {
       toast.error("Failed to reject user.");
     }
   };
-
-  const handleSelect = async (app) => {
+   const handleSelect = async (app) => {
     try {
       await updateDoc(doc(db, "jobApplications", app.id), {
         status: 5,
       });
-
       await setDoc(doc(db, "notifications", `${app.userId}_${jobId}_selected`), {
         userId: app.userId,
         jobId,
@@ -128,7 +118,6 @@ export default function CompanyApplicants() {
         seen: false,
         message: "Congratulations! You have been selected for the job.",
       });
-
       toast.success("User marked as Selected.");
     } catch (err) {
       console.error("Select error:", err);
@@ -138,7 +127,6 @@ export default function CompanyApplicants() {
 
   return (
     <>
-     
       <style>{`
         .hover-effect {
           transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -171,7 +159,6 @@ export default function CompanyApplicants() {
 
       {/* Applications Section */}
       <div className="container my-5">
-        
         <div className="row">
           {applications.length === 0 ? (
             <div className="col-12 text-center">

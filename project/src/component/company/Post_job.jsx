@@ -85,8 +85,7 @@ const skillsOptions = [
   { value: 'conflict-resolution', label: 'Conflict Resolution' },
   { value: 'critical-thinking', label: 'Critical Thinking' },
   { value: 'presentation', label: 'Presentation' },
-  
-  // Specific skills for jobs
+
   { value: 'software-engineer', label: 'Software Engineering' },
   { value: 'frontend-development', label: 'Frontend Development' },
   { value: 'backend-development', label: 'Backend Development' },

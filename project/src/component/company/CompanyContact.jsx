@@ -42,8 +42,6 @@ export default function Contact() {
       await addDoc(collection(db, "contactMessages"), payload);
 
       toast.success("Message sent successfully!");
-
-      // Clear form
       setCompanyName("");
       setFirstName("");
       setLastName("");
@@ -57,7 +55,6 @@ export default function Contact() {
 
   return (
     <>
-      
       <style>{`
         .contact-form-wrapper {
           background: #fff;
@@ -99,7 +96,6 @@ export default function Contact() {
           box-shadow: 0 6px 18px rgba(0,123,255,0.35);
         }
       `}</style>
-
       <div className="site-wrap">
         {/* Hero Section */}
         <section
@@ -120,7 +116,6 @@ export default function Contact() {
             </div>
           </div>
         </section>
-
         {/* Contact Form Section */}
         <section className="site-section" id="next-section">
           <div className="container">

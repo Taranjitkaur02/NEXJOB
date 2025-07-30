@@ -5,7 +5,6 @@ export default function Navbar() {
   const isLogin = sessionStorage.getItem("isLogin") === "true";
   const name = sessionStorage.getItem("name") || "User";
   const nav = useNavigate();
-
   const logout = () => {
     Swal.fire({
       title: "Are you sure you want to Logout?",
@@ -29,7 +28,6 @@ export default function Navbar() {
 
   return (
     <>
-    
       <div className="site-mobile-menu site-navbar-target">
         <div className="site-mobile-menu-header">
           <div className="site-mobile-menu-close mt-3">
@@ -38,17 +36,12 @@ export default function Navbar() {
         </div>
         <div className="site-mobile-menu-body" />
       </div>
-
-
       <header className="site-navbar mt-3">
         <div className="container-fluid">
-          <div className="row align-items-center">
-            
+          <div className="row align-items-center"> 
             <div className="site-logo col-6">
               <Link to="/">NEXJOB</Link>
             </div>
-
-           
             <nav className="mx-auto site-navigation">
               <ul className="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
                 <li><Link to="/" className="nav-link">Home</Link></li>
@@ -63,13 +56,10 @@ export default function Navbar() {
                 </li>
               </ul>
             </nav>
-
-           
             <div className="right-cta-menu text-right d-flex align-items-center col-6">
               <div className="ml-auto d-flex align-items-center">
                 {!isLogin ? (
                   <>
-                  
                     <div className="dropdown ml-3">
                       <button
                         className="btn btn-primary border-width-2 dropdown-toggle d-inline-flex align-items-center"
@@ -78,8 +68,7 @@ export default function Navbar() {
                         data-toggle="dropdown"
                         aria-haspopup="true"
                         aria-expanded="false"
-                        style={{ fontWeight: "500" }}
-                      >
+                        style={{ fontWeight: "500" }}>
                         <span className="mr-2 icon-person_add" />
                         Register
                       </button>
@@ -88,38 +77,30 @@ export default function Navbar() {
                         <Link className="dropdown-item" to="/company-register">Register as Company</Link>
                       </div>
                     </div>
-
-                   
                     <Link
                       to="/login"
-                      className="btn btn-primary border-width-2 d-inline-flex align-items-center ml-3"
-                    >
+                      className="btn btn-primary border-width-2 d-inline-flex align-items-center ml-3" >
                       <span className="mr-2 icon-lock_outline" />
                       Log In
                     </Link>
                   </>
                 ) : (
-                  <>
-                    
+                  <> 
                     <Link
                       to="/user-profile"
                       className="btn border-width-2 d-inline-flex align-items-center ml-3"
                       style={{
                         backgroundColor: "#89BA16",
                         color: "#fff",
-                        
                         borderRadius: "4px",
                         fontSize: "16px",
                         padding: "6px 12px",
                         cursor: "pointer",
                         fontWeight: "500"
-                      }}
-                    >
+                      }}>
                       <span className="mr-2">👤</span>
                       Profile
-                    </Link>
-
-                   
+                    </Link>                  
                     <button
                       onClick={logout}
                       className="btn border-width-2 d-inline-flex align-items-center ml-3"
@@ -132,8 +113,7 @@ export default function Navbar() {
                         padding: "6px 12px",
                         cursor: "pointer",
                         fontWeight: "500"
-                      }}
-                    >
+                      }}>
                       <span className="mr-2 icon-lock_outline" />
                       Logout
                     </button>

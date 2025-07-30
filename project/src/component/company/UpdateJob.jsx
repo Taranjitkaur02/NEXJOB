@@ -41,14 +41,13 @@ export default function UpdateJob() {
     console.log(id);
     
   },[])
-  // const [url, setUrl]=useState("")
-  const handleForm = async (e) => {
+const handleForm = async (e) => {
   e.preventDefault();
     if(image && imageName){
   const formData = new FormData();
   formData.append("file", image);
   formData.append("upload_preset", "images");
-console.log(formData);
+   console.log(formData);
 
   try {
     const response = await axios.post(
@@ -63,7 +62,7 @@ console.log(formData);
       else{
             saveData(imageurl)
         }
-};
+ };
 
 const saveData = async (Url) => {
   try {
@@ -86,7 +85,6 @@ const saveData = async (Url) => {
 
     await updateDoc(doc(db, "postJob",id), data);
     toast.success("Job Update Successfully");
-   
     setTitle("");
     setLocation("");
     setJobType("Full Time");
@@ -100,14 +98,15 @@ const saveData = async (Url) => {
     setImage({});
     setImageName("");
     nav("/company/manage-jobs")
-  } catch (err) {
+  } 
+  catch (err) {
     toast.error(err.message);
   }
 };
 
-         const changeImage=(e)=>{
-        setImageName(e.target.value)
-        setImage(e.target.files[0])
+    const changeImage=(e)=>{
+       setImageName(e.target.value)
+       setImage(e.target.files[0])
     }
 
 

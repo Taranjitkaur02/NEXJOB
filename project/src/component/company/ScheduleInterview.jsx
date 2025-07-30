@@ -14,7 +14,6 @@ import { SyncLoader } from "react-spinners";
 export default function ScheduleInterview() {
   const { jobId, applicationId } = useParams();
   const navigate = useNavigate(); 
-
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [meetingURL, setMeetingURL] = useState("");
@@ -24,7 +23,6 @@ export default function ScheduleInterview() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isInterviewScheduled, setIsInterviewScheduled] = useState(false);
 
-  // Fetch application data
   useEffect(() => {
     const fetchApplication = async () => {
       if (!applicationId) {
@@ -89,23 +87,18 @@ export default function ScheduleInterview() {
       toast.error("Please fill all fields.");
       return;
     }
-
     const selectedDateTime = new Date(`${date}T${time}`);
     const now = new Date();
-
     if (isNaN(selectedDateTime.getTime())) {
       toast.error("Invalid date/time format.");
       return;
     }
-
     if (selectedDateTime <= now) {
       toast.error("Cannot schedule/update interview for a past date or time.");
       return;
     }
-
     const roomName = `swap_${companyId}_${userId}`;
     const jitsiLink = `https://meet.jit.si/${roomName}`;
-
     setIsSubmitting(true);
     try {
       await setDoc(doc(db, "interviews", applicationId), {
@@ -119,7 +112,6 @@ export default function ScheduleInterview() {
         isMeetingEnded: false,
         createdAt: new Date().toISOString(),
       });
-
       setMeetingURL(jitsiLink);
       setIsInterviewScheduled(true);
       toast.success("Interview scheduled successfully.");
@@ -137,26 +129,21 @@ export default function ScheduleInterview() {
       toast.error("Scheduled date or time is missing.");
       return;
     }
-
     const scheduledTime = new Date(`${date}T${time}`);
     const now = new Date();
-
     if (isNaN(scheduledTime.getTime())) {
       toast.error("Invalid scheduled date/time.");
       return;
     }
-
     if (scheduledTime > now) {
       toast.error("You can only start the interview on or after the scheduled time.");
       return;
     }
-
     try {
       await updateDoc(doc(db, "interviews", applicationId), {
         isMeetingStarted: true,
         isMeetingEnded: false,
       });
-
       toast.success("Meeting started!");
       window.open(meetingURL, "_blank");
     } catch (err) {
@@ -164,7 +151,6 @@ export default function ScheduleInterview() {
       toast.error("Failed to start the meeting.");
     }
   };
-
   //  End meeting 
   const handleEndMeeting = async () => {
     try {
@@ -199,7 +185,6 @@ export default function ScheduleInterview() {
           </div>
         </div>
       </section>
-
       <div className="container my-5 col-md-8">
         <h2 className="mb-4 text-center">
           {isInterviewScheduled ? "Update Interview" : "Schedule Interview"}

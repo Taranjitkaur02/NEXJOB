@@ -23,7 +23,6 @@ export default function CompanyJobs() {
 
   return (
     <>
-      {/* 3D Card Animation CSS */}
       <style>{`
         .hover-3d {
           transition: transform 0.4s ease, box-shadow 0.4s ease;
