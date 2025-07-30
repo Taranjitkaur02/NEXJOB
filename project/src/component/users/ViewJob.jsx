@@ -154,12 +154,12 @@ export default function ViewJob() {
                       />
                     </div>
                     <h3 className="text-center">{job.title}</h3>
-                    <p><i className="bi bi-geo-alt me-2"></i>{job.location}</p>
-                    <p><i className="bi bi-clock me-2"></i>{job.jobType}</p>
-                    <p><i className="bi bi-currency-rupee me-2"></i>{job.salary}</p>
-                    <p><i className="bi bi-mortarboard me-2"></i>{job.qualification}</p>
-                    <p><i className="bi bi-briefcase me-2"></i>{job.experience} Year Experience</p>
-                    <p><i className="bi bi-person-lines-fill me-2"></i>{job.vacancies} Vacancies</p>
+                    <p><i className="bi bi-geo-alt me-2"></i>{" "}{job.location}</p>
+                    <p><i className="bi bi-clock me-2"></i>{" "}{job.jobType}</p>
+                    <p><i className="bi bi-currency-rupee me-2"></i>{" "}{job.salary}</p>
+                    <p><i className="bi bi-mortarboard me-2"></i>{" "}{job.qualification}</p>
+                    <p><i className="bi bi-briefcase me-2"></i>{" "}{job.experience} Year Experience</p>
+                    <p><i className="bi bi-person-lines-fill me-2"></i>{" "}{job.vacancies} Vacancies</p>
                     <Link to={`/job-form/${job.id}`} className="btn btn-primary mt-3 w-100">Apply Now</Link>
                   </div>
                 </div>

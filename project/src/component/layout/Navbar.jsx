@@ -98,7 +98,7 @@ export default function Navbar() {
                         cursor: "pointer",
                         fontWeight: "500"
                       }}>
-                      <span className="mr-2">👤</span>
+                      <span className="mr-2"><i class="bi bi-person-circle"></i></span>
                       Profile
                     </Link>                  
                     <button

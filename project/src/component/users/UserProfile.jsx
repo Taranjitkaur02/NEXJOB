@@ -301,7 +301,7 @@ export default function UserProfile() {
           {[
             { title: "Shortlisted Notifications", data: shortlistedJobs, message: "You are shortlisted!", color: "success", interview: true },
             { title: "Rejected Notifications", data: rejectedJobs, message: "You were not selected.", color: "danger" },
-            { title: "Selected Notifications", data: selectedJobs, message: "🎉 You have been selected!", color: "success" },
+            { title: "Selected Notifications", data: selectedJobs, message:" You have been selected!", color: "success" },
           ].map((section, idx) => (
             <div className="container my-5" key={idx}>
               <h4 className="mb-4">{section.title}</h4>
