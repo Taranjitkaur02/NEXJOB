@@ -17,7 +17,6 @@ export default function AdminContactMessages() {
 //get data from firebase 
   useEffect(() => {
     const q = query(collection(db, "contactMessages"), orderBy("createdAt", "desc"));
-  
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
