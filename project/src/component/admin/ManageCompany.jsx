@@ -42,7 +42,6 @@ export default function ManageCompany() {
 
     return () => unsub();
   }, []);
-//change company state from block to unclock or viceverse
   const changeStatus = async (companyId, currentStatus) => {
     Swal.fire({
       title: `Are you sure you want to ${currentStatus ? "block" : "unblock"} this company?`,
@@ -73,7 +72,6 @@ export default function ManageCompany() {
       }
     });
   };
-
   return (
     <div>
       {/* Hero Section */}

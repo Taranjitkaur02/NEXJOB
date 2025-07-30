@@ -41,7 +41,7 @@ export default function ManageUser() {
   useEffect(() => {
     fetchData();
   }, []);
-  //toggle user status(active/inactive)
+
   const changeStatus = (userId, currentStatus) => {
     Swal.fire({
       title: `Are you sure you want to ${currentStatus ? "block" : "unblock"} this user?`,

@@ -43,7 +43,6 @@ export default function ViewApplication() {
 
     return () => unsub();
   }, [companyId]);
-  //fetch interview
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "interviews"), (snapshot) => {
       const interviewList = snapshot.docs.map((doc) => ({
@@ -124,7 +123,6 @@ export default function ViewApplication() {
 
   return (
     <>
-      {/* 3D Card Animation Style */}
       <style>{`
         .hover-card {
           transition: transform 0.4s ease, box-shadow 0.4s ease;

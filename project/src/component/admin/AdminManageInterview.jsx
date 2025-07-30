@@ -24,7 +24,6 @@ export default function AdminManageInterview() {
 
   useEffect(() => {
     if (!jobId) return;
-
     const loadJobTitle = async () => {
       const jobSnap = await getDoc(doc(db, "postJob", jobId));
       setJobTitle(jobSnap.exists() ? jobSnap.data().title || "Untitled Job" : "Unknown Job");
@@ -34,11 +33,9 @@ export default function AdminManageInterview() {
       collection(db, "interviews"),
       where("jobId", "==", jobId)
     );
-
     const unsubscribe = onSnapshot(interviewQuery, async (snapshot) => {
       const allDocs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       const latestInterviewMap = {};
-
       for (const doc of allDocs) {
         const existing = latestInterviewMap[doc.applicationId];
         if (
@@ -49,7 +46,6 @@ export default function AdminManageInterview() {
           latestInterviewMap[doc.applicationId] = doc;
         }
       }
-
       const interviewDocs = Object.values(latestInterviewMap);
       const statusLookup = {};
       const userLookup = {};
