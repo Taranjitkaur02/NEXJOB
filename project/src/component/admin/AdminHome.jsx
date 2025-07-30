@@ -17,11 +17,9 @@ export default function AdminHome() {
 
   const fetchCounters = async () => {
     try {
-      {/* get the total number of users,company and job post in counter */}
       const usersSnap = await getCountFromServer(query(collection(db, "users"), where("userType", "==", 3)));
       const companiesSnap = await getCountFromServer(query(collection(db, "users"), where("userType", "==", 2)));
       const jobsSnap = await getCountFromServer(collection(db, "postJob"));
-
       setCounters({
         users: usersSnap.data().count,
         companies: companiesSnap.data().count,
@@ -57,7 +55,6 @@ export default function AdminHome() {
           <p className="lead mb-4">Monitor activity and manage the platform efficiently.</p>
         </div>
       </section>
-
       <section
         className="py-5 bg-image overlay-primary fixed overlay"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
