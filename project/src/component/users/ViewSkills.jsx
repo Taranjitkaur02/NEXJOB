@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectCoverflow } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/autoplay";
-import "swiper/css/effect-coverflow";
 import { Link } from "react-router-dom";
 
 export default function TrendingSkillsCarousel() {
@@ -46,46 +45,48 @@ export default function TrendingSkillsCarousel() {
 
       <section className="site-section services-section bg-light" id="next-section" style={styles.section}>
         <div style={styles.container}>
-          {/* <h2 style={styles.title}>Trending Skills</h2> */}
           <Swiper
-            modules={[Autoplay, EffectCoverflow]}
-            effect="coverflow"
+            modules={[Autoplay]}
             grabCursor={true}
             centeredSlides={true}
-            slidesPerView={3}
+            slidesPerView="auto"
             loop={true}
-            autoplay={{ delay: 1500, disableOnInteraction: false }}
-            coverflowEffect={{
-              rotate: 50,
-              stretch: 0,
-              depth: 120,
-              modifier: 1.5,
-              slideShadows: true,
-            }}
+            autoplay={{ delay: 2000, disableOnInteraction: false }}
             style={styles.swiper}
           >
             {skillsOptions.map((skill, index) => (
-              <SwiperSlide key={index}>
-                <div
-                  style={styles.card}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "scale(1.05)";
-                    e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.2)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.style.boxShadow = "0 8px 25px rgba(0,0,0,0.1)";
-                  }}
-                >
-                  <img src={skill.icon} alt={skill.label} style={styles.icon} />
-                  <h4 style={styles.label}>{skill.label}</h4>
-                  <button
-                    style={styles.button}
-                    onClick={() => handleClick(skill.label)}
+              <SwiperSlide key={index} style={styles.slide}>
+                {({ isActive }) => (
+                  <div
+                   style={{
+                        ...styles.card,
+                        transform: isActive ? "scale(1.07)" : "scale(0.9)",
+                        boxShadow: isActive
+                          ? "0 20px 40px rgba(0, 0, 0, 0.25)"
+                          : "4px 4px 10px rgba(0,0,0,0.15), -4px -4px 10px rgba(255,255,255,0.6)",
+                      }}
+
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.transform = isActive
+                        ? "scale(1.1)"
+                        : "scale(0.95)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.transform = isActive
+                        ? "scale(1.07)"
+                        : "scale(0.9)")
+                    }
                   >
-                    Explore Jobs
-                  </button>
-                </div>
+                    <img src={skill.icon} alt={skill.label} style={styles.icon} />
+                    <h4 style={styles.label}>{skill.label}</h4>
+                    <button
+                      style={styles.button}
+                      onClick={() => handleClick(skill.label)}
+                    >
+                      Explore Jobs
+                    </button>
+                  </div>
+                )}
               </SwiperSlide>
             ))}
           </Swiper>
@@ -105,29 +106,24 @@ const styles = {
     margin: "0 auto",
     padding: "0 15px",
   },
-  title: {
-    fontSize: "36px",
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: "40px",
-    color: "#222",
-  },
   swiper: {
     padding: "20px 0",
+  },
+  slide: {
+    width: "320px",
   },
   card: {
     background: "#fff",
     borderRadius: "14px",
     padding: "40px 25px",
-    boxShadow: "0 8px 25px rgba(0,0,0,0.1)",
     textAlign: "center",
     height: "400px",
-    width: "300px",
+    width: "100%",
     margin: "auto",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+    transition: "transform 0.4s ease, box-shadow 0.4s ease",
   },
   icon: {
     width: "130px",
@@ -152,9 +148,11 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s ease",
     outline: "none",
-    boxShadow: "none",
+    boxShadow: "0 4px 10px rgba(137,186,22,0.3)",
   },
 };
+
+
 
 
 

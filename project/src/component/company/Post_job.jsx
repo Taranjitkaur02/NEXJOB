@@ -4,9 +4,7 @@ import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { db } from "../../Firebase";
 import { toast } from "react-toastify";
 import axios from "axios";
-import Select from "react-select";  // Import react-select
-
-// Example options for technical job titles
+import Select from "react-select";  
 const jobTitleOptions = [
   { value: 'software-engineer', label: 'Software Engineer' },
   { value: 'frontend-developer', label: 'Frontend Developer' },
@@ -216,12 +214,12 @@ const cityOptions = [
 ];
 
 export default function Post_job() {
-  const [title, setTitle] = useState(""); // Job Title state
+  const [title, setTitle] = useState(""); 
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState("Full Time");
   const [salary, setSalary] = useState("");
-  const [skills, setSkills] = useState([]); // For multi-select skills
-  const [qualification, setQualification] = useState([]); // For multi-select qualifications
+  const [skills, setSkills] = useState([]); 
+  const [qualification, setQualification] = useState([]); 
   const [experience, setExperience] = useState("");
   const [vacancies, setVacancies] = useState("");
   const [description, setDescription] = useState("");
@@ -261,8 +259,8 @@ export default function Post_job() {
         location,
         jobType,
         salary,
-        skills: skills.map((skill) => skill.value).join(', '), // Convert selected skills to a comma-separated string
-        qualification: qualification.map((qual) => qual.value).join(', '), // Convert selected qualifications to a string
+        skills: skills.map((skill) => skill.value).join(', '), 
+        qualification: qualification.map((qual) => qual.value).join(', '), 
         experience,
         vacancies,
         description,
@@ -275,8 +273,6 @@ export default function Post_job() {
 
       await addDoc(collection(db, "postJob"), data);
       toast.success("Job Posted Successfully");
-
-      // Reset all fields
       setTitle("");
       setLocation("");
       setJobType("Full Time");

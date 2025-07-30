@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
-import Navbar from "../layout/Navbar";
-import Footer from "../layout/Footer";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";

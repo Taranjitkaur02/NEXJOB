@@ -64,7 +64,7 @@ export default function Login() {
           }
           getUserData(userId);
         } else {
-          // If user doesn't exist, create with default data
+          
           const data = {
             name: userCred.user.displayName,
             email: userCred.user.email,

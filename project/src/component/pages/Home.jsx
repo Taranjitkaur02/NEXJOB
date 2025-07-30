@@ -54,7 +54,7 @@ export default function Home() {
           <h1 className="font-weight-bold text-white mb-2 display-4">The Easiest Way To Get Your Dream Job</h1>
           <p className="lead text-white">Jobs that match your skills. Careers that match your dreams.</p>
 
-          {/* Rotating Company Logo with Hover Zoom and No Border */}
+        
           <div className="text-center mt-5">
             <h2 className="mb-4" style={{ color: "#89BA16" }}>Top Companies Hiring</h2>
 
@@ -75,35 +75,36 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-5">
-        <div className="container text-center">
-          <h2 className="mb-5 fw-bold text-dark">Your Job Journey Starts Here</h2>
-          <div className="row justify-content-center">
-            {[
-              { icon: "bi-person-circle", title: "1. Create Profile", link: "/register" },
-              { icon: "bi-search", title: "2. Browse Jobs", link: "/view-job" },
-              { icon: "bi-send-check", title: "3. Apply Instantly", link: "/apply-job" },
-              { icon: "bi-award", title: "4. Get Hired", link: null },
-            ].map((step, i) => (
-              <div key={i} className="col-6 col-md-3 mb-4">
-                {step.link ? (
-                  <Link to={step.link} className="text-decoration-none text-dark">
-                    <div className="journey-card text-center p-4">
-                      <i className={`bi ${step.icon} display-4 text-primary mb-3`}></i>
-                      <h6 className="fw-semibold">{step.title}</h6>
-                    </div>
-                  </Link>
-                ) : (
-                  <div className="journey-card text-center p-4 opacity-75">
-                    <i className={`bi ${step.icon} display-4 text-primary mb-3`}></i>
-                    <h6 className="fw-semibold">{step.title}</h6>
-                  </div>
-                )}
+     <section className="py-5">
+  <div className="container text-center">
+    <h2 className="mb-5 fw-bold text-dark">Your Job Journey Starts Here</h2>
+    <div className="row justify-content-center">
+      {[
+        { icon: "bi-person-circle", title: "1. Create Profile", link: "/register" },
+        { icon: "bi-search", title: "2. Browse Jobs", link: "/view-job" },
+        { icon: "bi-send-check", title: "3. Check Skills", link: "/view-skills" }, 
+        { icon: "bi-award", title: "4. Get Hired", link: null },
+      ].map((step, i) => (
+        <div key={i} className="col-6 col-md-3 mb-4">
+          {step.link ? (
+            <Link to={step.link} className="text-decoration-none text-dark">
+              <div className="journey-card text-center p-4">
+                <i className={`bi ${step.icon} display-4 text-primary mb-3`}></i>
+                <h6 className="fw-semibold">{step.title}</h6>
               </div>
-            ))}
-          </div>
+            </Link>
+          ) : (
+            <div className="journey-card text-center p-4 opacity-75">
+              <i className={`bi ${step.icon} display-4 text-primary mb-3`}></i>
+              <h6 className="fw-semibold">{step.title}</h6>
+            </div>
+          )}
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       <section className="site-section">
         <div className="container">
@@ -144,7 +145,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Custom Styles */}
+    
       <style>{`
         .company-logo-wrapper {
           display: inline-block;

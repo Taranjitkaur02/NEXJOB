@@ -13,7 +13,7 @@ import { SyncLoader } from "react-spinners";
 
 export default function ScheduleInterview() {
   const { jobId, applicationId } = useParams();
-  const navigate = useNavigate(); // ✅ for redirection
+  const navigate = useNavigate(); 
 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -56,7 +56,7 @@ export default function ScheduleInterview() {
     fetchApplication();
   }, [applicationId]);
 
-  // Load existing interview data
+
   useEffect(() => {
     const fetchInterview = async () => {
       try {
@@ -165,7 +165,7 @@ export default function ScheduleInterview() {
     }
   };
 
-  // ✅ End meeting and redirect
+  //  End meeting 
   const handleEndMeeting = async () => {
     try {
       await updateDoc(doc(db, "interviews", applicationId), {
@@ -190,7 +190,7 @@ export default function ScheduleInterview() {
         <div className="container">
           <div className="row">
             <div className="col-md-7">
-              <h1 className="text-white font-weight-bold">Manage Company</h1>
+              <h1 className="text-white font-weight-bold">Schedule Interview</h1>
               <div className="custom-breadcrumbs">
                 <Link to="/admin">Home</Link>{" "}
                 <span className="mx-2 slash"></span>
@@ -253,7 +253,7 @@ export default function ScheduleInterview() {
 
             {meetingURL && (
               <div className="mt-4 text-center">
-                <button className="btn btn-primary me-2" onClick={handleStartMeeting}>
+                <button className="btn btn-primary me-2 mx-3" onClick={handleStartMeeting}>
                   Start Interview
                 </button>
                 <button className="btn btn-danger ms-2" onClick={handleEndMeeting}>

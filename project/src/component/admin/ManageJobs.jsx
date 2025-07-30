@@ -18,7 +18,8 @@ export default function ManageJobs() {
   const [load, setLoad] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const LIMIT = 10;
-  //fetch jobs data
+
+  // Fetch jobs data
   const fetchData = () => {
     const q = query(collection(db, "postJob"));
     onSnapshot(q, (userCol) => {
@@ -34,7 +35,8 @@ export default function ManageJobs() {
   useEffect(() => {
     fetchData();
   }, []);
-  //delete 
+
+  // Delete job
   const DeleteJob = (JobId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -49,7 +51,7 @@ export default function ManageJobs() {
         await deleteDoc(doc(db, "postJob", JobId));
         Swal.fire({
           title: "Deleted!",
-          text: "Your file has been deleted.",
+          text: "Your job post has been deleted.",
           icon: "success",
         });
       }
@@ -72,7 +74,7 @@ export default function ManageJobs() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Manage Jobs</h1>
               <div className="custom-breadcrumbs">
-                <Link to={"/admin"}>Home</Link>{" "}
+                <Link to="/admin">Home</Link>{" "}
                 <span className="mx-2 slash">/</span>
                 <span className="text-white">Manage Jobs</span>
               </div>
@@ -84,11 +86,16 @@ export default function ManageJobs() {
       {/* Main Content */}
       <div className="container my-5">
         {load ? (
-          <SyncLoader
-            color="#89BA16"
-            size={20}
-            cssOverride={{ display: "block", margin: "50px auto" }}
-          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "50vh",
+            }}
+          >
+            <SyncLoader color="#89BA16" size={20} />
+          </div>
         ) : user.length === 0 ? (
           <p className="text-center">No jobs found.</p>
         ) : (
@@ -126,16 +133,19 @@ export default function ManageJobs() {
                       <td>{el?.title}</td>
                       <td>{el?.location}</td>
                       <td>{el?.jobType}</td>
-                      <td><i class="bi bi-currency-rupee"></i>{el?.salary}</td>
+                      <td>
+                        <i className="bi bi-currency-rupee"></i>
+                        {el?.salary}
+                      </td>
                       <td>{el?.qualification}</td>
                       <td>{el?.experience}</td>
                       <td>{el?.vacancies}</td>
                       <td>
                         <button
                           onClick={() => DeleteJob(el.id)}
-                          className="btn btn-danger "
+                          className="btn btn-danger"
                         >
-                        <i className="bi bi-trash me-1"></i>
+                          <i className="bi bi-trash me-1"></i>
                         </button>
                       </td>
                     </tr>

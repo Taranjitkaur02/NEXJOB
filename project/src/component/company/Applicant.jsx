@@ -138,7 +138,7 @@ export default function CompanyApplicants() {
 
   return (
     <>
-      {/* Hover Animation Style */}
+     
       <style>{`
         .hover-effect {
           transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -159,7 +159,7 @@ export default function CompanyApplicants() {
         <div className="container">
           <div className="row">
             <div className="col-md-7">
-              <h1 className="text-white font-weight-bold">Manage Company</h1>
+              <h1 className="text-white font-weight-bold">Applicants</h1>
               <div className="custom-breadcrumbs">
                 <Link to="/admin">Home</Link>{" "}
                 <span className="mx-2 slash"></span>
@@ -171,7 +171,7 @@ export default function CompanyApplicants() {
 
       {/* Applications Section */}
       <div className="container my-5">
-        <h2 className="mb-4">Applications for Job</h2>
+        
         <div className="row">
           {applications.length === 0 ? (
             <div className="col-12 text-center">

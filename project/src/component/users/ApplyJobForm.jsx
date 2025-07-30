@@ -22,7 +22,7 @@ export default function ApplyJobForm() {
   const userId = sessionStorage.getItem("userId");
   const userEmail = sessionStorage.getItem("email");
 
-  // ✅ Fetch job data to get companyId
+  
   useEffect(() => {
     async function fetchJob() {
       try {

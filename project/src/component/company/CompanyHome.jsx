@@ -14,7 +14,7 @@ export default function CompanyHome() {
   const [company, setCompany] = useState(null);
   const email = sessionStorage.getItem("email");
 
-  // Fetch company info from 'users' collection
+  
   const fetchCompanyDetails = async () => {
     const q = query(collection(db, "users"), where("email", "==", email), where("userType", "==", 2));
     const snapshot = await getDocs(q);
@@ -24,7 +24,6 @@ export default function CompanyHome() {
     }
   };
 
-  // Fetch all jobs posted by the company
   const fetchCompanyJobs = () => {
     const q = query(collection(db, "postJob"), where("email", "==", email));
     onSnapshot(q, (snapshot) => {
@@ -61,7 +60,6 @@ export default function CompanyHome() {
         className="row align-items-center shadow p-4 rounded "
         style={{ backgroundColor: "#ECECEC" }}
       >
-        {/* Left: Logo and Info */}
         <div className="col-md-6 text-center text-md-left mb-3 mb-md-0">
           <img
             src={(jobs[0] && jobs[0].image) || "/assets/images/default_company.png"}
@@ -70,7 +68,6 @@ export default function CompanyHome() {
             style={{ width: "150px", borderRadius: "12px" }}
           />
           <h3 className="mb-3">{" "}{company.name}</h3>
-
           <p className="mb-2">
             <i className="bi bi-geo-alt-fill me-2"></i>{" "}
             {company.location}
@@ -88,8 +85,6 @@ export default function CompanyHome() {
             {company.contact}
           </p>
         </div>
-
-        {/* Right: Update Button */}
         <div className="col-md-6 text-center text-md-right">
           <Link to="/company/update-profile" className="btn btn-outline-primary">
             Update Company Profile
@@ -100,8 +95,6 @@ export default function CompanyHome() {
   </section>
 )}
       </section>
-      {/* Posted Jobs Section */}
-    {/* Posted Jobs Section */}
 <section className="site-section" style={{ backgroundColor: "#F7F7F7" }}>
   <div className="container py-5">
     <div className="row mb-5 justify-content-center">

@@ -61,8 +61,6 @@ export default function CompanyJobs() {
           </div>
         </div>
       </section>
-
-      {/* Jobs Grid */}
       <div className="container my-5">
         <h2 className="mb-4">Your Posted Jobs</h2>
         <div className="row">

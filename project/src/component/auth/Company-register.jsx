@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../layout/Navbar";
-import Footer from "../layout/Footer";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -69,7 +67,7 @@ export default function CompanyRegister() {
 
       await setDoc(doc(db, "users", userId), data);
 
-      // ✅ Set sessionStorage before redirect
+   
       sessionStorage.setItem("isLogin", "true");
       sessionStorage.setItem("userType", "2");
       sessionStorage.setItem("userId", userId);

@@ -51,7 +51,7 @@ export default function Contact() {
 
   return (
     <>
-      {/* 3D Form Hover Animation */}
+     
       <style>{`
         .form-card {
           background: white;

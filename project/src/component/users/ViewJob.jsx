@@ -47,12 +47,12 @@ export default function ViewJob() {
     });
   };
 
-  // On mount
+ 
   useEffect(() => {
     fetchCompanies();
   }, []);
 
-  // Apply filters from URL
+  // Apply filters 
   useEffect(() => {
     const companyId = searchParams.get("companyId");
     const skill = searchParams.get("skill")?.toLowerCase();
@@ -70,7 +70,7 @@ export default function ViewJob() {
     }
   }, [location.search, companyOptions]);
 
-  // On company dropdown change
+  // On company dropdown 
   useEffect(() => {
     if (companyFilter) {
       fetchData(companyFilter.value, skillFilter);

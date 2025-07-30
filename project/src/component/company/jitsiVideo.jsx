@@ -20,7 +20,7 @@ export default function JitsiVideo({ roomName, displayName }) {
 
     api = new window.JitsiMeetExternalAPI(domain, options);
 
-    // Cleanup when component unmounts
+   
     return () => {
       if (api) {
         api.dispose();

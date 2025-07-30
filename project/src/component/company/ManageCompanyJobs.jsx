@@ -9,10 +9,10 @@ import Swal from "sweetalert2";
 export default function ManageCompanyJobs() {
   const [user, setUser] = useState([]);
   const [load, setLoad] = useState(true);
-  const email = sessionStorage.getItem("email"); // ✅ Using email again
+  const email = sessionStorage.getItem("email"); 
 
   const fetchData = () => {
-    const q = query(collection(db, "postJob"), where("email", "==", email)); // ✅ Filter by email
+    const q = query(collection(db, "postJob"), where("email", "==", email)); 
     onSnapshot(q, (userCol) => {
       setUser(
         userCol.docs?.map((el) => {

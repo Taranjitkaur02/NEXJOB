@@ -41,12 +41,12 @@ export default function AdminNavbar() {
       <header className="site-navbar mt-3">
         <div className="container-fluid">
           <div className="row no-gutters align-items-center">
-            {/* Logo */}
+            
             <div className="site-logo col-6">
               <Link to="/">NEXJOB</Link>
             </div>
 
-            {/* Navigation */}
+           
             <nav className="mx-auto site-navigation">
               <ul
                 className="site-menu js-clone-nav d-none d-xl-flex align-items-center ml-0 pl-0"

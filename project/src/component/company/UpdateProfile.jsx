@@ -27,7 +27,6 @@ export default function UpdateCompany() {
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
 
-  // Fetch existing user data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,17 +53,15 @@ export default function UpdateCompany() {
     fetchData();
   }, [userId, navigate]);
 
-  // Handle text field changes
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Handle logo file selection
   const handleImage = (e) => {
     setImage(e.target.files[0]);
   };
 
-  // Handle form submission
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -89,7 +86,6 @@ export default function UpdateCompany() {
     }
   };
 
-  // Update Firestore with form data
   const updateData = async (logoURL) => {
     try {
       const q = query(collection(db, "users"), where("userId", "==", userId));

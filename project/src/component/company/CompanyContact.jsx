@@ -6,8 +6,7 @@ import { toast } from "react-toastify";
 
 export default function Contact() {
   const isLogin = sessionStorage.getItem("isLogin") === "true";
-  const userType = sessionStorage.getItem("userType"); // "2" = company, "3" = user
-
+  const userType = sessionStorage.getItem("userType"); 
   const [companyName, setCompanyName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -58,7 +57,7 @@ export default function Contact() {
 
   return (
     <>
-      {/* 3D Form Styling */}
+      
       <style>{`
         .contact-form-wrapper {
           background: #fff;

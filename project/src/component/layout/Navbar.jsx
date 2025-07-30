@@ -29,7 +29,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Mobile Menu */}
+    
       <div className="site-mobile-menu site-navbar-target">
         <div className="site-mobile-menu-header">
           <div className="site-mobile-menu-close mt-3">
@@ -39,16 +39,16 @@ export default function Navbar() {
         <div className="site-mobile-menu-body" />
       </div>
 
-      {/* Header Navbar */}
+
       <header className="site-navbar mt-3">
         <div className="container-fluid">
           <div className="row align-items-center">
-            {/* Logo */}
+            
             <div className="site-logo col-6">
               <Link to="/">NEXJOB</Link>
             </div>
 
-            {/* Navigation Links */}
+           
             <nav className="mx-auto site-navigation">
               <ul className="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
                 <li><Link to="/" className="nav-link">Home</Link></li>
@@ -64,12 +64,12 @@ export default function Navbar() {
               </ul>
             </nav>
 
-            {/* Right CTA Buttons */}
+           
             <div className="right-cta-menu text-right d-flex align-items-center col-6">
               <div className="ml-auto d-flex align-items-center">
                 {!isLogin ? (
                   <>
-                    {/* Register Dropdown */}
+                  
                     <div className="dropdown ml-3">
                       <button
                         className="btn btn-primary border-width-2 dropdown-toggle d-inline-flex align-items-center"
@@ -89,7 +89,7 @@ export default function Navbar() {
                       </div>
                     </div>
 
-                    {/* Login Button */}
+                   
                     <Link
                       to="/login"
                       className="btn btn-primary border-width-2 d-inline-flex align-items-center ml-3"
@@ -100,7 +100,7 @@ export default function Navbar() {
                   </>
                 ) : (
                   <>
-                    {/* 👤 Profile Button */}
+                    
                     <Link
                       to="/user-profile"
                       className="btn border-width-2 d-inline-flex align-items-center ml-3"
@@ -119,7 +119,7 @@ export default function Navbar() {
                       Profile
                     </Link>
 
-                    {/* Logout Button */}
+                   
                     <button
                       onClick={logout}
                       className="btn border-width-2 d-inline-flex align-items-center ml-3"

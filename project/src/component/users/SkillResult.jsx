@@ -58,7 +58,7 @@ export default function SkillAutoCarousel() {
 
   return (
     <div style={styles.wrapper}>
-      <h2 style={styles.heading}>🔥 Explore In-Demand Skills</h2>
+      <h2 style={styles.heading}> Explore In-Demand Skills</h2>
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 2500, disableOnInteraction: false }}
