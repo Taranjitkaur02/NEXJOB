@@ -132,13 +132,13 @@ export default function ManageCompanyJobs() {
                         onClick={() => DeleteJob(el.id)}
                         className="btn btn-danger w-100 w-md-50"
                       >
-                        <i className="bi bi-trash-fill me-1"></i> Delete
+                        <i className="bi bi-trash-fill me-1 mx-2"></i> Delete
                       </button>
                       <Link
                         to={`/company/update-job/${el.id}`}
-                        className="btn btn-primary w-100 w-md-50"
+                        className="btn btn-primary w-100 w-md-50 mx-2"
                       >
-                        <i className="bi bi-pencil-square me-1"></i> Update
+                        <i className="bi bi-pencil-square me-1 mx-2"></i> Update
                       </Link>
                     </div>
                   </div>
