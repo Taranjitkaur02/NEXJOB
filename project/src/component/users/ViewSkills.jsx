@@ -7,17 +7,27 @@ import { Link } from "react-router-dom";
 
 export default function TrendingSkillsCarousel() {
   const navigate = useNavigate();
-
   const skillsOptions = [
-    { label: "HTML", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
-    { label: "CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
-    { label: "JavaScript", icon: "https://static.vecteezy.com/system/resources/previews/027/127/463/non_2x/javascript-logo-javascript-icon-transparent-free-png.png" },
-    { label: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-    { label: "Java", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
-    { label: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-    { label: "Node.js", icon: "https://img.icons8.com/fluent/512/node-js.png" },
-    { label: "AI", icon: "https://cdn-icons-png.flaticon.com/512/4630/4630645.png" },
+    { value: 'html', label: 'HTML', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
+    { value: 'css', label: 'CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' },
+    { value: 'javascript', label: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+    { value: 'python', label: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+    { value: 'java', label: 'Java', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
+  
+    { value: 'react', label: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
+    { value: 'angular', label: 'Angular', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg' },
+    
+    { value: 'mongodb', label: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
+    { value: 'mysql', label: 'MySQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
+    { value: 'docker', label: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
+    { value: 'kubernetes', label: 'Kubernetes', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg' },
+    { value: 'devops', label: 'DevOps', icon: 'https://cdn-icons-png.flaticon.com/512/1183/1183672.png' },
+    { value: 'seo', label: 'SEO', icon: 'https://cdn-icons-png.flaticon.com/512/2820/2820700.png' },
+    { value: 'scrum', label: 'Scrum', icon: 'https://cdn-icons-png.flaticon.com/512/2620/2620372.png' },
+ 
   ];
+
+
 
   const handleClick = (skill) => {
     navigate(`/view-job?skill=${encodeURIComponent(skill)}`);
@@ -34,8 +44,7 @@ export default function TrendingSkillsCarousel() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Trending Skills</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/">Home</Link> <span className="mx-2 slash" /> 
-                <span>/</span>
+                <Link to="/">Home</Link> <span className="mx-2 slash" /> <span>/</span>
                 <span>Skills</span>
               </div>
             </div>
@@ -51,38 +60,30 @@ export default function TrendingSkillsCarousel() {
             centeredSlides={true}
             slidesPerView="auto"
             loop={true}
-            autoplay={{ delay: 2000, disableOnInteraction: false }}
+            autoplay={{ delay: 1000, disableOnInteraction: false }}
             style={styles.swiper}
           >
             {skillsOptions.map((skill, index) => (
               <SwiperSlide key={index} style={styles.slide}>
                 {({ isActive }) => (
                   <div
-                   style={{
-                        ...styles.card,
-                        transform: isActive ? "scale(1.07)" : "scale(0.9)",
-                        boxShadow: isActive
-                          ? "0 20px 40px rgba(0, 0, 0, 0.25)"
-                          : "4px 4px 10px rgba(0,0,0,0.15), -4px -4px 10px rgba(255,255,255,0.6)",
-                      }}
-
+                    style={{
+                      ...styles.card,
+                      transform: isActive ? "scale(1.07)" : "scale(0.9)",
+                      boxShadow: isActive
+                        ? "0 20px 40px rgba(0, 0, 0, 0.25)"
+                        : "4px 4px 10px rgba(0,0,0,0.15), -4px -4px 10px rgba(255,255,255,0.6)"
+                    }}
                     onMouseEnter={(e) =>
-                      (e.currentTarget.style.transform = isActive
-                        ? "scale(1.1)"
-                        : "scale(0.95)")
+                      (e.currentTarget.style.transform = isActive ? "scale(1.1)" : "scale(0.95)")
                     }
                     onMouseLeave={(e) =>
-                      (e.currentTarget.style.transform = isActive
-                        ? "scale(1.07)"
-                        : "scale(0.9)")
+                      (e.currentTarget.style.transform = isActive ? "scale(1.07)" : "scale(0.9)")
                     }
                   >
-                    <img src={skill.icon} alt={skill.label} style={styles.icon} />
+                    <img src={skill.icon} alt={skill.label} loading="lazy" style={styles.icon} />
                     <h4 style={styles.label}>{skill.label}</h4>
-                    <button
-                      style={styles.button}
-                      onClick={() => handleClick(skill.label)}
-                    >
+                    <button style={styles.button} onClick={() => handleClick(skill.label)}>
                       Explore Jobs
                     </button>
                   </div>
@@ -130,6 +131,8 @@ const styles = {
     height: "130px",
     margin: "0 auto 20px auto",
     objectFit: "contain",
+    display: "block",
+    filter: "drop-shadow(0 0 4px rgba(0,0,0,0.1))",
   },
   label: {
     fontSize: "22px",

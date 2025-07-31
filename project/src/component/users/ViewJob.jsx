@@ -11,6 +11,10 @@ export default function ViewJob() {
   const [companyFilter, setCompanyFilter] = useState(null);
   const [load, setLoad] = useState(true);
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const jobsPerPage = 9;
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const skillFilter = searchParams.get("skill")?.toLowerCase();
@@ -44,15 +48,14 @@ export default function ViewJob() {
 
       setJobs(jobsData);
       setLoad(false);
+      setCurrentPage(1); // Reset page when filters applied
     });
   };
 
- 
   useEffect(() => {
     fetchCompanies();
   }, []);
 
-  // Apply filters 
   useEffect(() => {
     const companyId = searchParams.get("companyId");
     const skill = searchParams.get("skill")?.toLowerCase();
@@ -70,12 +73,19 @@ export default function ViewJob() {
     }
   }, [location.search, companyOptions]);
 
-  // On company dropdown 
   useEffect(() => {
     if (companyFilter) {
       fetchData(companyFilter.value, skillFilter);
     }
   }, [companyFilter]);
+
+  // Pagination logic
+  const indexOfLastJob = currentPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+  const totalPages = Math.ceil(jobs.length / jobsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const customStyles = {
     control: (provided) => ({
@@ -137,37 +147,60 @@ export default function ViewJob() {
       <section className="site-section services-section bg-light block__62849" id="next-section">
         <div className="container">
           {load ? (
-            <SyncLoader color="#89BA16" size={20} cssOverride={{ display: "block", margin: "50px auto" }} />
+            <div className="d-flex justify-content-center" style={{ padding: "50px 0" }}>
+              <SyncLoader color="#89BA16" size={20} />
+            </div>
           ) : jobs.length === 0 ? (
             <p className="text-center">No jobs found.</p>
           ) : (
-            <div className="row">
-              {jobs.map((job) => (
-                <div className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5" key={job.id}>
-                  <div className="block__16443 d-block p-4 bg-white shadow rounded">
-                    <div className="text-center mb-3">
-                      <img
-                        className="img-fluid"
-                        src={job.image || "/assets/images/default_company.png"}
-                        alt="Job"
-                        style={{ borderRadius: "50%", maxHeight: "100px" }}
-                      />
+            <>
+              <div className="row">
+                {currentJobs.map((job) => (
+                  <div className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5" key={job.id}>
+                    <div className="block__16443 d-block p-4 bg-white shadow rounded">
+                      <div className="text-center mb-3">
+                        <img
+                          className="img-fluid"
+                          src={job.image || "/assets/images/default_company.png"}
+                          alt="Job"
+                          style={{ borderRadius: "50%", maxHeight: "100px" }}
+                        />
+                      </div>
+                      <h3 className="text-center">{job.title}</h3>
+                      <p><i className="bi bi-geo-alt me-2"></i> {job.location}</p>
+                      <p><i className="bi bi-clock me-2"></i> {job.jobType}</p>
+                      <p><i className="bi bi-currency-rupee me-2"></i> {job.salary}</p>
+                      <p><i className="bi bi-mortarboard me-2"></i> {job.qualification}</p>
+                      <p><i className="bi bi-briefcase me-2"></i> {job.experience} Year Experience</p>
+                      <p><i className="bi bi-person-lines-fill me-2"></i> {job.vacancies} Vacancies</p>
+                      <Link to={`/job-form/${job.id}`} className="btn btn-primary mt-3 w-100">Apply Now</Link>
                     </div>
-                    <h3 className="text-center">{job.title}</h3>
-                    <p><i className="bi bi-geo-alt me-2"></i>{" "}{job.location}</p>
-                    <p><i className="bi bi-clock me-2"></i>{" "}{job.jobType}</p>
-                    <p><i className="bi bi-currency-rupee me-2"></i>{" "}{job.salary}</p>
-                    <p><i className="bi bi-mortarboard me-2"></i>{" "}{job.qualification}</p>
-                    <p><i className="bi bi-briefcase me-2"></i>{" "}{job.experience} Year Experience</p>
-                    <p><i className="bi bi-person-lines-fill me-2"></i>{" "}{job.vacancies} Vacancies</p>
-                    <Link to={`/job-form/${job.id}`} className="btn btn-primary mt-3 w-100">Apply Now</Link>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+
+              {/* Pagination Buttons */}
+              <div className="d-flex justify-content-center mt-4">
+                <nav>
+                  <ul className="pagination">
+                    {[...Array(totalPages).keys()].map((number) => (
+                      <li
+                        key={number + 1}
+                        className={`page-item ${currentPage === number + 1 ? "active" : ""}`}
+                      >
+                        <button onClick={() => paginate(number + 1)} className="page-link">
+                          {number + 1}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </div>
+            </>
           )}
         </div>
       </section>
     </>
   );
 }
+

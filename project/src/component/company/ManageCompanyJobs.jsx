@@ -1,4 +1,11 @@
-import { collection, deleteDoc, onSnapshot, query, where, doc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  onSnapshot,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../../Firebase";
@@ -9,10 +16,10 @@ import Swal from "sweetalert2";
 export default function ManageCompanyJobs() {
   const [user, setUser] = useState([]);
   const [load, setLoad] = useState(true);
-  const email = sessionStorage.getItem("email"); 
+  const email = sessionStorage.getItem("email");
 
   const fetchData = () => {
-    const q = query(collection(db, "postJob"), where("email", "==", email)); 
+    const q = query(collection(db, "postJob"), where("email", "==", email));
     onSnapshot(q, (userCol) => {
       setUser(
         userCol.docs?.map((el) => {
@@ -28,24 +35,24 @@ export default function ManageCompanyJobs() {
   }, []);
 
   const DeleteJob = async (JobId) => {
-       Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-        }).then(async (result) => {
-        if (result.isConfirmed) {
-            await deleteDoc(doc(db, "postJob", JobId));
-            Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success"
-            });
-        }
-        }); 
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(doc(db, "postJob", JobId));
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   };
 
   return (
@@ -71,59 +78,68 @@ export default function ManageCompanyJobs() {
       </section>
 
       {/* Jobs Section */}
-      <section className="site-section services-section bg-light block__62849" id="next-section">
+      <section
+        className="site-section services-section bg-light block__62849"
+        id="next-section"
+      >
         <div className="container">
           {load ? (
-            <SyncLoader
-              color="#89BA16"
-              size={30}
-              cssOverride={{ display: "block", margin: "0 auto" }}
-              loading={load}
-            />
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{ minHeight: "300px" }}
+            >
+              <SyncLoader color="#89BA16" size={30} loading={load} />
+            </div>
           ) : user.length === 0 ? (
             <p className="text-center">No jobs posted yet.</p>
           ) : (
             <div className="row">
               {user.map((el) => (
-                <div className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5" key={el.id}>
+                <div
+                  className="col-12 col-sm-6 col-lg-4 mb-4 mb-lg-5"
+                  key={el.id}
+                >
                   <div className="block__16443 d-block p-4 bg-white shadow rounded">
                     <div className="text-center mb-3">
                       <img
                         className="img-fluid"
                         src={el.image}
                         alt=""
-                        style={{ borderRadius: "50%", maxHeight: "100px" }}
+                        style={{
+                          borderRadius: "50%",
+                          maxHeight: "100px",
+                        }}
                       />
                     </div>
                     <h3 className="text-center">{el.title}</h3>
 
                     <p>
-                      <i className="bi bi-geo-alt me-2"></i>{" "}
+                      <i className="bi bi-geo-alt me-2"></i>
                       {el.location}
                     </p>
 
                     <p>
-                      <i className="bi bi-clock me-2"></i>{" "}
+                      <i className="bi bi-clock me-2"></i>
                       {el.jobType}
                     </p>
 
                     <p>
-                      <i className="bi bi-currency-rupee me-2"></i>{" "}
+                      <i className="bi bi-currency-rupee me-2"></i>
                       {el.salary}
                     </p>
 
                     <p>
-                      <i className="bi bi-mortarboard me-2"></i>{" "}
+                      <i className="bi bi-mortarboard me-2"></i>
                       {el.qualification}
                     </p>
 
                     <p>
-                      <i className="bi bi-briefcase me-2"></i>{" "}
+                      <i className="bi bi-briefcase me-2"></i>
                       {el.experience} Year Experience
                     </p>
 
                     <p>
-                      <i className="bi bi-person-lines-fill me-2"></i>{" "}
+                      <i className="bi bi-person-lines-fill me-2"></i>
                       {el.vacancies} Vacancies
                     </p>
 
@@ -136,7 +152,7 @@ export default function ManageCompanyJobs() {
                       </button>
                       <Link
                         to={`/company/update-job/${el.id}`}
-                        className="btn btn-primary w-100 w-md-50 mx-2"
+                        className="btn btn-primary w-100 w-md-50"
                       >
                         <i className="bi bi-pencil-square me-1 mx-2"></i> Update
                       </Link>
@@ -151,4 +167,5 @@ export default function ManageCompanyJobs() {
     </>
   );
 }
+
 

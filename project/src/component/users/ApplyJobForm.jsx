@@ -7,9 +7,13 @@ import {
   Timestamp,
   doc,
   getDoc,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { SyncLoader } from "react-spinners";
 
 export default function ApplyJobForm() {
   const [resume, setResume] = useState(null);
@@ -22,7 +26,6 @@ export default function ApplyJobForm() {
   const userId = sessionStorage.getItem("userId");
   const userEmail = sessionStorage.getItem("email");
 
-  
   useEffect(() => {
     async function fetchJob() {
       try {
@@ -34,7 +37,7 @@ export default function ApplyJobForm() {
             toast.error("Job is missing company info.");
             setJobExists(false);
           } else {
-            setCompanyId(jobData.userId); // this is the company ID
+            setCompanyId(jobData.userId);
           }
         } else {
           toast.error("This job no longer exists.");
@@ -62,16 +65,30 @@ export default function ApplyJobForm() {
       return;
     }
 
-    if (!companyId) {
-      toast.error("Cannot apply: Missing company ID.");
+    if (!companyId || !userId || !jobId) {
+      toast.error("Missing required application details.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", resume);
-    formData.append("upload_preset", "images");
-
     try {
+      const q = query(
+        collection(db, "jobApplications"),
+        where("userId", "==", userId),
+        where("jobId", "==", jobId),
+        where("companyId", "==", companyId)
+      );
+
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty) {
+        toast.warning("You have already applied for this job.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", resume);
+      formData.append("upload_preset", "images");
+
       const uploadRes = await axios.post(
         "https://api.cloudinary.com/v1_1/dhvmmiipj/image/upload",
         formData
@@ -85,9 +102,10 @@ export default function ApplyJobForm() {
         userId,
         userEmail,
         resume: resumeUrl,
+        status: 1,
         createdAt: Timestamp.now(),
       });
-      
+
       toast.success("Application submitted!");
       setResume(null);
       setResumeName("");
@@ -102,21 +120,9 @@ export default function ApplyJobForm() {
     setResumeName(e.target.value);
   };
 
-  if (loadingJob) {
-    return <div className="container my-5">Loading job details...</div>;
-  }
-
-  if (!jobExists) {
-    return (
-      <div className="container my-5">
-        <div className="alert alert-danger">This job does not exist.</div>
-      </div>
-    );
-  }
-
   return (
     <>
-    
+      {/* Hero Section */}
       <section
         className="section-hero overlay inner-page bg-image"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
@@ -138,23 +144,41 @@ export default function ApplyJobForm() {
         </div>
       </section>
 
+      {/* Main Content */}
       <div className="container my-5">
-        <h2 className="mb-4">Apply Here</h2>
-        <form onSubmit={handleSubmit} className="border p-4 bg-light rounded shadow-sm">
-          <div className="form-group mb-3">
-            <label>Upload Resume</label>
-            <input
-              type="file"
-              className="form-control"
-              value={resumeName}
-              onChange={handleFileChange}
-              required
-            />
+        {loadingJob ? (
+          <div className="d-flex justify-content-center my-5">
+            <SyncLoader color="#89BA16" size={20} />
           </div>
-          <button type="submit" className="btn btn-primary" disabled={!companyId}>
-            Apply
-          </button>
-        </form>
+        ) : !jobExists ? (
+          <div className="alert alert-danger">This job does not exist.</div>
+        ) : (
+          <>
+            <h2 className="mb-4">Apply Here</h2>
+            <form
+              onSubmit={handleSubmit}
+              className="border p-4 bg-light rounded shadow-sm"
+            >
+              <div className="form-group mb-3">
+                <label>Upload Resume</label>
+                <input
+                  type="file"
+                  className="form-control"
+                  value={resumeName}
+                  onChange={handleFileChange}
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!companyId}
+              >
+                Apply
+              </button>
+            </form>
+          </>
+        )}
       </div>
     </>
   );

@@ -13,7 +13,7 @@ import { SyncLoader } from "react-spinners";
 
 export default function ScheduleInterview() {
   const { jobId, applicationId } = useParams();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [meetingURL, setMeetingURL] = useState("");
@@ -54,7 +54,6 @@ export default function ScheduleInterview() {
     fetchApplication();
   }, [applicationId]);
 
-
   useEffect(() => {
     const fetchInterview = async () => {
       try {
@@ -79,7 +78,6 @@ export default function ScheduleInterview() {
     if (applicationId) fetchInterview();
   }, [applicationId]);
 
-  // Schedule or update interview
   const handleSchedule = async (e) => {
     e.preventDefault();
 
@@ -87,6 +85,7 @@ export default function ScheduleInterview() {
       toast.error("Please fill all fields.");
       return;
     }
+
     const selectedDateTime = new Date(`${date}T${time}`);
     const now = new Date();
     if (isNaN(selectedDateTime.getTime())) {
@@ -97,72 +96,29 @@ export default function ScheduleInterview() {
       toast.error("Cannot schedule/update interview for a past date or time.");
       return;
     }
+
     const roomName = `swap_${companyId}_${userId}`;
     const jitsiLink = `https://meet.jit.si/${roomName}`;
     setIsSubmitting(true);
+
     try {
-      await setDoc(doc(db, "interviews", applicationId), {
-        jobId: jobId || "",
-        applicationId,
-        companyId,
-        userId,
+      await updateDoc(doc(db, "jobApplications", applicationId), {
         date: Timestamp.fromDate(selectedDateTime),
         link: jitsiLink,
+        status: 2,
         isMeetingStarted: false,
         isMeetingEnded: false,
-        createdAt: new Date().toISOString(),
+        meetingURL: jitsiLink,
       });
       setMeetingURL(jitsiLink);
       setIsInterviewScheduled(true);
       toast.success("Interview scheduled successfully.");
+      navigate("/company/applicants/" + jobId);
     } catch (err) {
       console.error("Error scheduling interview:", err);
       toast.error("Failed to schedule interview.");
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  // Start meeting
-  const handleStartMeeting = async () => {
-    if (!date || !time) {
-      toast.error("Scheduled date or time is missing.");
-      return;
-    }
-    const scheduledTime = new Date(`${date}T${time}`);
-    const now = new Date();
-    if (isNaN(scheduledTime.getTime())) {
-      toast.error("Invalid scheduled date/time.");
-      return;
-    }
-    if (scheduledTime > now) {
-      toast.error("You can only start the interview on or after the scheduled time.");
-      return;
-    }
-    try {
-      await updateDoc(doc(db, "interviews", applicationId), {
-        isMeetingStarted: true,
-        isMeetingEnded: false,
-      });
-      toast.success("Meeting started!");
-      window.open(meetingURL, "_blank");
-    } catch (err) {
-      console.error("Error starting meeting:", err);
-      toast.error("Failed to start the meeting.");
-    }
-  };
-  //  End meeting 
-  const handleEndMeeting = async () => {
-    try {
-      await updateDoc(doc(db, "interviews", applicationId), {
-        isMeetingStarted: false,
-        isMeetingEnded: true,
-      });
-      toast.success("Meeting ended.");
-      navigate("/company/view-application"); 
-    } catch (err) {
-      console.error("Error ending meeting:", err);
-      toast.error("Failed to end meeting.");
     }
   };
 
@@ -185,18 +141,19 @@ export default function ScheduleInterview() {
           </div>
         </div>
       </section>
-      <div className="container my-5 col-md-8">
-        <h2 className="mb-4 text-center">
-          {isInterviewScheduled ? "Update Interview" : "Schedule Interview"}
-        </h2>
 
-        {loading ? (
-          <SyncLoader
-            color="#89BA16"
-            size={15}
-            cssOverride={{ display: "block", margin: "50px auto" }}
-          />
-        ) : (
+      {loading ? (
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ height: "50vh" }}
+        >
+          <SyncLoader color="#89BA16" size={15} />
+        </div>
+      ) : (
+        <div className="container my-5 col-md-8">
+          <h2 className="mb-4 text-center">
+            {isInterviewScheduled ? "Update Interview" : "Schedule Interview"}
+          </h2>
           <div className="card shadow p-4">
             <form onSubmit={handleSchedule}>
               <div className="form-group mb-3">
@@ -231,24 +188,22 @@ export default function ScheduleInterview() {
                     ? "Updating..."
                     : "Update Interview"
                   : isSubmitting
-                  ? "Scheduling..."
-                  : "Schedule Interview"}
+                    ? "Scheduling..."
+                    : "Schedule Interview"}
               </button>
             </form>
 
-            {meetingURL && (
-              <div className="mt-4 text-center">
-                <button className="btn btn-primary me-2 mx-3" onClick={handleStartMeeting}>
-                  Start Interview
-                </button>
-                <button className="btn btn-danger ms-2" onClick={handleEndMeeting}>
-                  End Interview
-                </button>
-              </div>
-            )}
+            <div className="mt-4 text-center">
+              <button
+                className="btn btn-danger w-100 my-3"
+                onClick={() => navigate("/company/applicants/" + jobId)}
+              >
+                Back
+              </button>
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 }

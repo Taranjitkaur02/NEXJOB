@@ -14,80 +14,56 @@ import Swal from "sweetalert2";
 import { SyncLoader } from "react-spinners";
 
 export default function AdminManageInterview() {
-  const { jobId } = useParams();//component loads
-  const [interviews, setInterviews] = useState([]);
+  const { jobId } = useParams();
+  const [applications, setApplications] = useState([]);
   const [jobTitle, setJobTitle] = useState("Loading...");
-  const [statusMap, setStatusMap] = useState({});
   const [userInfo, setUserInfo] = useState({});
   const [companyNames, setCompanyNames] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!jobId) return;
+
     const loadJobTitle = async () => {
       const jobSnap = await getDoc(doc(db, "postJob", jobId));
       setJobTitle(jobSnap.exists() ? jobSnap.data().title || "Untitled Job" : "Unknown Job");
     };
-    //list of all the interviews
-    const interviewQuery = query(
-      collection(db, "interviews"),
+
+    const appQuery = query(
+      collection(db, "jobApplications"),
       where("jobId", "==", jobId)
     );
-    const unsubscribe = onSnapshot(interviewQuery, async (snapshot) => {
-      const allDocs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      const latestInterviewMap = {};
-      for (const doc of allDocs) {
-        const existing = latestInterviewMap[doc.applicationId];
-        if (
-          !existing ||
-          (!existing.date && doc.date) ||
-          (doc.date?.toDate?.() > existing.date?.toDate?.())
-        ) {
-          latestInterviewMap[doc.applicationId] = doc;
-        }
-      }
-      const interviewDocs = Object.values(latestInterviewMap);
-      const statusLookup = {};
+
+    const unsubscribe = onSnapshot(appQuery, async (snapshot) => {
+      const apps = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       const userLookup = {};
       const companyLookup = {};
-      //loop through each interview document
-      for (const interview of interviewDocs) {
-        const appSnap = await getDoc(doc(db, "jobApplications", interview.applicationId));
-        //aplication status 
-        if (appSnap.exists()) {
-          const statusCode = appSnap.data().status;
-          statusLookup[interview.applicationId] = {
-            1: "Shortlisted",
-            2: "Rejected",
-            3: "Interview Scheduled",
-            4: "Rejected (Final)",
-            5: "Selected",
-          }[statusCode] || "Applied";
-        }
-        //user info
-        if (!userLookup[interview.userId]) {
-          const userSnap = await getDoc(doc(db, "users", interview.userId));
+
+      for (const app of apps) {
+        if (!userLookup[app.userId]) {
+          const userSnap = await getDoc(doc(db, "users", app.userId));
           if (userSnap.exists()) {
             const data = userSnap.data();
             if (data.userType === 3) {
-              userLookup[interview.userId] = {
+              userLookup[app.userId] = {
                 name: data.name || "User",
                 email: data.email || "N/A",
               };
             }
           }
         }
-        //company info
-        if (!companyLookup[interview.companyId]) {
-          const compSnap = await getDoc(doc(db, "users", interview.companyId));
+
+        if (!companyLookup[app.companyId]) {
+          const compSnap = await getDoc(doc(db, "users", app.companyId));
           if (compSnap.exists()) {
-            companyLookup[interview.companyId] = compSnap.data().name || "Company";
+            companyLookup[app.companyId] = compSnap.data().name || "Company";
+          } else {
+            companyLookup[app.companyId] = `Company ID: ${app.companyId}`;
           }
         }
       }
-      //sace data in state
-      setInterviews(interviewDocs);
-      setStatusMap(statusLookup);
+
+      setApplications(apps);
       setUserInfo(userLookup);
       setCompanyNames(companyLookup);
       setLoading(false);
@@ -99,13 +75,13 @@ export default function AdminManageInterview() {
 
   const handleDelete = async (id) => {
     Swal.fire({
-      title: "Delete Interview?",
+      title: "Delete Application?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, delete it",
     }).then(async (res) => {
       if (res.isConfirmed) {
-        await deleteDoc(doc(db, "interviews", id));
+        await deleteDoc(doc(db, "jobApplications", id));
         Swal.fire("Deleted", "", "success");
       }
     });
@@ -113,19 +89,16 @@ export default function AdminManageInterview() {
 
   return (
     <>
-      {/* 3D card animation */}
       <style>{`
         .interview-card {
           transition: transform 0.4s ease, box-shadow 0.4s ease;
           transform-style: preserve-3d;
           will-change: transform;
         }
-
         .interview-card:hover {
           transform: perspective(1000px) translateZ(20px) scale(1.03);
-        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 0 20px rgba(137, 186, 22, 0.2);
+          box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 0 20px rgba(137, 186, 22, 0.2);
         }
-
         @media (hover: none) {
           .interview-card:hover {
             transform: none;
@@ -133,13 +106,13 @@ export default function AdminManageInterview() {
           }
         }
       `}</style>
-      {/*hero section */}
+
       <section
         className="section-hero overlay inner-page bg-image"
         style={{ backgroundImage: 'url("/assets/images/hero_1.jpg")' }}
       >
         <div className="container py-5">
-          <h1 className="text-white">Interviews for: {jobTitle}</h1>
+          <h1 className="text-white">Applications for: {jobTitle}</h1>
           <Link
             to="/admin/manage-interviews"
             className="btn btn-sm mt-2"
@@ -155,26 +128,41 @@ export default function AdminManageInterview() {
           <div className="text-center my-5">
             <SyncLoader color="#89BA16" />
           </div>
-        ) : interviews.length === 0 ? (
-          <p className="text-center">No interviews found for this job.</p>
+        ) : applications.length === 0 ? (
+          <p className="text-center">No applications found for this job.</p>
         ) : (
           <div className="row">
-            {interviews.map((int) => {
-              const user = userInfo[int.userId] || { name: int.userId, email: "Unknown" };
-              const companyName = companyNames[int.companyId] || int.companyId;
-              const status = statusMap[int.applicationId] || "Applied";
+            {applications.map((app) => {
+              const user = userInfo[app.userId] || { name: app.userId, email: "Unknown" };
+              const companyName = companyNames[app.companyId] || `Company ID: ${app.companyId}`;
+
+              // Corrected status mapping
+              let statusText = "Applied";
+              if (app.status === 1) statusText = "Shortlisted";
+              else if (app.status === 2) statusText = "Interview Scheduled";
+              else if (app.status === 3) statusText = "Placed";
+              else if (app.status === 4) statusText = "Rejected";
+              else if (app.status === 5) statusText = "Rejected (Final)";
+              else if (app.status === 6) statusText = "Interview Started";
+              else if (app.status === 7) statusText = "Interview Ended";
+              else if (app.date?.seconds) statusText = "Interview Scheduled";
+
+              const dateObj = app.date?.seconds ? new Date(app.date.seconds * 1000) : null;
+              const formattedDate = dateObj ? dateObj.toLocaleDateString() : "Not Scheduled";
+              const formattedTime = dateObj ? dateObj.toLocaleTimeString() : "-";
 
               return (
-                <div className="col-md-4 mb-4" key={int.id}>
+                <div className="col-md-4 mb-4" key={app.id}>
                   <div className="bg-white rounded shadow p-4 interview-card h-100">
                     <p><strong>User Name:</strong> {user.name}</p>
                     <p><strong>User Email:</strong> {user.email}</p>
                     <p><strong>Company:</strong> {companyName}</p>
-                    <p><strong>Status:</strong> {status}</p>
-                    <p><strong>Date:</strong> {int.date?.toDate?.().toLocaleString() || "Not Scheduled"}</p>
+                    <p><strong>Status:</strong> {statusText}</p>
+                    <p><strong>Date:</strong> {formattedDate}</p>
+                    <p><strong>Time:</strong> {formattedTime}</p>
                     <button
                       className="btn btn-danger btn-sm w-100"
-                      onClick={() => handleDelete(int.id)}
+                      onClick={() => handleDelete(app.id)}
                     >
                       Delete
                     </button>
@@ -188,4 +176,3 @@ export default function AdminManageInterview() {
     </>
   );
 }
-

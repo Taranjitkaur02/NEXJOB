@@ -4,17 +4,11 @@ import {
   getDoc,
   setDoc,
   updateDoc,
-  collection,
-  query,
-  where,
-  onSnapshot,
-  deleteDoc,
-  getDocs,
 } from "firebase/firestore";
 import { db } from "../../Firebase";
 import { toast } from "react-toastify";
-import { SyncLoader } from "react-spinners";
 import axios from "axios";
+import { SyncLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 
 export default function UserProfile() {
@@ -25,9 +19,6 @@ export default function UserProfile() {
   const [resumeName, setResumeName] = useState("");
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState("");
-  const [shortlistedJobs, setShortlistedJobs] = useState([]);
-  const [rejectedJobs, setRejectedJobs] = useState([]);
-  const [selectedJobs, setSelectedJobs] = useState([]);
 
   const userId = sessionStorage.getItem("userId");
   const email = sessionStorage.getItem("email");
@@ -62,67 +53,6 @@ export default function UserProfile() {
 
     fetchProfile();
   }, [userId, email]);
-
-  useEffect(() => {
-    if (!userId) return;
-
-    const unsub = onSnapshot(
-      query(collection(db, "notifications"), where("userId", "==", userId)),
-      async (snapshot) => {
-        const shortlisted = [];
-        const rejected = [];
-        const selected = [];
-
-        for (const docSnap of snapshot.docs) {
-          const data = docSnap.data();
-          const jobId = data.jobId;
-          const companyId = data.companyId;
-
-          const jobDoc = await getDoc(doc(db, "postJob", jobId));
-          const companyDoc = await getDoc(doc(db, "users", companyId));
-
-          if (!jobDoc.exists() || !companyDoc.exists()) continue;
-
-          const baseData = {
-            id: docSnap.id,
-            jobTitle: jobDoc.data().title,
-            jobImage: jobDoc.data().image || "/assets/images/default.png",
-            companyName: companyDoc.data().name || "Unknown Company",
-          };
-
-          if (data.status === "shortlisted") {
-            const interviewQuery = query(
-              collection(db, "interviews"),
-              where("jobId", "==", jobId),
-              where("userId", "==", userId)
-            );
-            const interviewSnap = await getDocs(interviewQuery);
-
-            let interviewDate = null;
-            let interviewTime = null;
-
-            if (!interviewSnap.empty) {
-              const interviewData = interviewSnap.docs[0].data();
-              interviewDate = interviewData.date;
-              interviewTime = interviewData.time;
-            }
-
-            shortlisted.push({ ...baseData, interviewDate, interviewTime });
-          } else if (data.status === "rejected") {
-            rejected.push(baseData);
-          } else if (data.status === "selected") {
-            selected.push(baseData);
-          }
-        }
-
-        setShortlistedJobs(shortlisted);
-        setRejectedJobs(rejected);
-        setSelectedJobs(selected);
-      }
-    );
-
-    return () => unsub();
-  }, [userId]);
 
   const handleResumeUpload = async () => {
     if (!resumeFile) {
@@ -182,19 +112,6 @@ export default function UserProfile() {
     } catch (err) {
       console.error("Update name failed:", err);
       toast.error("Failed to update name.");
-    }
-  };
-
-  const handleDeleteNotification = async (notifId) => {
-    try {
-      await deleteDoc(doc(db, "notifications", notifId));
-      setShortlistedJobs((prev) => prev.filter((job) => job.id !== notifId));
-      setRejectedJobs((prev) => prev.filter((job) => job.id !== notifId));
-      setSelectedJobs((prev) => prev.filter((job) => job.id !== notifId));
-      toast.success("Notification removed.");
-    } catch (err) {
-      console.error("Failed to delete notification:", err);
-      toast.error("Failed to remove notification.");
     }
   };
 
@@ -296,53 +213,6 @@ export default function UserProfile() {
               </div>
             </div>
           )}
-
-          {/* Notifications */}
-          {[
-            { title: "Shortlisted Notifications", data: shortlistedJobs, message: "You are shortlisted!", color: "success", interview: true },
-            { title: "Rejected Notifications", data: rejectedJobs, message: "You were not selected.", color: "danger" },
-            { title: "Selected Notifications", data: selectedJobs, message:" You have been selected!", color: "success" },
-          ].map((section, idx) => (
-            <div className="container my-5" key={idx}>
-              <h4 className="mb-4">{section.title}</h4>
-              <div className="row">
-                {section.data.length === 0 ? (
-                  <p className="text-muted">No {section.title.toLowerCase()}.</p>
-                ) : (
-                  section.data.map((item) => (
-                    <div className="col-12 col-sm-6 col-lg-4 mb-4" key={item.id}>
-                      <div className="block__16443 d-block p-4 bg-white shadow rounded text-center">
-                        <img
-                          className="img-fluid mb-3"
-                          src={item.jobImage}
-                          alt="Job"
-                          style={{ borderRadius: "50%", maxHeight: "100px" }}
-                        />
-                        <h3>{item.jobTitle}</h3>
-                        <p className="text-primary">{item.companyName}</p>
-                        <p className={`fw-bold text-${section.color} fs-6`}>{section.message}</p>
-                        {section.interview && item.interviewDate && item.interviewTime && (
-                          <p className="fw-bold text-dark fs-6">
-                            Interview scheduled for <br />
-                            <span className="text-info">{item.interviewDate}</span> at{" "}
-                            <span className="text-info">{item.interviewTime}</span>
-                          </p>
-                        )}
-                        <div className="mt-2">
-                          <button
-                            className="btn btn-sm btn-outline-danger"
-                            onClick={() => handleDeleteNotification(item.id)}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          ))}
         </>
       )}
     </>
