@@ -153,9 +153,9 @@ export default function UserInterviewDetails() {
                           : status === "Ended"
                             ? "Interview Ended"
                             : status === "Selected"
-                              ? "🎉 You are Selected!"
+                              ? " You are Selected!"
                               : status === "Rejected"
-                                ? "❌ You are Rejected"
+                                ? " You are Rejected"
                                 : "Waiting"}
                       </button>
                     )}

@@ -193,14 +193,14 @@ export default function ScheduleInterview() {
               </button>
             </form>
 
-            <div className="mt-4 text-center">
+            {/* <div className="mt-4 text-center">
               <button
                 className="btn btn-danger w-100 my-3"
                 onClick={() => navigate("/company/applicants/" + jobId)}
               >
                 Back
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
