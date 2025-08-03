@@ -135,7 +135,7 @@ export default function ApplyJobForm() {
               <div className="custom-breadcrumbs">
                 <Link to="/">Home</Link>
                 <span className="mx-2 slash">/</span>
-                <Link to="/jobs">Jobs</Link>
+                <Link to="/view-job">Jobs</Link>
                 <span className="mx-2 slash">/</span>
                 <span className="text-white"><strong>Apply</strong></span>
               </div>

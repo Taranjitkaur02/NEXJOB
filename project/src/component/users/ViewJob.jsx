@@ -117,7 +117,7 @@ export default function ViewJob() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">All Job Listings</h1>
               <div className="custom-breadcrumbs">
-                <Link to={"/user"}>Home</Link>
+                <Link to={"/"}>Home</Link>
                 <span className="mx-2 slash"></span>
                 <span className="text-white">All Jobs</span>
               </div>

@@ -71,7 +71,7 @@ export default function AdminContactMessages() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Contact Messages</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/">Home</Link>
+                <Link to="/admin">Home</Link>
                 <span className="mx-2 slash">/</span>
                 <span className="text-white">
                   <strong>Contact Messages</strong>

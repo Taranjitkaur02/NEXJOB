@@ -17,6 +17,7 @@ export default function UserInterviewDetails() {
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(Date.now());
+  const [openMenuId, setOpenMenuId] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 1000);
@@ -37,7 +38,7 @@ export default function UserInterviewDetails() {
         const rawData = await Promise.all(
           snapshot.docs.map(async (docSnap) => {
             const data = docSnap.data();
-            if (![2, 3, 5, 6, 7].includes(data.status)) return null;
+            if (![1, 2, 3, 5, 6, 7].includes(data.status)) return null;
 
             const jobSnap = await getDoc(doc(db, "postJob", data.jobId));
             const companySnap = await getDoc(doc(db, "users", data.companyId));
@@ -93,6 +94,10 @@ export default function UserInterviewDetails() {
     }
   };
 
+  const toggleMenu = (id) => {
+    setOpenMenuId(openMenuId === id ? null : id);
+  };
+
   return (
     <>
       <section
@@ -130,8 +135,35 @@ export default function UserInterviewDetails() {
 
               return (
                 <div className="col-md-4 mb-4" key={interview.id}>
-                  <div className="card shadow p-3 h-100">
-                    <h5>{interview.jobTitle}</h5>
+                  <div className="card shadow p-3 h-100 position-relative">
+                    {/* Header with 3-dot menu */}
+                    <div className="d-flex justify-content-between align-items-start mb-2">
+                      <h5 className="mb-0">{interview.jobTitle}</h5>
+                      <div className="dropdown text-end">
+                        <button
+                          className="btn btn-link p-0 border-0"
+                          onClick={() => toggleMenu(interview.id)}
+                        >
+                          <i className="bi bi-three-dots-vertical fs-5"></i>
+                        </button>
+                        {openMenuId === interview.id && (
+                          <div>
+                            <span
+                              style={{
+                                cursor: "pointer",
+                                fontSize: "13px",
+                                fontWeight: "normal",
+                                color: "red",
+                              }}
+                              onClick={() => handleDelete(interview.id)}
+                            >
+                              Delete
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
                     <p><strong>Company:</strong> {interview.companyName}</p>
                     <p><strong>Date:</strong> {interview.date?.toLocaleDateString() || "N/A"}</p>
                     <p><strong>Time:</strong> {interview.date?.toLocaleTimeString() || "N/A"}</p>
@@ -153,19 +185,10 @@ export default function UserInterviewDetails() {
                           : status === "Ended"
                             ? "Interview Ended"
                             : status === "Selected"
-                              ? " You are Selected!"
+                              ? "You are Selected!"
                               : status === "Rejected"
-                                ? " You are Rejected"
+                                ? "You are Rejected"
                                 : "Waiting"}
-                      </button>
-                    )}
-
-                    {status === "Ended" && (
-                      <button
-                        className="btn btn-danger w-100 mt-2"
-                        onClick={() => handleDelete(interview.id)}
-                      >
-                        Delete Interview
                       </button>
                     )}
                   </div>
@@ -178,6 +201,8 @@ export default function UserInterviewDetails() {
     </>
   );
 }
+
+
 
 
 

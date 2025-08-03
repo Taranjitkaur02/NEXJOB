@@ -11,7 +11,7 @@ import { db } from "../../Firebase";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { SyncLoader } from "react-spinners";
-
+import { Link } from "react-router-dom";
 export default function ViewApplication() {
   const [applications, setApplications] = useState([]);
   const [interviews, setInterviews] = useState([]);
@@ -155,7 +155,7 @@ export default function ViewApplication() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Applications</h1>
               <div className="custom-breadcrumbs">
-                <span>Home</span> <span className="mx-2 slash"></span>
+                <Link to="/admin">Home</Link>/ <span className="mx-2 slash"></span>
                 <span>Applications</span>
               </div>
             </div>

@@ -155,7 +155,7 @@ export default function CompanyApplicants() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Applicants</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/admin">Home</Link>{" "}
+                <Link to="/company">Home</Link>{" "}
                 <span className="mx-2 slash"></span>
               </div>
             </div>

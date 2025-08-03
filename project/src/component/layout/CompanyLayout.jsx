@@ -4,6 +4,7 @@ import CompanyNavbar from "./CompanyNavbar";
 import { useEffect } from "react"
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
+import CompanyFooter from "./CompanyFooter";
 export default function CompanyLayout(){
     const {pathname}=useLocation()
     useEffect(()=>{
@@ -22,7 +23,7 @@ export default function CompanyLayout(){
         <>
         <CompanyNavbar/>
         <Outlet/>
-        <Footer/>
+        <CompanyFooter/>
         </>
     )
 }

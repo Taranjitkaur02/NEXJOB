@@ -134,7 +134,7 @@ export default function ScheduleInterview() {
             <div className="col-md-7">
               <h1 className="text-white font-weight-bold">Schedule Interview</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/admin">Home</Link>{" "}
+                <Link to="/company">Home</Link>{" "}
                 <span className="mx-2 slash"></span>
               </div>
             </div>

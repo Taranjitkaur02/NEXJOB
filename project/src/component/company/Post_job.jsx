@@ -306,8 +306,8 @@ export default function Post_job() {
             <div className="col-md-6">
               <h1 className="text-white font-weight-bold">Post A Job</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/">Home</Link> <span className="mx-2 slash">/</span>
-                <Link to="/company/post-job">Job</Link> <span className="mx-2 slash">/</span>
+                <Link to="/company">Home</Link> <span className="mx-2 slash">/</span>
+                <Link to="/company/manage-jobs">Job</Link> <span className="mx-2 slash">/</span>
                 <span className="text-white"><strong>Post a Job</strong></span>
               </div>
             </div>

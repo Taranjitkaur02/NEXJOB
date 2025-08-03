@@ -123,7 +123,7 @@ const saveData = async (Url) => {
             <div className="col-md-6">
               <h1 className="text-white font-weight-bold">Update  Job</h1>
               <div className="custom-breadcrumbs">
-                <Link to="/">Home</Link> <span className="mx-2 slash">/</span>
+                <Link to="/company">Home</Link> <span className="mx-2 slash">/</span>
                 <Link to="/company/post-job">Job</Link> <span className="mx-2 slash"></span>
               </div>
             </div>
