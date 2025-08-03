@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { db } from "../../Firebase";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 import Select from "react-select";
 import { SyncLoader } from "react-spinners";
 import { Link, useLocation } from "react-router-dom";
@@ -11,7 +18,6 @@ export default function ViewJob() {
   const [companyFilter, setCompanyFilter] = useState(null);
   const [load, setLoad] = useState(true);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 9;
 
@@ -19,7 +25,7 @@ export default function ViewJob() {
   const searchParams = new URLSearchParams(location.search);
   const skillFilter = searchParams.get("skill")?.toLowerCase();
 
-  // Fetch companies
+  // Fetch all companies for filter dropdown
   const fetchCompanies = () => {
     const q = query(collection(db, "users"), where("userType", "==", 2));
     onSnapshot(q, (snapshot) => {
@@ -31,24 +37,47 @@ export default function ViewJob() {
     });
   };
 
-  // Fetch jobs based on filters
-  const fetchData = (companyId = null, skill = null) => {
+  // Fetch jobs with optional company and skill filter
+  const fetchData = async (companyId = null, skill = null) => {
     let baseQuery = query(collection(db, "postJob"), where("status", "==", true));
-
     if (companyId) {
       baseQuery = query(baseQuery, where("userId", "==", companyId));
     }
 
-    onSnapshot(baseQuery, (snapshot) => {
+    onSnapshot(baseQuery, async (snapshot) => {
       let jobsData = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
       if (skill) {
-        jobsData = jobsData.filter((job) => job.skills?.toLowerCase().includes(skill));
+        jobsData = jobsData.filter((job) =>
+          job.skills?.toLowerCase().includes(skill)
+        );
       }
 
-      setJobs(jobsData);
+      // Get unique companyIds
+      const companyIds = [...new Set(jobsData.map((job) => job.userId))];
+
+      // Fetch company names
+      const companyMap = {};
+      await Promise.all(
+        companyIds.map(async (id) => {
+          const docSnap = await getDoc(doc(db, "users", id));
+          if (docSnap.exists()) {
+            companyMap[id] = docSnap.data().name || "Unknown Company";
+          } else {
+            companyMap[id] = "Unknown Company";
+          }
+        })
+      );
+
+      // Attach company name to job
+      const jobsWithCompany = jobsData.map((job) => ({
+        ...job,
+        companyName: companyMap[job.userId] || "Unknown Company",
+      }));
+
+      setJobs(jobsWithCompany);
       setLoad(false);
-      setCurrentPage(1); // Reset page when filters applied
+      setCurrentPage(1);
     });
   };
 
@@ -167,6 +196,9 @@ export default function ViewJob() {
                         />
                       </div>
                       <h3 className="text-center">{job.title}</h3>
+                      <p className="text-center text-muted mb-2">
+                        <i className="bi bi-building me-2"></i> {job.companyName}
+                      </p>
                       <p><i className="bi bi-geo-alt me-2"></i> {job.location}</p>
                       <p><i className="bi bi-clock me-2"></i> {job.jobType}</p>
                       <p><i className="bi bi-currency-rupee me-2"></i> {job.salary}</p>
@@ -203,4 +235,3 @@ export default function ViewJob() {
     </>
   );
 }
-
